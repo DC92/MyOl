@@ -1,0 +1,16 @@
+html,
+body,
+#map {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+#myol-help-gps {
+  left: 0;
+  width: 100%;
+}
+@viewport {
+  viewport-fit: cover;
+}

@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<!--
+© Dominique Cavailhez 2019
+https://github.com/Dominique92/MyOl
+Based on https://openlayers.org
+-->
+<html>
+
+<head>
+  <title>My Openlayers tile layers</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="images/logo-dark.svg" rel="icon" type="image/svg">
+
+  <link href="ressources/style.css" rel="stylesheet">
+
+  <!-- Simulation of importing myol -->
+  <script>
+    // apache (production)
+    if (window.origin.split(':').length == 2) {
+      document.write('<link href="../dist/myol.css" type="text/css" rel="stylesheet">');
+      document.write('<script src="../dist/myol-debug.js"><&#47;script>');
+    }
+  </script>
+  <script type="module">
+    // vite nmp (test)
+    import myol from '../build/index'; // At this place, mysteriously do not import out of npm vite context
+    window.myol = myol; // Declare a myol global variable
+  </script>
+
+  <!-- The main script must be defer or module to be run after the myol import -->
+  <script src="ressources/keys.js"></script>
+  <script type="module">
+    new ol.Map({
+      target: 'map',
+      view: new ol.View({
+        center: ol.proj.transform([2, 47], 'EPSG:4326', 'EPSG:3857'), // France
+        zoom: 5,
+        constrainResolution: true, // Force le zoom sur la définition des dalles disponibles
+      }),
+      controls: [
+        new ol.control.Zoom(),
+        new ol.control.Attribution({
+          collapsed: false,
+        }),
+        new myol.control.LayerSwitcher({
+          layers: myol.layer.tile.demo(layersKeys),
+        }),
+      ],
+      layers: [
+        new myol.layer.AltLayer(),
+      ],
+    });
+  </script>
+</head>
+
+<body>
+  <a style="float:right" href="vectorLayer.html">Next &#9654;</a>
+  <a style="float:right;margin-right:15px" href="..">Home</a>
+  <h1 style="margin:0">Tile layer</h1>
+  <a style="float:right" href="https://github.com/Dominique92/MyOl/">Github &#9654;</a>
+  <p><a href="../src/TileLayerCollection.js">src/TileLayerCollection.js</a> defines a collection of tile baselayers</p>
+
+  <div id="map" class="map"></div>
+
+  <h4 style="margin-bottom:0">Tests</h4>
+  <div>Try each layer</div>
+  <div>Reload the page on each layer</div>
+  <div>Try transparency slider</div>
+</body>
+
+</html>

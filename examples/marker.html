@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<!--
+© Dominique Cavailhez 2019
+https://github.com/Dominique92/MyOl
+Based on https://openlayers.org
+-->
+<html>
+
+<head>
+  <title>My Openlayers markers</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="images/logo-dark.svg" rel="icon" type="image/svg">
+
+  <link href="ressources/style.css" rel="stylesheet">
+
+  <!-- Simulation of importing myol -->
+  <script>
+    // apache (production)
+    if (window.origin.split(':').length == 2) {
+      document.write('<link href="../dist/myol.css" type="text/css" rel="stylesheet">');
+      document.write('<script src="../dist/myol-debug.js"><&#47;script>');
+    }
+  </script>
+  <script type="module">
+    // vite nmp (test)
+    import myol from '../build/index'; // At this place, mysteriously do not import out of npm vite context
+    window.myol = myol; // Declare a myol global variable
+  </script>
+
+  <!-- The main script must be defer or module to be run after the myol import -->
+  <script type="module">
+    new ol.Map({
+      target: 'map',
+      view: new ol.View({
+        center: ol.proj.transform([2, 47], 'EPSG:4326', 'EPSG:3857'), // France
+        zoom: 5,
+      }),
+      layers: [
+        new ol.layer.Tile({
+          source: new ol.source.OSM(),
+        }),
+        new myol.layer.Marker({
+          src: 'images/cadre.png',
+          prefix: 'cadre',
+        }),
+        new myol.layer.Marker({
+          src: 'images/viseur.png',
+          focus: 15, // Overload position & zoom to marker
+          dragable: true,
+        }),
+      ],
+    });
+  </script>
+</head>
+
+<body>
+  <a style="float:right" href="editor.html">Next &#9654;</a>
+  <a style="float:right;margin-right:15px" href="..">Home</a>
+  <h1 style="margin:0">Position marker</h1>
+  <a style="float:right" href="https://github.com/Dominique92/MyOl/">Github &#9654;</a>
+  <p><a href="../src/Editor.js">src/Editor.js</a> lines & polygons position display & edit</p>
+
+  <div id="map" class="map"></div>
+
+  <!-- Fixed marker -->
+  <input type="hidden" id="cadre-json" value='{"type":"Point","coordinates":[2.34,48.86]}'></p>
+  <p><b>Cadre :</b> <span id="cadre-string"></span></p>
+
+  <!-- Draggable marker -->
+  <div>
+    <p><b>Colimateur :</b>
+      <span id="marker-string"></span>
+      <select id="marker-select">
+        <option value="dec" selected="selected">Degrés décimaux</option>
+        <option value="dms">Deg Min Sec</option>
+        <option class="xy" value="swiss">Suisse</option>
+        <option value="utm">UTM</option>
+      </select>
+    </p>
+    <p>
+      Longitude :
+      <input id="marker-lon" type="text" name="lon" size="12" maxlength="12"> (WGS84)&nbsp;
+      <span class="xy"> / X : <input id="marker-x" type="text" name="x" size="7" maxlength="12"> (CH 1903)</span>
+    </p>
+    <p>
+      Latitude :
+      <input id="marker-lat" type="text" name="lat" size="12" maxlength="12"> (WGS84)&nbsp;
+      <span class="xy"> / Y : <input id="marker-y" type="text" name="y" size="7" maxlength="12"></span>
+    </p>
+    <p>
+      Double clic sur la carte y déplace le curseur.
+    </p>
+    <p>
+      <input id="marker-json" name="geojson" size="50" value='{"type":"Point","coordinates":[6.145,46.2]}'>
+    </p>
+  </div>
+
+  <h4 style="margin-bottom:0">Tests</h4>
+  <div>Look at fix marker & display</div>
+  <div>Move dragable marker</div>
+  <div>Center the map on the cusor</div>
+  <div>Move the cusor at the center of the map</div>
+</body>
+
+</html>

@@ -1,0 +1,19 @@
+{
+	"name": "My GPS",
+	"short_name": "GPS",
+	"id": "MyGPS",
+	"icons": [{
+		"src": "favicon.png",
+		"sizes": "64x64",
+		"type": "image/png"
+	}, {
+		"src": "icon-512.png",
+		"sizes": "512x512",
+		"type": "image/png"
+	}],
+	"start_url": "index.html",
+	"scope": "./",
+	"display": "standalone",
+	"background_color": "white",
+	"theme_color": "white"
+}

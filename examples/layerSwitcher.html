@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<!--
+© Dominique Cavailhez 2019
+https://github.com/Dominique92/MyOl
+Based on https://openlayers.org
+-->
+<html>
+
+<head>
+  <title>My Openlayers layer switcher</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="images/logo-dark.svg" rel="icon" type="image/svg">
+
+  <link href="ressources/style.css" rel="stylesheet">
+
+  <!-- Simulation of importing myol -->
+  <script>
+    // apache (production)
+    if (window.origin.split(':').length == 2) {
+      document.write('<link href="../dist/myol.css" type="text/css" rel="stylesheet">');
+      document.write('<script src="../dist/myol-debug.js"><&#47;script>');
+    }
+  </script>
+  <script type="module">
+    // vite nmp (test)
+    import myol from '../build/index'; // At this place, mysteriously do not import out of npm vite context
+    window.myol = myol; // Declare a myol global variable
+  </script>
+
+  <!-- The main script must be defer or module to be run after the myol import -->
+  <script type="module">
+    const baseLayers = {
+        StadiaMaps: new ol.layer.Tile({
+          source: new ol.source.StadiaMaps({
+            layer: 'stamen_terrain',
+          }),
+        }),
+        'OSM org': new ol.layer.Tile({
+          source: new ol.source.OSM(),
+        }),
+        'Null': null,
+        'Hidden': new ol.layer.Tile({
+          hidden: true,
+        }),
+        Watercolor: new ol.layer.Tile({
+          source: new ol.source.StadiaMaps({
+            layer: 'stamen_watercolor',
+          }),
+        }),
+      },
+      countries = new ol.layer.Vector({
+        source: new ol.source.Vector({
+          url: 'ressources/switzerland.geojson',
+          format: new ol.format.GeoJSON(),
+        }),
+        zIndex: 2, // Above the base layer
+      });
+
+    new ol.Map({
+      target: 'map',
+      view: new ol.View({
+        center: ol.proj.transform([4, 47], 'EPSG:4326', 'EPSG:3857'), // France + Swiss
+        zoom: 5,
+      }),
+      controls: [
+        new myol.control.LayerSwitcher({
+          layers: baseLayers,
+          selectExtId: 'select-ext',
+        }),
+        new ol.control.Attribution({
+          collapsed: false,
+        }),
+      ],
+      layers: [countries],
+    });
+
+    document.getElementById('toggle-countries')
+      .addEventListener('click', evt =>
+        countries.setVisible(evt.target.checked)
+      );
+  </script>
+</head>
+
+<body>
+  <a style="float:right" href="tileLayer.html">Next &#9654;</a>
+  <a style="float:right;margin-right:15px" href="..">Home</a>
+  <h1 style="margin:0">Layer switcher</h1>
+  <a style="float:right" href="https://github.com/Dominique92/MyOl/">Github &#9654;</a>
+  <p><a href="../src/LayerSwitcher.js">src/LayerSwitcher.js</a> add a tinny efficient layer switcher for both base & vector layers.</p>
+
+  <div id="map" class="map"></div>
+  <div id="select-ext">
+    <hr>
+    <label>Countries <input id="toggle-countries" type="checkbox" checked="checked"></label>
+  </div>
+</body>
+
+</html>

@@ -1,0 +1,30 @@
+/* Geocodeur */
+.ol-geocoder.gcd-gl-container {
+  position: initial !important;
+  float: left;
+  font-size: 14.4px !important;
+  /* For some mobiles */
+  width: 30.75px;
+  /* Takes place in the MyOl button flow */
+  height: 30.75px;
+}
+
+.ol-geocoder .gcd-gl-expanded {
+  width: 30.75px;
+  overflow: visible;
+}
+
+.ol-geocoder .gcd-gl-btn {
+  height: 24.75px;
+  width: 24.75px;
+}
+
+.ol-geocoder .gcd-gl-input {
+  top: 32px;
+  left: 4px;
+}
+
+.ol-geocoder .gcd-gl-result {
+  top: 61px !important;
+  left: 66px !important;
+}

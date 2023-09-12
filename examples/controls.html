@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<!--
+© Dominique Cavailhez 2019
+https://github.com/Dominique92/MyOl
+Based on https://openlayers.org
+-->
+<html>
+
+<head>
+  <title>My Openlayers controls</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="images/logo-dark.svg" rel="icon" type="image/svg">
+
+  <link href="ressources/style.css" rel="stylesheet">
+
+  <!-- Simulation of importing myol -->
+  <script>
+    // apache (production)
+    if (window.origin.split(':').length == 2) {
+      document.write('<link href="../dist/myol.css" type="text/css" rel="stylesheet">');
+      document.write('<script src="../dist/myol-debug.js"><&#47;script>');
+    }
+  </script>
+  <script type="module">
+    // vite nmp (test)
+    import myol from '../build/index'; // At this place, mysteriously do not import out of npm vite context
+    window.myol = myol; // Declare a myol global variable
+  </script>
+
+  <!-- The main script must be defer or module to be run after the myol import -->
+  <script type="module">
+    new ol.Map({
+      target: 'map',
+      controls: [
+        ...myol.control.collection(),
+        new myol.control.MyButton({ // Help
+          label: '?',
+          subMenuId: 'myol-help',
+        }),
+        new myol.control.Permalink({
+          display: true,
+        }),
+        new myol.control.TilesBuffer(),
+      ],
+      layers: [
+        new ol.layer.Tile({
+          source: new ol.source.OSM(),
+        }),
+        new ol.layer.Vector({
+          source: new ol.source.Vector({
+            url: 'ressources/features.geojson',
+            format: new ol.format.GeoJSON(),
+          }),
+        }),
+      ],
+    });
+  </script>
+</head>
+
+<body>
+  <a style="float:right" href="marker.html">Next &#9654;</a>
+  <a style="float:right;margin-right:15px" href="..">Home</a>
+  <h1 style="margin:0">Controls</h1>
+  <a style="float:right" href="https://github.com/Dominique92/MyOl/">Github &#9654;</a>
+  <p><a href="../src/Controls.js">src/Controls.js</a> usefull controls:
+  <ul>
+    <li>Full screen</li>
+    <li>Geocoder</li>
+    <li>Print</li>
+    <li>Length of a line</li>
+    <li>Load GPX file</li>
+    <li>Download GPX file</li>
+  </ul>
+  <p><a href="../src/Geolocation.js">src/Geolocation.js</a> adds GPS position control:
+  <ul>
+    <li>GPS</li>
+  </ul>
+  <p><a href="../src/MyGeocoder.js">src/controlCollection.js</a> adds GPS name location finding:
+  <ul>
+    <li>Geocoder</li>
+  </ul>
+  </p>
+
+  <div>
+    <div id="map" class="map"></div>
+  </div>
+
+  <div id="myol-help">
+    <p>Ceci est un exemple d'aide.</p>
+  </div>
+</body>
+
+</html>

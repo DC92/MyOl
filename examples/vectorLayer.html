@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<!--
+© Dominique Cavailhez 2019
+https://github.com/Dominique92/MyOl
+Based on https://openlayers.org
+-->
+<html>
+
+<head>
+  <title>My Openlayers vector layers</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="images/logo-dark.svg" rel="icon" type="image/svg">
+
+  <link href="ressources/style.css" rel="stylesheet">
+
+  <!-- Simulation of importing myol -->
+  <script>
+    // apache (production)
+    if (window.origin.split(':').length == 2) {
+      document.write('<link href="../dist/myol.css" type="text/css" rel="stylesheet">');
+      document.write('<script src="../dist/myol-debug.js"><&#47;script>');
+    }
+  </script>
+  <script type="module">
+    // vite nmp (test)
+    import myol from '../build/index'; // At this place, mysteriously do not import out of npm vite context
+    window.myol = myol; // Declare a myol global variable
+  </script>
+
+  <!-- The main script must be defer or module to be run after the myol import -->
+  <script type="module">
+    //localStorage.myol_selectwri = 'all'; // Force selectors
+
+    new ol.Map({
+      target: 'map',
+      view: new ol.View({
+        center: ol.proj.transform([5.64711, 45.2035], 'EPSG:4326', 'EPSG:3857'), // Cabane double
+        zoom: 14,
+      }),
+      layers: [
+        // Background layer
+        new ol.layer.Tile({
+          source: new ol.source.OSM(),
+        }),
+
+        // Vector layers
+        new myol.layer.vector.Chemineur({
+          selectName: 'select-chemineur',
+        }),
+        new myol.layer.vector.Alpages({
+          selectName: 'select-alpages',
+        }),
+        new myol.layer.vector.WRI({
+          host: 'https://dom.refuges.info/', //BEST www
+          spreadClusterMaxResolution: 10,
+          selectName: 'select-wri',
+        }),
+        new myol.layer.vector.PRC({
+          selectName: 'select-prc',
+        }),
+        new myol.layer.vector.C2C({
+          selectName: 'select-c2c',
+        }),
+        new myol.layer.vector.Overpass({
+          selectName: 'select-osm',
+        }),
+
+        new myol.layer.Hover(),
+      ],
+    });
+  </script>
+</head>
+
+<body>
+  <a style="float:right" href="controls.html">Next &#9654;</a>
+  <a style="float:right;margin-right:15px" href="..">Home</a>
+  <h1 style="margin:0">Vector layer</h1>
+  <a style="float:right" href="https://github.com/Dominique92/MyOl/">Github &#9654;</a>
+  <p><a href="../src/MyVectorLayer.js">src/MyVectorLayer.js</a> facilities to ol.layer.Vector</p>
+
+  <div id="map" class="map"></div>
+
+  <div class="layer-select">
+    <label>
+      Pyrenees-refuges.com
+      <input type="checkbox" name="select-prc">
+      <span id="select-prc-status"></span>
+    </label><br><label>
+      Chemineur
+      <input type="checkbox" name="select-chemineur" value="3,8,64">
+      <span id="select-chemineur-status"></span>
+    </label><br><label>
+      Camptocamp.org
+      <label><input type="checkbox" name="select-c2c" value="hut,shelter,gite,cave,bivouac,camp_site">logement</label>
+      <label><input type="checkbox" name="select-c2c" value="waterpoint,waterfall">point d'eau</label>
+      <span id="select-c2c-status"></span>
+    </label>
+    <div>Only 100 features at a time</div>
+    <br>
+    <label>
+      Alpages.info
+      <input type="checkbox" name="select-alpages">
+      <span id="select-alpages-status"></span>
+    </label>
+  </div>
+
+  <div class="layer-select">
+    <label>
+      Refuges.info
+      <input type="checkbox" name="select-wri" value="all">
+      <span id="select-wri-status"></span>
+    </label>
+    <label><input type="checkbox" name="select-wri" value="7">cabane non gardée</label>
+    <label><input type="checkbox" name="select-wri" value="10">refuge gardé</label>
+    <label><input type="checkbox" name="select-wri" value="9">gîte d'étape</label>
+    <label><input type="checkbox" name="select-wri" value="23">point d'eau</label>
+    <label><input type="checkbox" name="select-wri" value="6">sommet</label>
+    <label><input type="checkbox" name="select-wri" value="3">passage délicat</label>
+    <br>
+  </div>
+
+  <div class="layer-select">
+    <label>
+      Overpass (OSM services)
+      <input type="checkbox" name="select-osm" id="select-osm" value="all">
+      <span id="select-osm-status"></span>
+    </label>
+    <label><input type="checkbox" name="select-osm" value='["tourism"~"hotel|guest_house|chalet|hostel|apartment"]'>Hôtel</label>
+    <label><input type="checkbox" name="select-osm" value='["tourism"="alpine_hut"]'>Refuge gardé</label>
+    <label><input type="checkbox" name="select-osm" value='["building"="cabin"]'>Cabane non gardée</label>
+    <label><input type="checkbox" name="select-osm" value='["amenity"="shelter"]["shelter_type"="basic_hut"]'>Abri</label>
+    <label><input type="checkbox" name="select-osm" value='["tourism"="camp_site"]'>Camping</label>
+    <label><input type="checkbox" name="select-osm" value='["natural"="spring"]+["amenity"="drinking_water|watering_place|fountain"]+["waterway"="water_point"]+["man_made"="water_well"]'>Point d'eau</label>
+    <label><input type="checkbox" name="select-osm" value='["highway"="bus_stop"]'>Bus</label>
+    <label><input type="checkbox" name="select-osm" value='["amenity"="parking"]["access"!="private"]'>Parking</label>
+    <label><input type="checkbox" name="select-osm" value='["amenity"="restaurant"]'>Restaurant</label>
+    <label><input type="checkbox" name="select-osm" value='["shop"~"supermarket|convenience"]'>Alimentation</label>
+    <label><input type="checkbox" name="select-osm" value='["amenity"="toilets"]'>WC</label>
+    <label><input type="checkbox" name="select-osm" value='["amenity"="telephone"]'>Cabine téléphonique</label>
+  </div>
+</body>
+
+</html>

@@ -1,0 +1,51 @@
+@media (prefers-color-scheme: dark) {
+
+  body,
+  a {
+    background: #222;
+    color: white;
+  }
+
+  .ol-viewport {
+    color: black;
+  }
+
+  .ol-viewport a {
+    background: initial;
+  }
+}
+
+.map {
+  clear: both;
+  width: 100%;
+  max-width: 600px;
+  height: 80vw;
+  max-height: 400px;
+  background: #444;
+}
+
+/* MyVectorLayer */
+.layer-select {
+  float: left;
+  border-right: solid;
+  padding: 5px;
+}
+
+.layer-select input {
+  cursor: pointer;
+}
+
+.layer-select label {
+  display: block;
+  cursor: pointer;
+}
+
+.layer-select label:hover {
+  background: lightgray;
+}
+
+/* wri */
+h4 {
+  clear: both;
+  margin-bottom: 0;
+}

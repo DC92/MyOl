@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<!--
+© Dominique Cavailhez 2019
+https://github.com/Dominique92/MyOl
+Based on https://openlayers.org
+-->
+<html>
+
+<head>
+  <title>My Openlayers WRI</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="../images/logo-dark.svg" rel="icon" type="image/svg">
+
+  <link href="../ressources/style.css" rel="stylesheet">
+  <style>
+    #carte-point {
+      float: right;
+      width: 75vw;
+      height: 75vw;
+    }
+  </style>
+
+  <!-- Simulation of importing myol -->
+  <script>
+    // apache (production)
+    if (window.origin.split(':').length == 2) {
+      document.write('<link href="../../dist/myol.css" type="text/css" rel="stylesheet">');
+      document.write('<script src="../../dist/myol.js"><&#47;script>');
+    }
+  </script>
+  <script type="module">
+    // vite nmp (test)
+    import myol from '../../build/index'; // At this place, mysteriously do not import out of npm vite context
+    window.myol = myol; // Declare a myol global variable
+  </script>
+
+  <!-- WRI -->
+  <script src="_cartes.js"></script>
+  <!-- The main script must be defer or module to be run after the myol import -->
+  <script type="module">
+    const layersKeys = { // <?=json_encode($config_wri['mapKeys'])?>,
+      ign: 'iejxbx4obzhco6c8klxrfbto',
+      thunderforest: 'ee751f43b3af4614b01d1bce72785369',
+      os: 'P8MjahLAlyDAHXEH2engwXJG6KDYsVzF',
+      bing: 'AldBMbaKNyat-j6CBRKxxH05uaxP7dvQu1RnMWCQEGGC3z0gjBu-bLniE_8WZvcC',
+      kompass: '2ba8c124-38b6-11e7-ade1-e0cb4e28e847',
+    };
+
+    new ol.Map({
+      target: 'carte-point',
+      view: new ol.View({
+        center: ol.proj.transform([5.6471, 45.2035], 'EPSG:4326', 'EPSG:3857'), // ([<?=$vue->point->longitude?>, <?=$vue->point->latitude?>]),
+        zoom: 13,
+        enableRotation: false,
+        constrainResolution: true, // Force le zoom sur la définition des dalles disponibles
+      }),
+      controls: [
+        ...controlesCartes('point'),
+        new myol.control.Permalink({ // Permet de garder le même réglage de carte
+          visible: false, // Mais on ne visualise pas le lien du permalink
+          init: false, // Ici, on utilisera plutôt la position du point
+        }),
+        new myol.control.LayerSwitcher({
+          layers: fondsCarte('point', layersKeys),
+        }),
+      ],
+      layers: [
+        // Les autres points refuges.info
+        couchePointsWRI({
+          host: 'https://dom.refuges.info/', // '<?=$config_wri["sous_dossier_installation"]?>',
+        }),
+        // Le cadre rouge autour du point de la fiche
+        new myol.layer.Marker({
+          src: '../images/cadre.svg',
+          prefix: 'cadre', // S'interface avec les <TAG id="cadre-xxx"...>
+          focus: 15,
+        }),
+        new myol.layer.Hover(),
+      ],
+    });
+  </script>
+</head>
+
+<body>
+  <a style="float:right" href="modif.html">Next &#9654;</a>
+  <a style="float:right;margin-right:15px" href="../../">Home</a>
+  <h1 style="margin:0">Point refuges.info</h1>
+  <a style="float:right" href="https://github.com/Dominique92/MyOl/">Github &#9654;</a>
+
+  <h4>/vues/point.html</h4>
+  <div id="carte-point"></div>
+  <br style="clear:both">
+
+  <p><b>Colimateur :</b>
+    <span id="cadre-string"></span>
+    <select id="cadre-select">
+      <option value="dec" selected="selected">Degrés décimaux</option>
+      <option value="dms">Deg Min Sec</option>
+      <option class="xy" value="swiss">Suisse</option>
+      <option value="utm">UTM</option>
+    </select>
+  </p>
+</body>
+
+</html>

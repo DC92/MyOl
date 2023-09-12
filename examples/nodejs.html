@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<!--
+© Dominique Cavailhez 2019
+https://github.com/Dominique92/MyOl
+Based on https://openlayers.org
+-->
+<html>
+
+<head>
+  <title>My Openlayers simple example</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="images/logo-dark.svg" rel="icon" type="image/svg">
+
+  <script type="module">
+    // vite nmp (test)
+    import myol from '../build/index'; // At this place, mysteriously do not import out of npm vite context
+    window.myol = myol; // Declare a myol global variable
+  </script>
+
+  <!-- The main script must be defer or module to be run after the myol import -->
+  <script src="ressources/keys.js"></script>
+  <script type="module" src="ressources/trace.js"></script>
+  <script type="module">
+    new ol.Map({
+      target: 'map',
+      view: new ol.View({
+        enableRotation: false,
+      }),
+      controls: [
+        ...myol.control.collection(),
+        new myol.control.LayerSwitcher({
+          layers: myol.layer.tile.collection(layersKeys),
+        }),
+        new myol.control.Permalink({
+          display: true,
+        }),
+      ],
+      layers: [
+        new myol.layer.AltLayer(),
+      ],
+    });
+  </script>
+
+  <style>
+    body {
+      background: #444;
+    }
+
+    a {
+      color: lightblue;
+    }
+
+    #map {
+      clear: both;
+      width: 100%;
+      max-width: 600px;
+      height: 400px;
+    }
+  </style>
+</head>
+
+<body>
+  <a style="float:right" href="layerSwitcher.html">Next &#9654;</a>
+  <h1 style="margin:0">MyOl</h1>
+  <a href="LayerSwitcher.html" title="Layer switcher">S</a>
+  <a href="tileLayer.html" title="Tile layer">T</a>
+  <a href="vectorLayer.html" title="Vector layer">V</a>
+  <a href="controls.html" title="Controls">C</a>
+  <a href="marker.html" title="Marker">M</a>
+  <a href="editor.html" title="Editor">E</a>
+  <a href="gps/" title="Off line GPS">G</a> &nbsp;
+  <a href="wri/index.html" title="Refuges.info">W</a>
+  <a href="wri/nav.html" title="Nav">N</a>
+  <a href="wri/edit.html" title="Edit massif">E</a>
+  <a href="wri/point.html" title="Point WRI">P</a>
+  <a href="wri/modif.html" title="Modif point WRI">M</a>
+  <a style="float:right" href="https://github.com/Dominique92/MyOl/">Github &#9654;</a>
+  <br><br>
+
+  <div id="map"></div>
+
+  <p id="select-ext">
+    <label>chemineur.fr <input type="checkbox" name="select-chem" value="all"></label>
+    <label><input type="checkbox" name="select-chem" value="3">Refuge</label>
+    <label><input type="checkbox" name="select-chem" value="8">Abri</label>
+    <label><input type="checkbox" name="select-chem" value="23">Montagne</label>
+  </p>
+  <input id="marker-json" size="50" value='{"type":"Point","coordinates":[2.34,48.86]}'>
+
+  <h1 style="clear:both">MyOl</h1>
+  <p>Js library adding some facilities to <a href="https://openlayers.org/">Openlayers</a></p>
+  <p><a href="LayerSwitcher.html">Layer switcher</a></p>
+  <p><a href="tileLayer.html">Tile layer</a></p>
+  <p><a href="vectorLayer.html">Vector layer</a></p>
+  <p><a href="controls.html">Controls</a></p>
+  <p><a href="marker.html">Marker</a></p>
+  <p><a href="editor.html">Editor</a></p>
+  <p><a href="wri/index.html">Refuges.info</a></p>
+  <p><a href="gps">Off line GPS</a></p>
+</body>
+
+</html>

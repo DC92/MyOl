@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<!--
+© Dominique Cavailhez 2019
+https://github.com/Dominique92/MyOl
+Based on https://openlayers.org
+-->
+<html>
+
+<head>
+  <title>My Openlayers editor</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="images/logo-dark.svg" rel="icon" type="image/svg">
+
+  <link href="ressources/style.css" rel="stylesheet">
+  <style>
+    #myol-help-edit-modify p,
+    #myol-help-edit-line p,
+    #myol-help-edit-poly p {
+      margin: 0;
+    }
+  </style>
+
+  <!-- Simulation of importing myol -->
+  <script>
+    // apache (production)
+    if (window.origin.split(':').length == 2) {
+      document.write('<link href="../dist/myol.css" type="text/css" rel="stylesheet">');
+      document.write('<script src="../dist/myol-debug.js"><&#47;script>');
+    }
+  </script>
+  <script type="module">
+    // vite nmp (test)
+    import myol from '../build/index'; // At this place, mysteriously do not import out of npm vite context
+    window.myol = myol; // Declare a myol global variable
+  </script>
+
+  <!-- The main script must be defer or module to be run after the myol import -->
+  <script type="module">
+    const snaplayer = new ol.layer.Vector({
+        source: new ol.source.Vector({
+          url: 'ressources/switzerland.geojson',
+          format: new ol.format.GeoJSON(),
+        }),
+        style: new ol.style.Style({
+          stroke: new ol.style.Stroke(),
+        }),
+      }),
+      controlEditor = new myol.control.Editor({
+        geoJsonId: 'geojson',
+        geoJsonUrl: 'ressources/features.geojson',
+        snapLayers: [snaplayer],
+        help: [
+          document.getElementById('myol-help-edit-modify').innerHTML,
+          document.getElementById('myol-help-edit-line').innerHTML,
+          document.getElementById('myol-help-edit-poly').innerHTML,
+        ],
+      });
+
+    new ol.Map({
+      target: 'map',
+      view: new ol.View({
+        center: ol.proj.transform([2, 47], 'EPSG:4326', 'EPSG:3857'), // France
+        zoom: 6,
+      }),
+      controls: [
+        new ol.control.Zoom(),
+        new myol.control.Load(),
+        new myol.control.Download({
+          savedLayer: controlEditor.layer,
+        }),
+        controlEditor,
+      ],
+      layers: [
+        new ol.layer.Tile({
+          source: new ol.source.OSM(),
+        }),
+        snaplayer,
+      ],
+    });
+  </script>
+</head>
+
+<body>
+  <a style="float:right" href="wri/index.html">Next &#9654;</a>
+  <a style="float:right;margin-right:15px" href="..">Home</a>
+  <h1 style="margin:0">Lines & polygons edit</h1>
+  <a style="float:right" href="https://github.com/Dominique92/MyOl/">Github &#9654;</a>
+  <p><a href="../src/Editor.js">src/Editor.js</a> lines & polygons edition facilities</p>
+
+  <div id="map" class="map"></div>
+
+  <input type="text" id="geojson" style="width:90%" value='{
+		"type": "LineString",
+		"coordinates": [[1, 47],[2.2, 47],[2.2, 48]]
+	}'>
+
+  <h4>Modifier une ligne ou un polygone</h4>
+  <div id="myol-help-edit-modify">
+    <p><u>Déplacer un sommet:</u> cliquer sur le sommet et le déplacer</p>
+    <p><u>Ajouter un sommet au milieu d'un segment:</u> cliquer le long du segment puis déplacer</p>
+    <p><u>Supprimer un sommet:</u> Alt+cliquer sur le sommet</p>
+    <p><u>Couper une ligne en deux:</u> Alt+cliquer sur le segment à supprimer</p>
+    <p><u>Inverser la direction d'une ligne:</u> Shift+cliquer sur le segment à inverser</p>
+    <p><u>Transformer un polygone en ligne:</u> Alt+cliquer sur un côté</p>
+    <p><u>Fusionner deux lignes:</u> déplacer l'extrémité d'une ligne pour rejoindre l'autre</p>
+    <p><u>Transformer une ligne en polygone:</u> déplacer une extrémité pour rejoindre l'autre</p>
+    <p><u>Scinder un polygone:</u> joindre 2 sommets du polygone puis Alt+cliquer sur le sommet commun</p>
+    <p><u>Fusionner 2 polygones:</u> superposer un côté (entre 2 sommets consécutifs)
+      de chaque polygone puis Alt+cliquer dessus</p>
+    <p><u>Supprimer une ligne ou un polygone:</u> Ctrl+Alt+cliquer sur un segment</p>
+  </div>
+  <h4>Créer une ligne</h4>
+  <div id="myol-help-edit-line">
+    <p><u>Pour créer une ligne:</u></p>
+    <p>Cliquer sur l'emplacement du début</p>
+    <p>Puis sur chaque sommet</p>
+    <p>Double cliquer sur le dernier sommet pour terminer</p>
+    <p>
+      <hr>Cliquer sur une extrémité d'une ligne existante pour l'étendre
+    </p>
+  </div>
+  <h4>Créer un polygone</h4>
+  <div id="myol-help-edit-poly">
+    <p><u>Pour créer un polygone:</u></p>
+    <p>Cliquer sur l'emplacement du premier sommet</p>
+    <p>Puis sur chaque sommet</p>
+    <p>Double cliquer sur le dernier sommet pour terminer</p>
+    <p>
+      <hr>Un polygone entièrement compris dans un autre crée un "trou"
+    </p>
+  </div>
+</body>
+
+</html>

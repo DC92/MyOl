@@ -1,0 +1,40 @@
+{
+  "name": "@myol/myol",
+  "version": "1.1.0",
+  "description": "This package adds many features to Openlayer https://openlayers.org/",
+  "author": "Dominique Cavailhez",
+  "homepage": "https://github.com/Dominique92/MyOl#readme",
+  "license": "MIT",
+  "main": "dist/myol.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Dominique92/MyOl.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Dominique92/MyOl/issues"
+  },
+  "keywords": [
+    "Openlayers"
+  ],
+  "type": "module",
+  "scripts": {
+    "build": "rollup -c build/config.js",
+    "lint:dom": "npx eslint src/*.js src/*/*.js",
+    "beautify": "js-beautify -s=2 build/*.js examples/*.html examples/ressources/* examples/wri/* src/*.*s src/control/* src/layer/* package.json"
+  },
+  "dependencies": {
+    "ol": "latest",
+    "proj4": "latest",
+    "@myol/geocoder": "1.0.1"
+  },
+  "devDependencies": {
+    "@rollup/plugin-commonjs": "latest",
+    "@rollup/plugin-json": "latest",
+    "@rollup/plugin-node-resolve": "latest",
+    "@rollup/plugin-terser": "latest",
+    "eslint": "latest",
+    "js-beautify": "latest",
+    "rollup": "latest",
+    "rollup-plugin-import-css": "latest"
+  }
+}

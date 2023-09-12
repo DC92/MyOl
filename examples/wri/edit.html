@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<!--
+© Dominique Cavailhez 2019
+https://github.com/Dominique92/MyOl
+Based on https://openlayers.org
+-->
+<html>
+
+<head>
+  <title>My Openlayers WRI</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="../images/logo-dark.svg" rel="icon" type="image/svg">
+
+  <link href="../ressources/style.css" rel="stylesheet">
+  <style>
+    #carte-edit {
+      float: right;
+      width: 75vw;
+      height: 75vw;
+    }
+
+    #edit-json {
+      width: 100%;
+    }
+  </style>
+
+  <!-- Simulation of importing myol -->
+  <script>
+    // apache (production)
+    if (window.origin.split(':').length == 2) {
+      document.write('<link href="../../dist/myol.css" type="text/css" rel="stylesheet">');
+      document.write('<script src="../../dist/myol.js"><&#47;script>');
+    }
+  </script>
+  <script type="module">
+    // vite nmp (test)
+    import myol from '../../build/index'; // At this place, mysteriously do not import out of npm vite context
+    window.myol = myol; // Declare a myol global variable
+  </script>
+
+  <!-- WRI -->
+  <script src="_cartes.js"></script>
+  <!-- The main script must be defer or module to be run after the myol import -->
+  <script type="module">
+    const layersKeys = {
+        ign: 'iejxbx4obzhco6c8klxrfbto',
+        thunderforest: 'ee751f43b3af4614b01d1bce72785369',
+        os: 'P8MjahLAlyDAHXEH2engwXJG6KDYsVzF',
+        bing: 'AldBMbaKNyat-j6CBRKxxH05uaxP7dvQu1RnMWCQEGGC3z0gjBu-bLniE_8WZvcC',
+        kompass: '2ba8c124-38b6-11e7-ade1-e0cb4e28e847',
+      },
+
+      coucheContours = coucheContourMassif({
+        host: 'https://www.refuges.info/', // '<?=$config_wri["sous_dossier_installation"]?>',
+      }),
+      controlEditor = new myol.control.Editor({
+        geoJsonId: 'edit-json',
+        snapLayers: [coucheContours],
+        help: [
+          document.getElementById('myol-help-edit-modify').innerHTML,
+          null, // Pas d'édition de ligne
+          document.getElementById('myol-help-edit-poly').innerHTML,
+        ],
+        featuresToSave: coordinates => [new ol.Feature({
+          geometry: new ol.geom.MultiPolygon(coordinates.polys),
+        })],
+      }),
+
+      map = new ol.Map({
+        target: 'carte-edit',
+        view: new ol.View({
+          enableRotation: false,
+        }),
+        controls: [
+          ...controlesCartes('edit'),
+          new myol.control.Permalink({ // Permet de garder le même réglage de carte
+            display: false, // Cache le lien
+            init: false, // <?=$vue->polygone->id_polygone?'false':'true'?>, // On cadre le massif, s'il y a massif
+          }),
+          new myol.control.LayerSwitcher({
+            layers: fondsCarte('edit', layersKeys),
+          }),
+          controlEditor,
+        ],
+        layers: [
+          coucheContours,
+        ],
+      });
+
+    // Centrer sur la zone du polygone
+    map.getView().fit(ol.proj.transformExtent([5, 44.68, 5.72, 45.33], 'EPSG:4326', 'EPSG:3857'));
+    /*
+    		<?if ($vue->polygone->id_polygone) { ?>
+    			map.getView().fit(ol.proj.transformExtent([
+    				<?=$vue->polygone->ouest?>,
+    				<?=$vue->polygone->sud?>,
+    				<?=$vue->polygone->est?>,
+    				<?=$vue->polygone->nord?>,
+    			], 'EPSG:4326', 'EPSG:3857'));
+    		<? } ?>
+    */
+  </script>
+</head>
+
+<body>
+  <a style="float:right" href="point.html">Next &#9654;</a>
+  <a style="float:right;margin-right:15px" href="../../">Home</a>
+  <h1 style="margin:0">Edit massif refuges.info</h1>
+  <a style="float:right" href="https://github.com/Dominique92/MyOl/">Github &#9654;</a>
+
+  <h4>/vues/edit.html</h4>
+  <div id="carte-edit"></div>
+
+  <label id="myol-help-edit-modify">
+    <p><u>Déplacer un sommet:</u> cliquer sur le sommet et le déplacer</p>
+    <p><u>Ajouter un sommet au milieu d'un côté:</u> cliquer le long du côté puis déplacer</p>
+    <p><u>Supprimer un sommet:</u> Alt+cliquer sur le sommet</p>
+    <p><u>Scinder un polygone:</u> joindre 2 sommets du polygone puis Alt+cliquer sur le sommet commun</p>
+    'de chaque polygone puis Alt+cliquer dessus</p>
+    <p><u>Supprimer un polygone:</u> Ctrl+Alt+cliquer sur un côté du polygone</p>
+  </label>
+  <hr>
+  <label id="myol-help-edit-poly">
+    <p><u>Pour créer un polygone:</u></p>
+    <p>Cliquer sur le bouton &#x1F58D; et choisissez "Création polygone"</p>
+    <p>Cliquer sur l'emplacement du premier sommet</p>
+    <p>Puis sur chaque sommet</p>
+    <p>Double cliquer sur le dernier sommet pour terminer</p>
+    <hr>
+    <p>Un polygone entièrement compris dans un autre crée un "trou"</p>
+  </label>
+
+  <input id="edit-json" type="text" value='{
+		"type": "MultiPolygon",
+		"coordinates": [
+			[
+				[
+					[5.72, 45.18],
+					[5.6, 45.32],
+					[5.2, 45.08],
+					[5.11632, 44.91339],
+					[5.03, 44.73],
+					[5.19035, 44.7282],
+					[5.25558, 44.7755],
+					[5.29266, 44.78525],
+					[5.38193, 44.78866],
+					[5.44, 44.74],
+					[5.48, 44.69],
+					[5.54398, 44.69648],
+					[5.61, 44.76],
+					[5.62438, 44.7841],
+					[5.59, 44.87],
+					[5.63, 44.91],
+					[5.64, 45.02],
+					[5.72, 45.09],
+					[5.72, 45.18]
+				]
+			]
+		]
+	}'>
+</body>
+
+</html>
