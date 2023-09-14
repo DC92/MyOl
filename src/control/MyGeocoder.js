@@ -6,13 +6,12 @@
  */
 
 // Geocoder
+import Geocoder from '@myol/geocoder/src/base';
 import '@myol/geocoder/dist/ol-geocoder.css';
 import './myGeocoder.css'; // After ol-geocoder.css
-import Geocoder from '@myol/geocoder/src/base';
 
 //TODO BUG n'ouvre pas au survol
 //TODO BUG n'affiche pas le picto envoi
-//TODO Use unicode char for the button &#128269; loupe
 export default class MyGeocoder extends Geocoder {
   constructor(options) {
     super('nominatim', {
@@ -27,6 +26,7 @@ export default class MyGeocoder extends Geocoder {
         evt.stopImmediatePropagation()
       );
 
+    //TODO necessary ?
     this.on('addresschosen', evt =>
       evt.target.getMap().getView().fit(evt.bbox)
     );
