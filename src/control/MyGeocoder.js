@@ -26,13 +26,12 @@ export default class MyGeocoder extends Geocoder {
         evt.stopImmediatePropagation()
       );
 
-    //TODO necessary ?
-    this.on('addresschosen', evt =>
-      evt.target.getMap().getView().fit(evt.bbox)
-    );
-
-    // Close other opened buttons when hover with a mouse
     this.element.addEventListener('pointerover', () => {
+      // Open the control
+      this.element.querySelector('.gcd-gl-control')
+        .classList.add('gcd-gl-expanded');
+
+      // Close other opened buttons when hover with a mouse
       for (let el of document.getElementsByClassName('myol-button-selected'))
         el.classList.remove('myol-button-selected');
     });

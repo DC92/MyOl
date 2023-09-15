@@ -1,6 +1,6 @@
 /**
  * Controls.js
- * Add some usefull controls without buttons
+ * Add some usefull controls with buttons
  */
 
 import MyControl from './MyControl.js';

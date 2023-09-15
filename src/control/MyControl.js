@@ -1,6 +1,6 @@
 /**
  * Controls.js
- * Add some usefull controls with buttons
+ * Add some usefull controls without buttons
  */
 
 import ol from '../ol';
