@@ -12,6 +12,13 @@ Based on https://openlayers.org
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link href="images/logo-dark.svg" rel="icon" type="image/svg">
 
+  <script>
+    // apache (production)
+    if (window.origin.split(':').length == 2) {
+      document.write('<link href="../dist/myol.css" type="text/css" rel="stylesheet">');
+      document.write('<script src="../dist/myol.js"><&#47;script>');
+    }
+  </script>
   <script type="module">
     // vite nmp (test)
     import myol from '../build/index'; // At this place, mysteriously do not import out of npm vite context
@@ -19,7 +26,6 @@ Based on https://openlayers.org
   </script>
 
   <!-- The main script must be defer or module to be run after the myol import -->
-  <script src="ressources/keys.js"></script>
   <script type="module" src="ressources/trace.js"></script>
   <script type="module">
     new ol.Map({
@@ -30,7 +36,7 @@ Based on https://openlayers.org
       controls: [
         ...myol.control.collection(),
         new myol.control.LayerSwitcher({
-          layers: myol.layer.tile.collection(layersKeys),
+          layers: myol.layer.tile.collection(),
         }),
         new myol.control.Permalink({
           display: true,
@@ -40,17 +46,10 @@ Based on https://openlayers.org
         new myol.layer.AltLayer(),
       ],
     });
+    //TODO BUG les sélecteurs ne marchent pas
   </script>
 
   <style>
-    body {
-      background: #444;
-    }
-
-    a {
-      color: lightblue;
-    }
-
     #map {
       clear: both;
       width: 100%;
@@ -63,14 +62,13 @@ Based on https://openlayers.org
 <body>
   <a style="float:right" href="layerSwitcher.html">Next &#9654;</a>
   <h1 style="margin:0">MyOl</h1>
-  <a href="index.html" title="Layer switcher">I</a>
   <a href="layerSwitcher.html" title="Layer switcher">S</a>
   <a href="tileLayer.html" title="Tile layer">T</a>
   <a href="vectorLayer.html" title="Vector layer">V</a>
   <a href="controls.html" title="Controls">C</a>
   <a href="marker.html" title="Marker">M</a>
   <a href="editor.html" title="Editor">E</a>
-  <a href="gps/" title="Off line GPS">G</a> &nbsp;
+  <a href="../gps/" title="Off line GPS">G</a> &nbsp;
   <a href="wri/index.html" title="Refuges.info">W</a>
   <a href="wri/nav.html" title="Nav">N</a>
   <a href="wri/edit.html" title="Edit massif">E</a>
@@ -98,7 +96,7 @@ Based on https://openlayers.org
   <p><a href="marker.html">Marker</a></p>
   <p><a href="editor.html">Editor</a></p>
   <p><a href="wri/index.html">Refuges.info</a></p>
-  <p><a href="gps">Off line GPS</a></p>
+  <p><a href="../gps">Off line GPS</a></p>
 </body>
 
 </html>

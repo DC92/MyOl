@@ -19,7 +19,7 @@
   "type": "module",
   "scripts": {
     "build": "rollup -c build/config.js",
-    "lint:dom": "npx eslint src/*.js src/*/*.js",
+    "lint": "npx eslint src/*.js src/*/*.js",
     "beautify": "js-beautify -s=2 build/*.js examples/*.html examples/ressources/* examples/wri/* src/*.*s src/control/* src/layer/* package.json"
   },
   "dependencies": {

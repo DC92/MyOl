@@ -80,7 +80,7 @@ If you want to use external providers layers, you must acquire free keys and rep
 ARCHITECTURE
 ============
 Just include myol.js & myos.css after ol/dist, proj4js & geocoder's js & css.
-* See [index.html](https://raw.githubusercontent.com/Dominique92/dev/master/assets/MyOl/index.html) for example
+* See this [example](https://raw.githubusercontent.com/Dominique92/dev/master/assets/MyOl/index.html)
 * Code & all tiled layers use EPSG:3857 spherical mercator projection
 
 The coding rules are volontary simple & don't follow all openlayers's
@@ -96,8 +96,7 @@ FILES
 * ol/... : Openlayer V6.0.1 (you can use any of openlayers V5.* or V6.*) from [Openlayers](https://openlayers.org/download/)
 * geocoder/... : Geocoder V4.0.0 from [Openlayers geocoder](https://github.com/jonataswalker/ol-geocoder/releases/latest)
 * proj4/... : Coordinate transformation software proj4js V2.5.0 from [Proj4](https://github.com/proj4js/proj4js/releases/latest)
-* index.html : Simple demo
-* examples/... : Demos or ongoing developments
+* examples/... : Demos & visual tests
 * gps/... : Off line demo with GPS capabilities
 
 TESTED ON

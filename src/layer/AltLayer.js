@@ -11,19 +11,19 @@ export default class AltLayer extends layerTile.StadiaMaps {
   setMapInternal(map) { //HACK execute actions on Map init
     super.setMapInternal(map);
 
-    map.on(['precompose'], () => {
+    map.on('moveend', evt => {
       const mapExtent = map.getView().calculateExtent(map.getSize());
-
-      this.setVisible(true); // Display it by default
+      let needed = true;
 
       map.getLayers().forEach(l => {
-        if (l.isVisible && l.isVisible() &&
-          l != this &&
-          l.getSource().urls && // Is a tile layer
-          (!l.getExtent() || // The layer covers all the globe
-            ol.extent.containsExtent(l.getExtent(), mapExtent))) // The layer covers the map extent
-          this.setVisible(false); // Then, don't display the replacement layer
+        if (l.getSource() && l.getSource().urls && // Is a tile layer
+          l.isVisible && l.isVisible() && // It is visible
+          l != this && // Not the alt layer
+          ol.extent.containsExtent(l.getExtent() || mapExtent, mapExtent)) // The layer covers the map extent or the entiere worl
+          needed = false;
       });
+
+      this.setVisible(needed);
     });
   }
 }
