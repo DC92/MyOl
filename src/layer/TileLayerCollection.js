@@ -23,13 +23,14 @@ export class OpenStreetMap extends XYZsource {
   constructor(options) {
     super({
       url: 'https://{a-c}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-      maxZoom: 21,
+      maxZoom: 19,
       attributions: ol.source.OSM.ATTRIBUTION,
       ...options,
     });
   }
 }
 
+//TODO why not ol.layer.OSM ?
 export class OpenTopo extends OpenStreetMap {
   constructor(options) {
     super({
@@ -46,6 +47,7 @@ export class MRI extends OpenStreetMap {
   constructor(options) {
     super({
       url: 'https://maps.refuges.info/hiking/{z}/{x}/{y}.png',
+      maxZoom: 18,
       attributions: '<a href="//wiki.openstreetmap.org/wiki/Hiking/mri">Refuges.info</a>',
       ...options,
     });
@@ -53,11 +55,13 @@ export class MRI extends OpenStreetMap {
 }
 
 export class Kompass extends OpenStreetMap { // Austria
+  //TODO BUG semble charger 2 couches à l'init
   constructor(options = {}) {
     super({
       url: options.key ?
         'https://map{1-4}.kompass.de/{z}/{x}/{y}/kompass_' + options.subLayer + '?key=' + options.key : // Specific
         'https://map{1-5}.tourinfra.com/tiles/kompass_' + options.subLayer + '/{z}/{x}/{y}.png', // No key
+      maxZoom: 17,
       hidden: !options.key && options.subLayer != 'osm', // For LayerSwitcher
       attributions: '<a href="http://www.kompass.de/livemap/">KOMPASS</a>',
       ...options,
@@ -69,6 +73,7 @@ export class Thunderforest extends OpenStreetMap {
   constructor(options = {}) {
     super({
       url: 'https://{a-c}.tile.thunderforest.com/' + options.subLayer + '/{z}/{x}/{y}.png?apikey=' + options.key,
+      maxZoom: 22,
       // subLayer: 'outdoors', ...
       // key: Get a key at https://manage.thunderforest.com/dashboard
       hidden: !options.key, // For LayerSwitcher
@@ -164,7 +169,6 @@ export class SwissTopo extends ol.layer.Tile {
 /**
  * Spain
  */
-//TODO BUG charge couche Alt pour rien
 export class IgnES extends XYZsource {
   constructor(options) {
     super({
@@ -176,6 +180,7 @@ export class IgnES extends XYZsource {
         '&Format=image/jpeg' +
         '&style=default&tilematrixset=GoogleMapsCompatible' +
         '&TileMatrix={z}&TileCol={x}&TileRow={y}',
+      maxZoom: 20,
       attributions: '&copy; <a href="http://www.ign.es/">IGN España</a>',
       ...options,
     });
@@ -225,14 +230,13 @@ export class IGM extends ol.layer.Tile {
  * Ordnance Survey : Great Britain
  * key: Get your own (free) key at https://osdatahub.os.uk/
  */
-//BEST Replacement layer out of bounds
 //BEST XYZsource
 export class OS extends ol.layer.Tile {
   constructor(options = {}) {
     super({
       hidden: !options.key, // For LayerSwitcher
-      minResolution: 2,
-      maxResolution: 1700,
+      minZoom: 6,
+      maxZoom: 16,
       extent: [-1198263, 6365000, 213000, 8702260],
       source: new ol.source.XYZ({
         url: 'https://api.os.uk/maps/raster/v1/zxy/' +
@@ -249,14 +253,13 @@ export class OS extends ol.layer.Tile {
 /**
  * ArcGIS (Esri)
  */
-//TODO BUG charge couche Alt pour rien
 export class ArcGIS extends XYZsource {
   constructor(options) {
     super({
       host: 'https://server.arcgisonline.com/ArcGIS/rest/services/',
       subLayer: 'World_Imagery',
       url: o => o.host + o.subLayer + '/MapServer/tile/{z}/{y}/{x}',
-      maxZoom: 19, //TODO revoir tous les maxZoom / minResolution
+      maxZoom: 19,
       attributions: '&copy; <a href="https://www.arcgis.com/home/webmap/viewer.html">ArcGIS (Esri)</a>',
       ...options,
     });
@@ -275,6 +278,7 @@ export class StadiaMaps extends ol.layer.Tile {
     super({
       source: new ol.source.StadiaMaps({
         layer: 'stamen_toner_lite',
+        maxZoom: 16,
         ...options,
       }),
       ...options,
@@ -290,6 +294,7 @@ export class Maxbox extends XYZsource {
   constructor(options = {}) {
     super({
       url: 'https://api.mapbox.com/v4/' + options.tileset + '/{z}/{x}/{y}@2x.webp?access_token=' + options.key,
+      // No maxZoom
       attributions: '&copy; <a href="https://mapbox.com/">Mapbox</a>',
     });
   }
@@ -298,12 +303,12 @@ export class Maxbox extends XYZsource {
 /**
  * Google
  */
-//TODO BUG charge couche Alt pour rien
 export class Google extends XYZsource {
   constructor(options) {
     super({
       subLayers: 'm', // Roads
       url: o => 'https://mt{0-3}.google.com/vt/lyrs=' + o.subLayers + '&hl=fr&x={x}&y={y}&z={z}',
+      maxZoom: 22,
       attributions: '&copy; <a href="https://www.google.com/maps">Google</a>',
       ...options,
     });
@@ -319,6 +324,7 @@ export class Bing extends ol.layer.Tile {
     super({
       // imagerySet: 'Road',
       // key, Get your own (free) key at https://www.bingmapsportal.com
+      // No explicit zoom
       hidden: !options.key, // For LayerSwitcher
       // attributions, defined by ol.source.BingMaps
       ...options,
@@ -336,7 +342,9 @@ export class Bing extends ol.layer.Tile {
 // Tile layers examples
 export function collection(options = {}) {
   return {
-    'OSM fr': new OpenStreetMap(),
+    'OSM fr': new OpenStreetMap({
+      url: 'https://{a-c}.tile.openstreetmap.fr/osmfr/{z}/{x}/{y}.png',
+    }),
     'OpenTopo': new OpenTopo(),
     'OSM outdoors': new Thunderforest({
       ...options.thunderforest, // Include key
@@ -369,6 +377,7 @@ export function collection(options = {}) {
     'Kompas winter': new Kompass({
       ...options.kompass, // Include key
       subLayer: 'winter',
+      maxZoom: 22,
     }),
     'Angleterre': new OS(options.os), // options include key
     'Italie': new IGM(),
@@ -428,6 +437,7 @@ export function demo(options = {}) {
     'ThF cycle': new Thunderforest({
       ...options.thunderforest, // Include key
       subLayer: 'cycle',
+      maxZoom: 14,
     }),
     'ThF trains': new Thunderforest({
       ...options.thunderforest, // Include key

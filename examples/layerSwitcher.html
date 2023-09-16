@@ -30,7 +30,7 @@ Based on https://openlayers.org
 
   <!-- The main script must be defer or module to be run after the myol import -->
   <script type="module">
-    const baseLayers = {
+    var baseLayers = {
         StadiaMaps: new ol.layer.Tile({
           source: new ol.source.StadiaMaps({
             layer: 'stamen_terrain',

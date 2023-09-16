@@ -37,7 +37,7 @@ Based on https://openlayers.org
 
   <!-- The main script must be defer or module to be run after the myol import -->
   <script type="module">
-    const snaplayer = new ol.layer.Vector({
+    var snaplayer = new ol.layer.Vector({
         source: new ol.source.Vector({
           url: 'ressources/switzerland.geojson',
           format: new ol.format.GeoJSON(),

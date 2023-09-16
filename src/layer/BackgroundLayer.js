@@ -8,11 +8,18 @@ import ol from '../ol';
 import * as layerTile from './TileLayerCollection';
 
 export default class BackgroundLayer extends layerTile.StadiaMaps {
+  constructor() {
+    super({
+      visible: false,
+    });
+  }
+
   setMapInternal(map) { //HACK execute actions on Map init
     super.setMapInternal(map);
 
     map.on('moveend', () => {
-      const mapExtent = map.getView().calculateExtent(map.getSize());
+      const view = map.getView(),
+        mapExtent = view.calculateExtent(map.getSize());
       let needed = true;
 
       map.getLayers().forEach(l => {
@@ -23,7 +30,7 @@ export default class BackgroundLayer extends layerTile.StadiaMaps {
           needed = false;
       });
 
-      this.setVisible(needed);
+      this.setVisible(view.getResolution() > 5 && needed); //TODO resolution > only if the layer covers the map extent
     });
   }
 }

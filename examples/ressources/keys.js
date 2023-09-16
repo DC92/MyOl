@@ -1,4 +1,4 @@
-const layersKeys = {
+var layersKeys = {
   // Get your own (free) IGN key at https://geoservices.ign.fr/
   ign: {
     key: 'iejxbx4obzhco6c8klxrfbto'

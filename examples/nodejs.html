@@ -22,7 +22,7 @@ Based on https://openlayers.org
   <script src="ressources/keys.js"></script>
   <script type="module" src="ressources/trace.js"></script>
   <script type="module">
-    new ol.Map({
+    var map = new ol.Map({
       target: 'map',
       view: new ol.View({
         enableRotation: false,
@@ -35,13 +35,17 @@ Based on https://openlayers.org
       controls: [
         ...myol.control.collection(),
         new myol.control.LayerSwitcher({
-          layers: myol.layer.tile.collection(layersKeys),
+          layers: myol.layer.tile.demo(layersKeys),
         }),
         new myol.control.Permalink({
           display: true,
         }),
       ],
     });
+
+    map.getView().on('change:resolution', () =>
+      console.log('Resolution : ' + map.getView().getResolution())
+    );
   </script>
 
   <style>

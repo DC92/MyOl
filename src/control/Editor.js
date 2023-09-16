@@ -183,10 +183,11 @@ export default class Editor extends MyButton {
 
       const extent = this.source.getExtent();
 
+      //TODO factorise with Load.js
       if (!ol.extent.isEmpty(extent))
         this.getMap().getView().fit(
           extent, {
-            maxZoom: 17,
+            maxZoom: 17, //TODO replace by minResolution
             padding: [5, 5, 5, 5],
           });
     }

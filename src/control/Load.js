@@ -96,12 +96,13 @@ export default class Load extends MyButton {
       // Zoom the map on the added features
       const fileExtent = gpxSource.getExtent();
 
+      //TODO factorise with Editor.js
       if (ol.extent.isEmpty(fileExtent))
         alert(url + ' ne comporte pas de point ni de trace.');
       else
         map.getView().fit(
           fileExtent, {
-            maxZoom: 17,
+            maxZoom: 17, //TODO replace by minResolution
             padding: [5, 5, 5, 5],
           });
     }
