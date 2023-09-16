@@ -7,11 +7,11 @@
 import ol from '../ol';
 import * as layerTile from './TileLayerCollection';
 
-export default class AltLayer extends layerTile.StadiaMaps {
+export default class BackgroundLayer extends layerTile.StadiaMaps {
   setMapInternal(map) { //HACK execute actions on Map init
     super.setMapInternal(map);
 
-    map.on('moveend', evt => {
+    map.on('moveend', () => {
       const mapExtent = map.getView().calculateExtent(map.getSize());
       let needed = true;
 

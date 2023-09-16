@@ -1,6 +1,6 @@
 {
   "name": "@myol/myol",
-  "version": "1.1.0",
+  "version": "1.1.1-dev",
   "description": "This package adds many features to Openlayer https://openlayers.org/",
   "author": "Dominique Cavailhez",
   "homepage": "https://github.com/Dominique92/MyOl#readme",

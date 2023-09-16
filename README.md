@@ -80,7 +80,8 @@ If you want to use external providers layers, you must acquire free keys and rep
 ARCHITECTURE
 ============
 Just include myol.js & myos.css after ol/dist, proj4js & geocoder's js & css.
-* See this [example](https://raw.githubusercontent.com/Dominique92/dev/master/assets/MyOl/index.html)
+* See this [example](examples/index.html) <= //TODO TO TEST
+* See this [example](https://raw.githubusercontent.com/Dominique92/dev/master/assets/MyOl/examples/index.html)
 * Code & all tiled layers use EPSG:3857 spherical mercator projection
 
 The coding rules are volontary simple & don't follow all openlayers's

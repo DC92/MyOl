@@ -3,6 +3,7 @@
  */
 
 import MyButton from './MyButton';
+import BackgroundLayer from '../layer/BackgroundLayer';
 import './layerSwitcher.css';
 
 //BEST how do we do on touch terminal ? alt key to switch layers / transparency
@@ -37,6 +38,8 @@ export default class LayerSwitcher extends MyButton {
 
   setMap(map) {
     super.setMap(map);
+
+    map.addLayer(new BackgroundLayer());
 
     for (let name in this.layers) {
       // Build html layers selectors

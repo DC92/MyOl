@@ -43,7 +43,9 @@ Based on https://openlayers.org
         }),
       ],
       layers: [
-        new myol.layer.AltLayer(),
+        new myol.layer.vector.Chemineur({
+          selectName: 'select-chem',
+        }),
       ],
     });
     //TODO BUG les sélecteurs ne marchent pas
