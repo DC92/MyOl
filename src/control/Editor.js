@@ -7,6 +7,7 @@ import ol from '../ol';
 import MyButton from './MyButton';
 
 // Editor
+//TODO make a layer
 export default class Editor extends MyButton {
   constructor(options = {}) {
     super({

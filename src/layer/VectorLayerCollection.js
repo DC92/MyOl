@@ -20,15 +20,20 @@ function chemIconUrl(type, host) {
 }
 
 // chemineur.fr
-//TODO document options
 export class Chemineur extends MyVectorLayer {
   constructor(opt) {
     super({
       host: 'https://chemineur.fr/',
+      // addProperties: (properties) => {properties => {}}, // add properties to each received features
       browserClusterMinDistance: 50,
       browserClusterFeaturelMaxPerimeter: 300,
       serverClusterMinResolution: 100,
+      // basicStylesOptions: stylesOptions.basic, // (feature, layer)
+      // hoverStylesOptions: stylesOptions.hover,
+      // selector: new Selector(opt.selectName),
       attribution: '&copy;chemineur.fr',
+      // Any ol.source.Vector options
+      // Any ol.source.layer.Vector
 
       ...opt,
 
@@ -42,14 +47,20 @@ export class Chemineur extends MyVectorLayer {
 }
 
 // alpages.info
-//TODO document options
 export class Alpages extends MyVectorLayer {
   constructor(opt) {
     super({
       host: 'https://alpages.info/',
+      // addProperties: (properties) => {properties => {}}, // add properties to each received features
       browserClusterMinDistance: 50,
       browserClusterFeaturelMaxPerimeter: 300,
+      // serverClusterMinResolution: 100, // (map units per pixel) resolution above which we ask clusters to the server
+      // basicStylesOptions: stylesOptions.basic, // (feature, layer)
+      // hoverStylesOptions: stylesOptions.hover,
+      // selector: new Selector(opt.selectName),
       attribution: '&copy;alpages.info',
+      // Any ol.source.Vector options
+      // Any ol.source.layer.Vector
 
       ...opt,
 
@@ -67,14 +78,20 @@ export class Alpages extends MyVectorLayer {
 }
 
 // refuges.info
-//TODO document options
 export class WRI extends MyVectorLayer {
   constructor(opt) {
     super({
       host: 'https://www.refuges.info/',
+      // addProperties: (properties) => {properties => {}}, // add properties to each received features
       browserClusterMinDistance: 50,
       serverClusterMinResolution: 100,
+      // browserClusterFeaturelMaxPerimeter: 300, // (pixels) perimeter of a line or poly above which we do not cluster
+      // basicStylesOptions: stylesOptions.basic, // (feature, layer)
+      // hoverStylesOptions: stylesOptions.hover,
+      // selector: new Selector(opt.selectName),
       attribution: '&copy;refuges.info',
+      // Any ol.source.Vector options
+      // Any ol.source.layer.Vector
 
       ...opt,
 
@@ -101,14 +118,21 @@ export class WRI extends MyVectorLayer {
 }
 
 // pyrenees-refuges.com
-//TODO document options
 export class PRC extends MyVectorLayer {
   constructor(options) {
     super({
       url: 'https://www.pyrenees-refuges.com/api.php?type_fichier=GEOJSON',
       strategy: ol.loadingstrategy.all,
+      // addProperties: (properties) => {properties => {}}, // add properties to each received features
       browserClusterMinDistance: 50,
+      // browserClusterFeaturelMaxPerimeter: 300, // (pixels) perimeter of a line or poly above which we do not cluster
+      // serverClusterMinResolution: 100, // (map units per pixel) resolution above which we ask clusters to the server
+      // basicStylesOptions: stylesOptions.basic, // (feature, layer)
+      // hoverStylesOptions: stylesOptions.hover,
+      // selector: new Selector(opt.selectName),
       attribution: '&copy;Pyrenees-Refuges',
+      // Any ol.source.Vector options
+      // Any ol.source.layer.Vector
 
       ...options,
 
@@ -124,7 +148,6 @@ export class PRC extends MyVectorLayer {
 }
 
 // CampToCamp.org
-//TODO document options
 export class C2C extends MyVectorLayer {
   constructor(options) {
     const format_ = new ol.format.GeoJSON({ // Format of received data
@@ -139,8 +162,16 @@ export class C2C extends MyVectorLayer {
       }),
       projection: 'EPSG:3857',
       format: format_,
+      // addProperties: (properties) => {properties => {}}, // add properties to each received features
       browserClusterMinDistance: 50,
+      // browserClusterFeaturelMaxPerimeter: 300, // (pixels) perimeter of a line or poly above which we do not cluster
+      // serverClusterMinResolution: 100, // (map units per pixel) resolution above which we ask clusters to the server
+      // basicStylesOptions: stylesOptions.basic, // (feature, layer)
+      // hoverStylesOptions: stylesOptions.hover,
+      // selector: new Selector(opt.selectName),
       attribution: '&copy;Camp2camp',
+      // Any ol.source.Vector options
+      // Any ol.source.layer.Vector
 
       ...options,
     });
@@ -179,7 +210,6 @@ export class C2C extends MyVectorLayer {
  * From: https://openlayers.org/en/latest/examples/vector-osm.html
  * Doc: http://wiki.openstreetmap.org/wiki/Overpass_API/Language_Guide
  */
-//TODO document options
 export class Overpass extends MyVectorLayer {
   constructor(options) {
     const format_ = new ol.format.OSMXML(),
@@ -194,8 +224,18 @@ export class Overpass extends MyVectorLayer {
       query: query_,
       bbox: () => null, // No bbox at the end of the url
       format: format_,
+      // addProperties: (properties) => {properties => {}}, // add properties to each received features
       maxResolution: 50,
+      // browserClusterMinDistance:50, // (pixels) distance above which the browser clusterises
+      // browserClusterFeaturelMaxPerimeter: 300, // (pixels) perimeter of a line or poly above which we do not cluster
+      // serverClusterMinResolution: 100, // (map units per pixel) resolution above which we ask clusters to the server
+      // basicStylesOptions: stylesOptions.basic, // (feature, layer)
+      // hoverStylesOptions: stylesOptions.hover,
+      // selector: new Selector(opt.selectName),
       attribution: '&copy;OpenStreetMap',
+      // Any ol.source.Vector options
+      // Any ol.source.layer.Vector
+
       ...options,
     });
 
