@@ -12,7 +12,6 @@ export default class Marker extends ol.layer.Vector {
       // position: [0, 0], Initial position of the marker (default : center of the map)
       // dragable : can draw the marker to edit position
       // focus : number : center & value of zoom on the marker
-      zIndex: 400, // Above points
 
       prefix: 'marker', // Will take the values on
       // marker-json, <input> json form

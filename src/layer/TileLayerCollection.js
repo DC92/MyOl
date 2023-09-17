@@ -232,7 +232,7 @@ export class OS extends ol.layer.Tile {
   constructor(options = {}) {
     super({
       hidden: !options.key, // For LayerSwitcher
-      minZoom: 6,
+      minZoom: 7,
       maxZoom: 16,
       extent: [-1198263, 6365000, 213000, 8702260],
       source: new ol.source.XYZ({

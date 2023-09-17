@@ -244,7 +244,6 @@ export class MyVectorLayer extends MyServerClusterVectorLayer {
 
       basicStylesOptions: stylesOptions.basic, // (feature, layer)
       hoverStylesOptions: stylesOptions.hover,
-      zIndex: 100, // Above the tiles layers //TODO TEST ça marche quand déclarées avant ?
       selector: new Selector(opt.selectName),
 
       // Any ol.source.Vector options
@@ -290,7 +289,6 @@ export class Hover extends ol.layer.Vector {
   constructor() {
     super({
       source: new ol.source.Vector(),
-      zIndex: 200, // Above the vector layers
     });
   }
 

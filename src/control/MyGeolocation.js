@@ -70,7 +70,6 @@ export default class MyGeolocation extends MyButton {
       source: new ol.source.Vector({
         features: [this.graticuleFeature, this.northGraticuleFeature],
       }),
-      zIndex: 300, // Above the features
       style: new ol.style.Style({
         fill: new ol.style.Fill({
           color: 'rgba(128,128,255,0.2)',
@@ -217,7 +216,7 @@ export default class MyGeolocation extends MyButton {
       view.setRotation(0); // Return to inactive state
 
     // Display data under the button
-    let status = window.gpsValues.position ? '' : 'Sync...'; //TODO BUG never see Sync...
+    let status = window.gpsValues.position ? '' : 'Sync...';
     if (window.gpsValues.altitude) {
       status = Math.round(window.gpsValues.altitude) + ' m';
       if (window.gpsValues.speed)

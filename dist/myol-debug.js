@@ -60111,7 +60111,6 @@ var myol = (function () {
       this.layer = new ol.layer.Vector({
         source: this.source,
         style: this.displayStyle,
-        zIndex: 400, // Editor & cursor : above the features
       });
 
       // Register action listeners
@@ -60807,7 +60806,7 @@ var myol = (function () {
     constructor(options = {}) {
       super({
         hidden: !options.key, // For LayerSwitcher
-        minZoom: 6,
+        minZoom: 7,
         maxZoom: 16,
         extent: [-1198263, 6365000, 213000, 8702260],
         source: new ol.source.XYZ({
@@ -61113,8 +61112,18 @@ var myol = (function () {
 
 
   class BackgroundLayer extends StadiaMaps {
-    constructor() {
+    constructor(options) {
+      // High resolution background layer
       super({
+        minResolution: 10,
+        visible: false,
+
+        ...options,
+      });
+
+      // Low resolution background layer
+      this.lowResLayer = new noTile({
+        maxResolution: this.getMinResolution(),
         visible: false,
       });
     }
@@ -61124,27 +61133,23 @@ var myol = (function () {
       super.setMapInternal(map);
 
       // Substitution for low resoltions
-      map.addLayer(new noTile({
-        maxResolution: 10,
-      }));
+      map.addLayer(this.lowResLayer);
 
-      map.once('precompose', () => this.action(map)); // Once at the init
-      map.on('moveend', () => this.action(map));
-    }
+      map.on('precompose', () => {
+        const mapExtent = map.getView().calculateExtent(map.getSize());
+        let needed = true;
 
-    action(map) {
-      const mapExtent = map.getView().calculateExtent(map.getSize());
-      let needed = true;
+        map.getLayers().forEach(l => {
+          if (l.getSource() && l.getSource().urls && // Is a tile layer
+            l.isVisible && l.isVisible() && // Is visible
+            l != this && l != this.lowResLayer && // Not one of the background layers
+            ol.extent.containsExtent(l.getExtent() || mapExtent, mapExtent)) // The layer covers the map extent or the entiere worl
+            needed = false;
+        });
 
-      map.getLayers().forEach(l => {
-        if (l.getSource() && l.getSource().urls && // Is a tile layer
-          l.isVisible && l.isVisible() && // Is visible
-          l != this && // Not the background layer
-          ol.extent.containsExtent(l.getExtent() || mapExtent, mapExtent)) // The layer covers the map extent or the entiere worl
-          needed = false;
+        this.setVisible(needed);
+        this.lowResLayer.setVisible(needed);
       });
-
-      this.setVisible(needed);
     }
   }
 
@@ -89663,7 +89668,6 @@ var myol = (function () {
         source: new ol.source.Vector({
           features: [this.graticuleFeature, this.northGraticuleFeature],
         }),
-        zIndex: 300, // Above the features
         style: new ol.style.Style({
           fill: new ol.style.Fill({
             color: 'rgba(128,128,255,0.2)',
@@ -89810,7 +89814,7 @@ var myol = (function () {
         view.setRotation(0); // Return to inactive state
 
       // Display data under the button
-      let status = window.gpsValues.position ? '' : 'Sync...'; //TODO BUG never see Sync...
+      let status = window.gpsValues.position ? '' : 'Sync...';
       if (window.gpsValues.altitude) {
         status = Math.round(window.gpsValues.altitude) + ' m';
         if (window.gpsValues.speed)
@@ -97446,7 +97450,6 @@ var myol = (function () {
         // position: [0, 0], Initial position of the marker (default : center of the map)
         // dragable : can draw the marker to edit position
         // focus : number : center & value of zoom on the marker
-        zIndex: 400, // Above points
 
         prefix: 'marker', // Will take the values on
         // marker-json, <input> json form
@@ -98054,7 +98057,6 @@ var myol = (function () {
 
         basicStylesOptions: basic, // (feature, layer)
         hoverStylesOptions: hover,
-        zIndex: 100, // Above the tiles layers //TODO TEST ça marche quand déclarées avant ?
         selector: new Selector(opt.selectName),
 
         // Any ol.source.Vector options
@@ -98100,7 +98102,6 @@ var myol = (function () {
     constructor() {
       super({
         source: new ol.source.Vector(),
-        zIndex: 200, // Above the vector layers
       });
     }
 

@@ -8,8 +8,18 @@ import ol from '../ol';
 import * as layerTile from './TileLayerCollection';
 
 export default class BackgroundLayer extends layerTile.StadiaMaps {
-  constructor() {
+  constructor(options) {
+    // High resolution background layer
     super({
+      minResolution: 10,
+      visible: false,
+
+      ...options,
+    });
+
+    // Low resolution background layer
+    this.lowResLayer = new layerTile.noTile({
+      maxResolution: this.getMinResolution(),
       visible: false,
     });
   }
@@ -19,26 +29,22 @@ export default class BackgroundLayer extends layerTile.StadiaMaps {
     super.setMapInternal(map);
 
     // Substitution for low resoltions
-    map.addLayer(new layerTile.noTile({
-      maxResolution: 10,
-    }));
+    map.addLayer(this.lowResLayer);
 
-    map.once('precompose', () => this.action(map)); // Once at the init
-    map.on('moveend', () => this.action(map));
-  }
+    map.on('precompose', () => {
+      const mapExtent = map.getView().calculateExtent(map.getSize());
+      let needed = true;
 
-  action(map) {
-    const mapExtent = map.getView().calculateExtent(map.getSize());
-    let needed = true;
+      map.getLayers().forEach(l => {
+        if (l.getSource() && l.getSource().urls && // Is a tile layer
+          l.isVisible && l.isVisible() && // Is visible
+          l != this && l != this.lowResLayer && // Not one of the background layers
+          ol.extent.containsExtent(l.getExtent() || mapExtent, mapExtent)) // The layer covers the map extent or the entiere worl
+          needed = false;
+      });
 
-    map.getLayers().forEach(l => {
-      if (l.getSource() && l.getSource().urls && // Is a tile layer
-        l.isVisible && l.isVisible() && // Is visible
-        l != this && // Not the background layer
-        ol.extent.containsExtent(l.getExtent() || mapExtent, mapExtent)) // The layer covers the map extent or the entiere worl
-        needed = false;
+      this.setVisible(needed);
+      this.lowResLayer.setVisible(needed);
     });
-
-    this.setVisible(needed);
   }
 }
