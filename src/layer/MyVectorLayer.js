@@ -164,6 +164,7 @@ class MyClusterSource extends ol.source.Cluster {
 /**
  * Browser & server clustered layer
  */
+//TODO clusters KO sur index.html / chemineur & wri
 class MyBrowserClusterVectorLayer extends ol.layer.Vector {
   constructor(options) {
     // browserClusterMinDistance:50, // (pixels) distance above which the browser clusterises
@@ -245,6 +246,7 @@ export class MyVectorLayer extends MyServerClusterVectorLayer {
       basicStylesOptions: stylesOptions.basic, // (feature, layer)
       hoverStylesOptions: stylesOptions.hover,
       selector: new Selector(opt.selectName),
+      zIndex: 100, // Above tiles layers
 
       // Any ol.source.Vector options
       // Any ol.source.layer.Vector
@@ -285,10 +287,12 @@ export class MyVectorLayer extends MyServerClusterVectorLayer {
  * Display the hovered feature with the hover style
  * Go to the link property when click a feature
  */
+//TODO BUG affiche un petit ronf bleu style par défaut quand hover
 export class Hover extends ol.layer.Vector {
   constructor() {
     super({
       source: new ol.source.Vector(),
+      zIndex: 200, // Above the vector layers
     });
   }
 

@@ -60111,6 +60111,7 @@ var myol = (function () {
       this.layer = new ol.layer.Vector({
         source: this.source,
         style: this.displayStyle,
+        zIndex: 400, // Editor & cursor : above the features
       });
 
       // Register action listeners
@@ -61095,6 +61096,7 @@ var myol = (function () {
     MRI: MRI,
     Maxbox: Maxbox,
     OS: OS,
+    OpenStreetMap: OpenStreetMap,
     OpenTopo: OpenTopo,
     StadiaMaps: StadiaMaps,
     SwissTopo: SwissTopo,
@@ -89494,6 +89496,7 @@ var myol = (function () {
    */
 
 
+  //TODO plus de picto loupe sur localhost: / buildé
   class MyGeocoder extends Base {
     constructor(options) {
       super('nominatim', {
@@ -89668,6 +89671,7 @@ var myol = (function () {
         source: new ol.source.Vector({
           features: [this.graticuleFeature, this.northGraticuleFeature],
         }),
+        zIndex: 300, // Above the features
         style: new ol.style.Style({
           fill: new ol.style.Fill({
             color: 'rgba(128,128,255,0.2)',
@@ -97450,6 +97454,7 @@ var myol = (function () {
         // position: [0, 0], Initial position of the marker (default : center of the map)
         // dragable : can draw the marker to edit position
         // focus : number : center & value of zoom on the marker
+        zIndex: 400, // Above points
 
         prefix: 'marker', // Will take the values on
         // marker-json, <input> json form
@@ -97977,6 +97982,7 @@ var myol = (function () {
   /**
    * Browser & server clustered layer
    */
+  //TODO clusters KO sur index.html / chemineur & wri
   class MyBrowserClusterVectorLayer extends ol.layer.Vector {
     constructor(options) {
       // browserClusterMinDistance:50, // (pixels) distance above which the browser clusterises
@@ -98058,6 +98064,7 @@ var myol = (function () {
         basicStylesOptions: basic, // (feature, layer)
         hoverStylesOptions: hover,
         selector: new Selector(opt.selectName),
+        zIndex: 100, // Above tiles layers
 
         // Any ol.source.Vector options
         // Any ol.source.layer.Vector
@@ -98098,10 +98105,12 @@ var myol = (function () {
    * Display the hovered feature with the hover style
    * Go to the link property when click a feature
    */
+  //TODO BUG affiche un petit ronf bleu style par défaut quand hover
   class Hover extends ol.layer.Vector {
     constructor() {
       super({
         source: new ol.source.Vector(),
+        zIndex: 200, // Above the vector layers
       });
     }
 

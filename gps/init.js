@@ -1,5 +1,6 @@
 /* global ol, myol, layersKeys */ // eslint context
-
+//TODO gpx/20em.gps n'est pas pris en compte dan sles randos
+//TODO plus de picto loupe / plus de zoom
 console.log('MyGPS version LAST_CHANGE_TIME');
 //TODO GPS version in help
 

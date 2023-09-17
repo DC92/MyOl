@@ -53,6 +53,7 @@ export default class Editor extends MyButton {
     this.layer = new ol.layer.Vector({
       source: this.source,
       style: this.displayStyle,
+      zIndex: 400, // Editor & cursor : above the features
     });
 
     // Register action listeners

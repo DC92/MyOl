@@ -70,6 +70,7 @@ export default class MyGeolocation extends MyButton {
       source: new ol.source.Vector({
         features: [this.graticuleFeature, this.northGraticuleFeature],
       }),
+      zIndex: 300, // Above the features
       style: new ol.style.Style({
         fill: new ol.style.Fill({
           color: 'rgba(128,128,255,0.2)',

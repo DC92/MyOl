@@ -10,6 +10,7 @@ import Geocoder from '@myol/geocoder/src/base';
 import '@myol/geocoder/dist/ol-geocoder.css';
 import './myGeocoder.css'; // After ol-geocoder.css
 
+//TODO plus de picto loupe sur localhost: / buildé
 export default class MyGeocoder extends Geocoder {
   constructor(options) {
     super('nominatim', {

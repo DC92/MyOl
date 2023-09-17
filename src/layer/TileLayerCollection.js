@@ -19,7 +19,7 @@ class XYZsource extends ol.layer.Tile {
 }
 
 // OpenStreetMap & co
-class OpenStreetMap extends ol.layer.Tile {
+export class OpenStreetMap extends ol.layer.Tile {
   constructor(options) {
     super({
       source: new ol.source.OSM(options),
