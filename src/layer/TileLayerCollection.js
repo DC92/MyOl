@@ -19,18 +19,15 @@ class XYZsource extends ol.layer.Tile {
 }
 
 // OpenStreetMap & co
-export class OpenStreetMap extends XYZsource {
+class OpenStreetMap extends ol.layer.Tile {
   constructor(options) {
     super({
-      url: 'https://{a-c}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-      maxZoom: 19,
-      attributions: ol.source.OSM.ATTRIBUTION,
+      source: new ol.source.OSM(options),
       ...options,
     });
   }
 }
 
-//TODO why not ol.layer.OSM ?
 export class OpenTopo extends OpenStreetMap {
   constructor(options) {
     super({
