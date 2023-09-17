@@ -14,23 +14,31 @@ export default class BackgroundLayer extends layerTile.StadiaMaps {
     });
   }
 
-  setMapInternal(map) { //HACK execute actions on Map init
+  setMapInternal(map) {
+    //HACK execute actions on Map init
     super.setMapInternal(map);
 
-    map.on('moveend', () => {
-      const view = map.getView(),
-        mapExtent = view.calculateExtent(map.getSize());
-      let needed = true;
+    // Substitution for low resoltions
+    map.addLayer(new layerTile.noTile({
+      maxResolution: 10,
+    }));
 
-      map.getLayers().forEach(l => {
-        if (l.getSource() && l.getSource().urls && // Is a tile layer
-          l.isVisible && l.isVisible() && // It is visible
-          l != this && // Not the alt layer
-          ol.extent.containsExtent(l.getExtent() || mapExtent, mapExtent)) // The layer covers the map extent or the entiere worl
-          needed = false;
-      });
+    map.once('precompose', () => this.action(map)); // Once at the init
+    map.on('moveend', () => this.action(map));
+  }
 
-      this.setVisible(view.getResolution() > 5 && needed); //TODO resolution > only if the layer covers the map extent
+  action(map) {
+    const mapExtent = map.getView().calculateExtent(map.getSize());
+    let needed = true;
+
+    map.getLayers().forEach(l => {
+      if (l.getSource() && l.getSource().urls && // Is a tile layer
+        l.isVisible && l.isVisible() && // Is visible
+        l != this && // Not the background layer
+        ol.extent.containsExtent(l.getExtent() || mapExtent, mapExtent)) // The layer covers the map extent or the entiere worl
+        needed = false;
     });
+
+    this.setVisible(needed);
   }
 }

@@ -339,6 +339,16 @@ export class Bing extends ol.layer.Tile {
   }
 }
 
+export class noTile extends XYZsource {
+  constructor(options) {
+    super({
+      url: 'https://ecn.t0.tiles.virtualearth.net/tiles/r000000000000000000.jpeg?g=13897&mkt=en-us&shading=hill',
+      attributions: 'Out of zoom',
+      ...options,
+    });
+  }
+}
+
 // Tile layers examples
 export function collection(options = {}) {
   return {
@@ -497,6 +507,7 @@ export function demo(options = {}) {
     'Watercolor': new StadiaMaps({
       layer: 'stamen_watercolor',
     }),
+    'No tile': new noTile(),
     'Blank': new ol.layer.Tile(),
   };
 }
