@@ -63,13 +63,14 @@ export default class Load extends MyButton {
         dataProjection: receivedProjection,
         featureProjection: map.getView().getProjection(), // Map projection
       }),
-      added = map.dispatchEvent({
-        type: 'myol:onfeatureload', // Warn Editor that we uploaded some features
+      // Warn everyone that features have been loaded
+      used = map.dispatchEvent({
+        type: 'myol:onfeatureload',
         features: features,
       });
 
-    if (added !== false) { // If none used the feature
-      // Display the track on the map
+    // If no one used the feature, display them as a new layer
+    if (used !== false) {
       const gpxSource = new ol.source.Vector({
           format: loadFormat,
           features: features,

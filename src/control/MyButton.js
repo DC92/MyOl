@@ -15,8 +15,9 @@ export default class MyButton extends MyControl {
     // MyButton options
     // className : to be added to the control.element
     // label : one unicode character to decorate the button
-    // subMenuId : id of an existing html containing the scrolling menu 
-    // subMenuHTML : html code of the scrolling menu 
+    // subMenuId : id of an existing html containing the scrolling menu
+    // subMenuHTML : html code of the scrolling menu
+    // action: (evt) => {}, // To run when the button is clicked / hovered, ...
     super(options);
 
     // Add submenu below the button
@@ -54,6 +55,9 @@ export default class MyButton extends MyControl {
   }
 
   buttonAction(evt) {
+    if (this.options.action)
+      this.options.action(evt);
+
     if (evt.type == 'mouseover')
       this.element.classList.add('myol-button-hover');
     else // mouseout | click

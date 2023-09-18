@@ -24,6 +24,7 @@ export default class Print extends MyButton {
     });
 
     // Register action listeners
+    //TODO factoriser dans MyButton.js
     this.element.querySelectorAll('input,a')
       .forEach(el => {
         el.addEventListener('click', evt => this.action(evt));

@@ -2,8 +2,8 @@
  * This file defines the myol.control exports
  */
 
+import ol from '../ol';
 import Download from './Download';
-import Editor from './Editor';
 import LayerSwitcher from './LayerSwitcher';
 import LengthLine from './LengthLine';
 import Load from './Load';
@@ -15,7 +15,6 @@ import MyMousePosition from './MyMousePosition';
 import Permalink from './Permalink';
 import Print from './Print';
 import TilesBuffer from './TilesBuffer';
-import ol from '../ol';
 
 /**
  * Controls examples
@@ -50,7 +49,6 @@ export function collection(opt) {
 
 export default {
   Download: Download,
-  Editor: Editor,
   LayerSwitcher: LayerSwitcher,
   LengthLine: LengthLine,
   Load: Load,
