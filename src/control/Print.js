@@ -3,14 +3,13 @@
  */
 
 import ol from '../ol'; //BEST ??? come back to direct import (optim ???)
-import MyButton from './MyButton.js';
+import Button from './Button.js';
 
-export default class Print extends MyButton {
+export default class Print extends Button {
   constructor(options) {
     super({
-      // MyButton options
+      // Button options
       label: '&#128438;',
-      className: 'myol-button-print',
       subMenuHTML: '<p>Pour imprimer la carte:</p>' +
         '<p>-Choisir portrait ou paysage,</p>' +
         '<p>-zoomer et déplacer la carte dans le format,</p>' +
@@ -23,13 +22,6 @@ export default class Print extends MyButton {
       ...options,
     });
 
-    // Register action listeners
-    //TODO factoriser dans MyButton.js
-    this.element.querySelectorAll('input,a')
-      .forEach(el => {
-        el.addEventListener('click', evt => this.action(evt));
-      });
-
     // To return without print
     document.addEventListener('keydown', evt => {
       if (evt.key == 'Escape')
@@ -39,15 +31,14 @@ export default class Print extends MyButton {
     });
   }
 
-  action(evt) {
+  subMenuAction(evt) {
     const map = this.getMap(),
       mapEl = map.getTargetElement(),
       poElcs = this.element.querySelectorAll('input:checked'), // Selected orientation inputs
       orientation = poElcs.length ? parseInt(poElcs[0].value) : 0; // Selected orientation or portrait
 
     // Change map size & style
-    mapEl.style.maxHeight = mapEl.style.maxWidth =
-      mapEl.style.float = 'none';
+    mapEl.style.maxHeight = mapEl.style.maxWidth = mapEl.style.float = 'none';
     mapEl.style.width = orientation == 0 ? '208mm' : '295mm';
     mapEl.style.height = orientation == 0 ? '295mm' : '208mm';
     map.setSize([mapEl.clientWidth, mapEl.clientHeight]);

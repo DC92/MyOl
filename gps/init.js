@@ -8,7 +8,7 @@ console.log('MyGPS version LAST_CHANGE_TIME');
 navigator.serviceWorker.addEventListener('controllerchange', () => {
 	console.log('PWA controllerchange');
 	map.addControl(
-		new myol.control.MyButton({
+		new myol.control.Button({
 			label: '&#127381;',
 			subMenuHTML: '<p>Une nouvelle version</p>' +
 				'<p>ou de nouvelles traces</p>' +
@@ -35,7 +35,7 @@ var loadControl = new myol.control.Load(),
 			new myol.control.MyGeolocation(),
 			loadControl,
 			new myol.control.Download(),
-			new myol.control.MyButton({ // Help
+			new myol.control.Button({ // Help
 				label: '?',
 				subMenuId: 'myol-help-gps',
 			}),
@@ -77,7 +77,7 @@ if (gpxFiles) {
 	});
 
 	map.addControl(
-		new myol.control.MyButton({
+		new myol.control.Button({
 			label: '&#128694;',
 			subMenuId: 'myol-traces-gps',
 		})

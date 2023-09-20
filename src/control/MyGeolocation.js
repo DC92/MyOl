@@ -4,12 +4,12 @@
  */
 
 import ol from '../ol'; //BEST come back to direct import (optim ???)
-import MyButton from './myButton';
+import Button from './Button';
 
-export default class MyGeolocation extends MyButton {
+export default class MyGeolocation extends Button {
   constructor(options) {
     const subMenu = location.href.match(/(https|localhost)/) ?
-      //BEST use .html content / option
+      //BEST use .html content / option / Included file / deendig of language
       '<p>Localisation GPS:</p>' +
       '<label>' +
       '<input type="radio" name="myol-gps-source" value="0" checked="checked">' +
@@ -37,11 +37,10 @@ export default class MyGeolocation extends MyButton {
       '<a href="' + document.location.href.replace('http:', 'https:') + '">Passer en https<a>';
 
     super({
-      // MyButton options
-      className: 'myol-button-gps',
+      // Button options
       label: '&#8853;',
+      //TODO className: 'myol-button-geoloc',
       subMenuHTML: subMenu,
-      //BEST subMenuId: 'myol-gps',
 
       // ol.Geolocation options
       // https://www.w3.org/TR/geolocation/#position_options_interface
@@ -51,6 +50,8 @@ export default class MyGeolocation extends MyButton {
 
       ...options,
     });
+
+    this.options = options;
 
     // Add status display element
     this.statusEl = document.createElement('p');
@@ -98,7 +99,7 @@ export default class MyGeolocation extends MyButton {
     // Browser heading from the inertial & magnetic sensors
     window.addEventListener('deviceorientationabsolute', evt => {
       window.gpsValues.heading = evt.alpha || evt.webkitCompassHeading; // Android || iOS
-      this.change(evt);
+      this.subMenuAction(evt);
     });
   }
 
@@ -106,20 +107,20 @@ export default class MyGeolocation extends MyButton {
     super.setMap(map);
 
     map.addLayer(this.graticuleLayer);
-    map.on('moveend', evt => this.change(evt)); // Refresh graticule after map zoom
+    map.on('moveend', evt => this.subMenuAction(evt)); // Refresh graticule after map zoom
 
     this.geolocation = new ol.Geolocation({
       projection: map.getView().getProjection(),
       trackingOptions: this.options,
       ...this.options,
     });
-    this.geolocation.on('change', evt => this.change(evt));
+    this.geolocation.on('change', evt => this.subMenuAction(evt));
     this.geolocation.on('error', error => {
       console.log('Geolocation error: ' + error.message);
     });
   }
 
-  change(evt) {
+  subMenuAction(evt) {
     const sourceLevelEl = document.querySelector('input[name="myol-gps-source"]:checked'),
       displayLevelEl = document.querySelector('input[name="myol-gps-display"]:checked'),
       displayEls = document.getElementsByName('myol-gps-display'),

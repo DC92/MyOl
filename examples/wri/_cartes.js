@@ -159,9 +159,9 @@ function controlesCartes(page) {
     new ol.control.FullScreen(),
     new myol.control.MyGeocoder(),
     new myol.control.MyGeolocation(),
-    'nav,edit,modif'.includes(page) ? new myol.control.Load() : new myol.control.MyButton(),
-    'nav,edit,point'.includes(page) ? new myol.control.Download() : new myol.control.MyButton(),
-    'nav,point'.includes(page) ? new myol.control.Print() : new myol.control.MyButton(),
+    'nav,edit,modif'.includes(page) ? new myol.control.Load() : new myol.control.Button(),
+    'nav,edit,point'.includes(page) ? new myol.control.Download() : new myol.control.Button(),
+    'nav,point'.includes(page) ? new myol.control.Print() : new myol.control.Button(),
 
     // Bas gauche
     new myol.control.MyMousePosition(),

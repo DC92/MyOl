@@ -4,11 +4,12 @@
  */
 
 import ol from '../ol';
-import MyControl from './MyControl.js';
 
-export default class LengthLine extends MyControl {
+export default class LengthLine extends ol.control.Control {
   constructor() {
-    super(); //HACK button not visible
+    super({
+      element: document.createElement('div'), //HACK button not visible
+    });
 
     this.element.className = 'myol-length-line';
   }

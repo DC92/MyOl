@@ -4,11 +4,11 @@
  */
 
 import ol from '../ol';
-import MyButton from './MyButton';
+import Button from './Button';
 
 // Editor
 //TODO make a layer
-export default class Editor extends MyButton {
+export default class Editor extends Button {
   constructor(options = {}) {
     super({
       // Mybutton options

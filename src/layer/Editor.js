@@ -4,7 +4,7 @@
  */
 
 import ol from '../ol';
-import MyButton from '../control/MyButton';
+import Button from '../control/Button';
 
 // Editor
 export default class Editor extends ol.layer.Vector {
@@ -169,17 +169,17 @@ export default class Editor extends ol.layer.Vector {
     });
 
     this.buttons = [
-      new MyButton({ //
+      new Button({ //
         label: '&#128397;',
         subMenuHTML: '<p>Modification</p>',
         action: evt => this.changeInteraction(0, evt.type),
       }),
-      new MyButton({
+      new Button({
         label: '&#3351;',
         subMenuHTML: '<p>Création d\'une ligne</p>',
         action: evt => this.changeInteraction(1, evt.type),
       }),
-      new MyButton({
+      new Button({
         label: '&#9186;',
         subMenuHTML: '<p>Création d\'une surface</p>',
         action: evt => this.changeInteraction(2, evt.type),

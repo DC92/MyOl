@@ -3,12 +3,12 @@
  */
 
 import ol from '../ol';
+import './Control.css';
 import Download from './Download';
 import LayerSwitcher from './LayerSwitcher';
 import LengthLine from './LengthLine';
 import Load from './Load';
-import MyButton from './MyButton';
-import MyControl from './MyControl';
+import Button from './Button';
 import MyGeocoder from './MyGeocoder';
 import MyGeolocation from './MyGeolocation';
 import MyMousePosition from './MyMousePosition';
@@ -17,27 +17,18 @@ import Print from './Print';
 import TilesBuffer from './TilesBuffer';
 
 /**
- * Controls examples
+ * Basic list of controls
  */
-export function collection(opt) {
-  const options = {
-    supplementaryControls: [], //BEST resorb
-    ...opt,
-  };
-
+export function collection(options = {}) {
   return [
     // Top left
     new ol.control.Zoom(options.zoom),
     new ol.control.FullScreen(options.fullScreen),
-    /*
     new MyGeocoder(options.geocoder),
     new MyGeolocation(options.geolocation),
-	*/
     new Load(options.load),
     new Download(options.download),
-    /*
     new Print(options.print),
-*/
 
     // Bottom left
     new LengthLine(options.lengthLine),
@@ -46,7 +37,6 @@ export function collection(opt) {
 
     // Bottom right
     new ol.control.Attribution(options.attribution),
-    ...options.supplementaryControls,
   ];
 }
 
@@ -55,8 +45,7 @@ export default {
   LayerSwitcher: LayerSwitcher,
   LengthLine: LengthLine,
   Load: Load,
-  MyButton: MyButton,
-  MyControl: MyControl,
+  Button: Button,
   MyGeocoder: MyGeocoder,
   MyGeolocation: MyGeolocation,
   MyMousePosition: MyMousePosition,

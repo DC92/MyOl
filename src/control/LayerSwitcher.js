@@ -2,22 +2,24 @@
  * LayerSwitcher.js
  */
 
-import MyButton from './MyButton';
+import Button from './Button';
 import BackgroundLayer from '../layer/BackgroundLayer';
 import './layerSwitcher.css';
 
 //BEST how do we do on touch terminal ? alt key to switch layers / transparency
 //BEST keep selector open when click on the button (as other buttons)
-export default class LayerSwitcher extends MyButton {
+export default class LayerSwitcher extends Button {
   constructor(options) {
     super({
-      // MyButton options
+      // Button options
       className: 'myol-button-switcher',
       label: '&#10063;',
       subMenuHTML: '<div>',
 
       ...options,
     });
+
+    this.selectExtId = options.selectExtId;
 
     // Filter null or hidden layers
     this.layers = {};
@@ -54,7 +56,7 @@ export default class LayerSwitcher extends MyButton {
     this.subMenuEl.insertAdjacentHTML('beforeend', '<p>Ctrl+click: multicouches</p>');
 
     // Attach html additional selector (must be there to be after base layers)
-    const selectExtEl = document.getElementById(this.options.selectExtId);
+    const selectExtEl = document.getElementById(this.selectExtId);
     if (selectExtEl) {
       selectExtEl.classList.add('select-ext');
       this.subMenuEl.appendChild(selectExtEl);

@@ -5,9 +5,8 @@
  */
 
 import ol from '../ol';
-import MyControl from './MyControl.js';
 
-export default class Permalink extends MyControl {
+export default class Permalink extends ol.control.Control {
   constructor(options) {
     super({
       // Permalink options
@@ -16,11 +15,14 @@ export default class Permalink extends MyControl {
       display: false, // {true | false} Display permalink link the map.
       hash: '?', // {?, #} the permalink delimiter after the url
       //BEST init with bbox option
+      element: document.createElement('div'),
 
       ...options,
     });
 
-    if (this.options.display) {
+    this.init = options.init;
+
+    if (options.display) {
       this.element.className = 'myol-permalink';
       this.aEl = document.createElement('a');
       this.aEl.innerHTML = 'Permalink';
@@ -44,8 +46,8 @@ export default class Permalink extends MyControl {
 
 
     // Set center & zoom at the init
-    if (this.options.init) {
-      this.options.init = false; // Only once
+    if (this.init) {
+      this.init = false; // Only once
 
       view.setZoom(urlMod.match(/zoom=([0-9.]+)/)[1]);
 

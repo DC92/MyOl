@@ -17,7 +17,7 @@ class MyVectorSource extends ol.source.Vector {
         url: url_, // (extent, resolution, projection) // Calculate the url
         // host: '',
         // query: (extent, resolution, projection ,options) => ({_path: '...'}),
-        bbox: bbox_, // (extent, resolution, projection)
+        bbox: bbox_, // (extent, resolution, projection) //TODO mettre en methode de la classe / appel par super s'il faut //TODO ALL OTHERS
         strategy: ol.loadingstrategy.bbox,
         projection: 'EPSG:4326',
 
@@ -25,7 +25,7 @@ class MyVectorSource extends ol.source.Vector {
 
         // Any ol.source.Vector options
 
-        ...opt,
+        ...opt, //TODO remplacer par options
       },
       statusEl = document.getElementById(options.selectName + '-status');
 
@@ -181,7 +181,7 @@ class MyBrowserClusterVectorLayer extends ol.layer.Vector {
       ...options,
     });
 
-    this.options = options; // Mem for further use
+    this.options = options; // Mem for further use //TODO replace by options.toto => this.toto //TODO ALL
   }
 
   reload(visible) {

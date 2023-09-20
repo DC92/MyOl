@@ -521,6 +521,10 @@
 .myol-button hr {
   margin: 1px;
 }
+
+.myol-button-geoloc:after {
+  content: "\2295";
+}
 /* LayerSwitcher */
 .myol-button-switcher {
   float: right !important;

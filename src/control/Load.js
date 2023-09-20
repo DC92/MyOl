@@ -3,44 +3,30 @@
  */
 
 import ol from '../ol'; //BEST ??? come back to direct import (optim ???)
-import MyButton from './MyButton.js';
+import Button from './Button.js';
 
-export default class Load extends MyButton {
-  constructor(options = {}) {
+export default class Load extends Button {
+  constructor(options) {
     super({
-      // MyButton options
+      // Button options
       label: '&#128194;',
-      subMenuId: 'myol-button-load',
       subMenuHTML: '<p>Importer un fichier de points ou de traces</p>' +
         '<input type="file" accept=".gpx,.kml,.geojson">',
 
-      // Load options
-      //TODO initFileUrl, url of a gpx file to be uploaded at the init
-
-      ...options, //HACK default when options is undefined
+      ...options,
     });
-
-    // Load file at init
-    if (options.initFileUrl) {
-      const xhr = new XMLHttpRequest();
-      xhr.open('GET', options.initFileUrl);
-      xhr.onreadystatechange = () => {
-        if (xhr.readyState == 4 && xhr.status == 200)
-          this.loadText(xhr.responseText, options.initFileUrl);
-      };
-      xhr.send();
-    }
 
     this.reader = new FileReader();
   }
 
-  subMenuChange(evt) {
+  subMenuAction(evt) {
     const blob = evt.target.files[0];
 
     this.reader.readAsText(blob);
     this.reader.onload = () => this.loadText(this.reader.result, blob.name);
   }
 
+  // Method to load a geoJson layer from an url
   loadUrl(url) {
     if (url)
       fetch(url)
@@ -48,6 +34,7 @@ export default class Load extends MyButton {
       .then(text => this.loadText(text, url));
   }
 
+  // Method to load features from a geoJson text
   loadText(text, url) {
     const map = this.getMap(),
       formatName = url.split('.').pop().toUpperCase(), // Extract extension to be used as format name

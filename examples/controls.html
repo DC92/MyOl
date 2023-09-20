@@ -32,16 +32,23 @@ Based on https://openlayers.org
   <script type="module">
     new ol.Map({
       target: 'map',
+      view: new ol.View({
+        enableRotation: false,
+        center: [600000, 5800000],
+        zoom: 6,
+      }),
       controls: [
         ...myol.control.collection(),
-        new myol.control.MyButton({ // Help
+        new myol.control.Button({ // Help
           label: '?',
           subMenuId: 'myol-help',
         }),
-        new myol.control.Permalink({
+        /*
+      new myol.control.Permalink({ //TODO debug / Don't work !
           display: true,
         }),
-        new myol.control.TilesBuffer(),
+        new myol.control.TilesBuffer(), //TODO debug / Don't work !
+ 		*/
       ],
       layers: [
         new ol.layer.Tile({

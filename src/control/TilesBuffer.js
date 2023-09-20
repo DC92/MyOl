@@ -4,11 +4,12 @@
  * This prepares the browser to become offline
  */
 
-import MyControl from './MyControl.js';
+import ol from '../ol';
 
-export default class TilesBuffer extends MyControl {
+export default class TilesBuffer extends ol.control.Control {
   constructor(options) {
     super({
+      element: document.createElement('div'), //HACK button not visible
       depth: 2,
       ...options,
     });
