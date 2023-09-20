@@ -8,11 +8,17 @@ import ol from '../ol';
 
 export default class TilesBuffer extends ol.control.Control {
   constructor(options) {
-    super({
-      element: document.createElement('div'), //HACK button not visible
+    options = {
       depth: 2,
       ...options,
+    };
+
+    super({
+      element: document.createElement('div'), //HACK button not visible
+      ...options,
     });
+
+    this.depth = options.depth;
   }
 
   setMap(map) {
@@ -23,7 +29,7 @@ export default class TilesBuffer extends ol.control.Control {
     map.on('precompose', () => {
       map.getLayers().forEach(layer => {
         if (typeof layer.setPreload == 'function')
-          layer.setPreload(this.options.depth);
+          layer.setPreload(this.depth);
       });
     });
   }

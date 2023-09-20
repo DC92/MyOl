@@ -12,22 +12,21 @@ import * as stylesOptions from './stylesOptions';
  * display the loading status
  */
 class MyVectorSource extends ol.source.Vector {
-  constructor(opt) {
-    const options = {
-        url: url_, // (extent, resolution, projection) // Calculate the url
-        // host: '',
-        // query: (extent, resolution, projection ,options) => ({_path: '...'}),
-        bbox: bbox_, // (extent, resolution, projection) //TODO mettre en methode de la classe / appel par super s'il faut //TODO ALL OTHERS
-        strategy: ol.loadingstrategy.bbox,
-        projection: 'EPSG:4326',
+  constructor(options) {
+    options = {
+      url: url_, // (extent, resolution, projection) // Calculate the url
+      // host: '',
+      // query: (extent, resolution, projection ,options) => ({_path: '...'}),
+      bbox: bbox_, // (extent, resolution, projection) //TODO mettre en methode de la classe / appel par super s'il faut //TODO ALL OTHERS
+      strategy: ol.loadingstrategy.bbox,
+      projection: 'EPSG:4326',
 
-        addProperties: () => {}, // (default) properties => {} // add properties to each received features
+      addProperties: () => {}, // (default) properties => {} // add properties to each received features
 
-        // Any ol.source.Vector options
+      // Any ol.source.Vector options
 
-        ...opt, //TODO remplacer par options
-      },
-      statusEl = document.getElementById(options.selectName + '-status');
+      ...options,
+    };
 
     super({
       format: new ol.format.GeoJSON({ //BEST treat & display JSON errors
@@ -37,9 +36,11 @@ class MyVectorSource extends ol.source.Vector {
       ...options,
     });
 
+    this.statusEl = document.getElementById(options.selectName + '-status');
+
     // Display loading satus
     this.on(['featuresloadstart', 'featuresloadend', 'error', 'featuresloaderror'], evt => {
-      if (statusEl) statusEl.innerHTML =
+      if (this.statusEl) this.statusEl.innerHTML =
         evt.type == 'featuresloadstart' ? '&#8987;' :
         evt.type == 'featuresloadend' ? '' :
         '&#9888;'; // Symbol error
@@ -230,8 +231,8 @@ class MyServerClusterVectorLayer extends MyBrowserClusterVectorLayer {
  * Layer & features selector
  */
 export class MyVectorLayer extends MyServerClusterVectorLayer {
-  constructor(opt) {
-    const options = {
+  constructor(options) {
+    options = {
       // url: (extent, resolution, projection) => Calculate the url
       // host: '',
       // query: (extent, resolution, projection ,options) => ({_path: '...'}),
@@ -245,13 +246,13 @@ export class MyVectorLayer extends MyServerClusterVectorLayer {
 
       basicStylesOptions: stylesOptions.basic, // (feature, layer)
       hoverStylesOptions: stylesOptions.hover,
-      selector: new Selector(opt.selectName),
+      selector: new Selector(options.selectName),
       zIndex: 100, // Above tiles layers
 
       // Any ol.source.Vector options
       // Any ol.source.layer.Vector
 
-      ...opt,
+      ...options,
     };
 
     super({
@@ -260,7 +261,7 @@ export class MyVectorLayer extends MyServerClusterVectorLayer {
       style: (feature, resolution) => {
         // Function returning an array of styles options
         const sof = !feature.getProperties().cluster ? options.basicStylesOptions :
-          resolution < opt.spreadClusterMaxResolution ? stylesOptions.spreadCluster :
+          resolution < options.spreadClusterMaxResolution ? stylesOptions.spreadCluster :
           stylesOptions.cluster;
 
         return sof(feature, this) // Call the styleOptions function

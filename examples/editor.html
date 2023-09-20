@@ -14,9 +14,9 @@ Based on https://openlayers.org
 
   <link href="ressources/style.css" rel="stylesheet">
   <style>
-    #myol-help-edit-modify p,
-    #myol-help-edit-line p,
-    #myol-help-edit-poly p {
+    #myol-edit-help-modify p,
+    #myol-edit-help-line p,
+    #myol-edit-help-poly p {
       margin: 0;
     }
   </style>
@@ -50,9 +50,9 @@ Based on https://openlayers.org
         geoJsonId: 'geojson',
         snapLayers: [snaplayer],
         help: [
-          document.getElementById('myol-help-edit-modify').innerHTML,
-          document.getElementById('myol-help-edit-line').innerHTML,
-          document.getElementById('myol-help-edit-poly').innerHTML,
+          document.getElementById('myol-edit-help-modify').innerHTML,
+          document.getElementById('myol-edit-help-line').innerHTML,
+          document.getElementById('myol-edit-help-poly').innerHTML,
         ],
       });
 
@@ -67,7 +67,7 @@ Based on https://openlayers.org
         new ol.control.Zoom(),
         new myol.control.Load(),
         new myol.control.Download({
-          //TODO savedLayer: editorlayer.layer,
+          savedLayer: editorlayer.layer,
         }),
       ],
       layers: [
@@ -156,7 +156,7 @@ Based on https://openlayers.org
 '>
 
   <h4>Modifier une ligne ou un polygone</h4>
-  <div id="myol-help-edit-modify">
+  <div id="myol-edit-help-modify">
     <p><u>Déplacer un sommet:</u> cliquer sur le sommet et le déplacer</p>
     <p><u>Ajouter un sommet au milieu d'un segment:</u> cliquer le long du segment puis déplacer</p>
     <p><u>Supprimer un sommet:</u> Alt+cliquer sur le sommet</p>
@@ -171,7 +171,7 @@ Based on https://openlayers.org
     <p><u>Supprimer une ligne ou un polygone:</u> Ctrl+Alt+cliquer sur un segment</p>
   </div>
   <h4>Créer une ligne</h4>
-  <div id="myol-help-edit-line">
+  <div id="myol-edit-help-line">
     <p><u>Pour créer une ligne:</u></p>
     <p>Cliquer sur l'emplacement du début</p>
     <p>Puis sur chaque sommet</p>
@@ -181,7 +181,7 @@ Based on https://openlayers.org
     </p>
   </div>
   <h4>Créer un polygone</h4>
-  <div id="myol-help-edit-poly">
+  <div id="myol-edit-help-poly">
     <p><u>Pour créer un polygone:</u></p>
     <p>Cliquer sur l'emplacement du premier sommet</p>
     <p>Puis sur chaque sommet</p>

@@ -39,7 +39,6 @@ export default class MyGeolocation extends Button {
     super({
       // Button options
       label: '&#8853;',
-      //TODO className: 'myol-button-geoloc',
       subMenuHTML: subMenu,
 
       // ol.Geolocation options

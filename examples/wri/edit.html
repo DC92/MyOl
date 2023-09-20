@@ -54,13 +54,13 @@ Based on https://openlayers.org
       coucheContours = coucheContourMassif({
         host: 'https://www.refuges.info/', // '<?=$config_wri["sous_dossier_installation"]?>',
       }),
-      controlEditor = new myol.control.Editor({
+      controlEditor = new myol.layer.Editor({
         geoJsonId: 'edit-json',
         snapLayers: [coucheContours],
         help: [
-          document.getElementById('myol-help-edit-modify').innerHTML,
+          document.getElementById('myol-edit-help-modify').innerHTML,
           null, // Pas d'édition de ligne
-          document.getElementById('myol-help-edit-poly').innerHTML,
+          document.getElementById('myol-edit-help-poly').innerHTML,
         ],
         featuresToSave: coordinates => [new ol.Feature({
           geometry: new ol.geom.MultiPolygon(coordinates.polys),
@@ -112,7 +112,7 @@ Based on https://openlayers.org
   <h4>/vues/edit.html</h4>
   <div id="carte-edit"></div>
 
-  <label id="myol-help-edit-modify">
+  <label id="myol-edit-help-modify">
     <p><u>Déplacer un sommet:</u> cliquer sur le sommet et le déplacer</p>
     <p><u>Ajouter un sommet au milieu d'un côté:</u> cliquer le long du côté puis déplacer</p>
     <p><u>Supprimer un sommet:</u> Alt+cliquer sur le sommet</p>
@@ -121,7 +121,7 @@ Based on https://openlayers.org
     <p><u>Supprimer un polygone:</u> Ctrl+Alt+cliquer sur un côté du polygone</p>
   </label>
   <hr>
-  <label id="myol-help-edit-poly">
+  <label id="myol-edit-help-poly">
     <p><u>Pour créer un polygone:</u></p>
     <p>Cliquer sur le bouton &#x1F58D; et choisissez "Création polygone"</p>
     <p>Cliquer sur l'emplacement du premier sommet</p>

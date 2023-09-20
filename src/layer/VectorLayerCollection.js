@@ -21,7 +21,7 @@ function chemIconUrl(type, host) {
 
 // chemineur.fr
 export class Chemineur extends MyVectorLayer {
-  constructor(opt) {
+  constructor(options) {
     super({
       host: 'https://chemineur.fr/',
       // addProperties: (properties) => {properties => {}}, // add properties to each received features
@@ -30,12 +30,12 @@ export class Chemineur extends MyVectorLayer {
       serverClusterMinResolution: 100,
       // basicStylesOptions: stylesOptions.basic, // (feature, layer)
       // hoverStylesOptions: stylesOptions.hover,
-      // selector: new Selector(opt.selectName),
+      // selector: new Selector(options.selectName),
       attribution: '&copy;chemineur.fr',
       // Any ol.source.Vector options
       // Any ol.source.layer.Vector
 
-      ...opt,
+      ...options,
 
       query: (extent, resolution, projection, options) => ({
         _path: 'ext/Dominique92/GeoBB/gis.php',
@@ -48,7 +48,7 @@ export class Chemineur extends MyVectorLayer {
 
 // alpages.info
 export class Alpages extends MyVectorLayer {
-  constructor(opt) {
+  constructor(options) {
     super({
       host: 'https://alpages.info/',
       // addProperties: (properties) => {properties => {}}, // add properties to each received features
@@ -57,12 +57,12 @@ export class Alpages extends MyVectorLayer {
       // serverClusterMinResolution: 100, // (map units per pixel) resolution above which we ask clusters to the server
       // basicStylesOptions: stylesOptions.basic, // (feature, layer)
       // hoverStylesOptions: stylesOptions.hover,
-      // selector: new Selector(opt.selectName),
+      // selector: new Selector(options.selectName),
       attribution: '&copy;alpages.info',
       // Any ol.source.Vector options
       // Any ol.source.layer.Vector
 
-      ...opt,
+      ...options,
 
       query: (extent, resolution, projection, options) => ({
         _path: 'ext/Dominique92/GeoBB/gis.php',
@@ -79,7 +79,7 @@ export class Alpages extends MyVectorLayer {
 
 // refuges.info
 export class WRI extends MyVectorLayer {
-  constructor(opt) {
+  constructor(options) {
     super({
       host: 'https://www.refuges.info/',
       // addProperties: (properties) => {properties => {}}, // add properties to each received features
@@ -88,12 +88,12 @@ export class WRI extends MyVectorLayer {
       // browserClusterFeaturelMaxPerimeter: 300, // (pixels) perimeter of a line or poly above which we do not cluster
       // basicStylesOptions: stylesOptions.basic, // (feature, layer)
       // hoverStylesOptions: stylesOptions.hover,
-      // selector: new Selector(opt.selectName),
+      // selector: new Selector(options.selectName),
       attribution: '&copy;refuges.info',
       // Any ol.source.Vector options
       // Any ol.source.layer.Vector
 
-      ...opt,
+      ...options,
 
       query: (extent, resolution, projection, options) => ({
         _path: 'api/bbox',
@@ -129,7 +129,7 @@ export class PRC extends MyVectorLayer {
       // serverClusterMinResolution: 100, // (map units per pixel) resolution above which we ask clusters to the server
       // basicStylesOptions: stylesOptions.basic, // (feature, layer)
       // hoverStylesOptions: stylesOptions.hover,
-      // selector: new Selector(opt.selectName),
+      // selector: new Selector(options.selectName),
       attribution: '&copy;Pyrenees-Refuges',
       // Any ol.source.Vector options
       // Any ol.source.layer.Vector
@@ -168,7 +168,7 @@ export class C2C extends MyVectorLayer {
       // serverClusterMinResolution: 100, // (map units per pixel) resolution above which we ask clusters to the server
       // basicStylesOptions: stylesOptions.basic, // (feature, layer)
       // hoverStylesOptions: stylesOptions.hover,
-      // selector: new Selector(opt.selectName),
+      // selector: new Selector(options.selectName),
       attribution: '&copy;Camp2camp',
       // Any ol.source.Vector options
       // Any ol.source.layer.Vector
@@ -231,7 +231,7 @@ export class Overpass extends MyVectorLayer {
       // serverClusterMinResolution: 100, // (map units per pixel) resolution above which we ask clusters to the server
       // basicStylesOptions: stylesOptions.basic, // (feature, layer)
       // hoverStylesOptions: stylesOptions.hover,
-      // selector: new Selector(opt.selectName),
+      // selector: new Selector(options.selectName),
       attribution: '&copy;OpenStreetMap',
       // Any ol.source.Vector options
       // Any ol.source.layer.Vector
@@ -271,7 +271,7 @@ export class Overpass extends MyVectorLayer {
         tags += selectEls[e].value.replace('private', '');
 
     // Extract features from data when received
-    format_.readFeatures = function(doc, opt) {
+    format_.readFeatures = function(doc, options) {
       // Transform an area to a node (picto) at the center of this area
 
       for (let node = doc.documentElement.firstElementChild; node; node = node.nextSibling) {
@@ -329,7 +329,7 @@ export class Overpass extends MyVectorLayer {
         node.appendChild(newTag);
       }
 
-      return ol.format.OSMXML.prototype.readFeatures.call(this, doc, opt);
+      return ol.format.OSMXML.prototype.readFeatures.call(this, doc, options);
     };
   }
 }

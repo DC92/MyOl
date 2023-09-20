@@ -8,26 +8,31 @@ import ol from '../ol';
 
 export default class Permalink extends ol.control.Control {
   constructor(options) {
-    super({
-      // Permalink options
+    options = {
       init: true, // {true | false} use url hash or localStorage to position the map.
       setUrl: false, // {true | false} Change url hash when moving the map.
       display: false, // {true | false} Display permalink link the map.
       hash: '?', // {?, #} the permalink delimiter after the url
       //BEST init with bbox option
-      element: document.createElement('div'),
 
+      ...options,
+    };
+
+    super({
+      element: document.createElement('div'),
       ...options,
     });
 
     this.init = options.init;
+    this.setUrl = options.setUrl;
+    this.hash = options.hash;
 
     if (options.display) {
       this.element.className = 'myol-permalink';
-      this.aEl = document.createElement('a');
-      this.aEl.innerHTML = 'Permalink';
-      this.aEl.title = 'Generate a link with map zoom & position';
-      this.element.appendChild(this.aEl);
+      this.linkEl = document.createElement('a');
+      this.linkEl.innerHTML = 'Permalink';
+      this.linkEl.title = 'Generate a link with map zoom & position';
+      this.element.appendChild(this.linkEl);
     }
   }
 
@@ -65,11 +70,12 @@ export default class Permalink extends ol.control.Control {
         (localStorage.myol_lon = Math.round(ll4326[0] * 10000) / 10000) + '/' +
         (localStorage.myol_lat = Math.round(ll4326[1] * 10000) / 10000);
 
-      if (this.options.display)
-        this.aEl.href = this.options.hash + newParams;
+      if (this.linkEl) {
+        this.linkEl.href = this.hash + newParams;
 
-      if (this.options.setUrl)
-        location.href = '#' + newParams;
+        if (this.setUrl)
+          location.href = '#' + newParams;
+      }
     }
   }
 }

@@ -41,14 +41,12 @@ Based on https://openlayers.org
         ...myol.control.collection(),
         new myol.control.Button({ // Help
           label: '?',
-          subMenuId: 'myol-help',
+          subMenuId: 'myol-button-help',
         }),
-        /*
-      new myol.control.Permalink({ //TODO debug / Don't work !
+        new myol.control.Permalink({
           display: true,
         }),
-        new myol.control.TilesBuffer(), //TODO debug / Don't work !
- 		*/
+        new myol.control.TilesBuffer(),
       ],
       layers: [
         new ol.layer.Tile({
@@ -93,7 +91,7 @@ Based on https://openlayers.org
     <div id="map" class="map"></div>
   </div>
 
-  <div id="myol-help">
+  <div id="myol-button-help">
     <p>Ceci est un exemple d'aide.</p>
   </div>
 </body>

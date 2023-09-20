@@ -126,17 +126,18 @@ export class IGN extends ol.layer.Tile {
  * API : https://api3.geo.admin.ch/services/sdiservices.html#wmts
  */
 export class SwissTopo extends ol.layer.Tile {
-  constructor(opt) {
-    const options = {
-        host: 'https://wmts2{0-4}.geo.admin.ch/1.0.0/',
-        subLayer: 'ch.swisstopo.pixelkarte-farbe',
-        maxResolution: 2000, // Resolution limit above which we switch to a more global service
-        extent: [640000, 5730000, 1200000, 6100000],
-        attributions: '&copy <a href="https://map.geo.admin.ch/">SwissTopo</a>',
+  constructor(options) {
+    options = {
+      host: 'https://wmts2{0-4}.geo.admin.ch/1.0.0/',
+      subLayer: 'ch.swisstopo.pixelkarte-farbe',
+      maxResolution: 2000, // Resolution limit above which we switch to a more global service
+      extent: [640000, 5730000, 1200000, 6100000],
+      attributions: '&copy <a href="https://map.geo.admin.ch/">SwissTopo</a>',
 
-        ...opt,
-      },
-      projectionExtent = ol.proj.get('EPSG:3857').getExtent(),
+      ...options,
+    };
+
+    const projectionExtent = ol.proj.get('EPSG:3857').getExtent(),
       resolutions = [],
       matrixIds = [];
 

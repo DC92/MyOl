@@ -7,8 +7,8 @@ import Button from './Button.js';
 
 //BEST BUG incompatible with clusters
 export default class Download extends Button {
-  constructor(options = {}) {
-    super({
+  constructor(options) {
+    options = {
       // Button options
       label: '&#128427;',
       subMenuHTML: '<p>Cliquer sur un format ci-dessous pour obtenir un fichier ' +
@@ -16,15 +16,15 @@ export default class Download extends Button {
         '<a mime="application/gpx+xml">GPX</a>' +
         '<a mime="vnd.google-earth.kml+xml">KML</a>' +
         '<a mime="application/json">GeoJSON</a>',
-      // fileName: '', // Name of the file to be downloaded
+      fileName: document.title || 'openlayers', // Name of the file to be downloaded //BEST name from feature
 
       ...options,
-    });
+    };
 
-    this.fileName = options.fileName || document.title || 'openlayers', //BEST name from feature
+    super(options);
 
-      // Add a hidden element to handle the download
-      this.hiddenEl = document.createElement('a');
+    // Add a hidden element to handle the download
+    this.hiddenEl = document.createElement('a');
     this.hiddenEl.target = '_self';
     this.hiddenEl.style = 'display:none';
     this.element.appendChild(this.hiddenEl);
@@ -39,7 +39,7 @@ export default class Download extends Button {
       extent = map.getView().calculateExtent();
 
     // Get all visible features
-    if (this.savedLayer) //TODO KESAKO ?
+    if (this.savedLayer) //TODO KESAKO ? TEST
       getFeatures(this.savedLayer);
     else
       map.getLayers().forEach(getFeatures); //BEST what about (args)

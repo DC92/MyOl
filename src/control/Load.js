@@ -79,7 +79,7 @@ export default class Load extends Button {
       // Zoom the map on the added features
       const fileExtent = gpxSource.getExtent();
 
-      //TODO factorise with Editor.js
+      //TODO factoriser with Editor.js
       if (ol.extent.isEmpty(fileExtent))
         alert(url + ' ne comporte pas de point ni de trace.');
       else

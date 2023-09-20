@@ -12,7 +12,7 @@ import './Button.css';
  */
 export default class Button extends ol.control.Control {
   constructor(options) {
-    options = { //TODO GENERALISE
+    options = {
       label: '?', // An ascii or unicode character to decorate the button
       className: '', // To be added to the control.element
       // subMenuId : 'id', // Id of an existing html containing the scrolling menu
@@ -35,7 +35,7 @@ export default class Button extends ol.control.Control {
     // Create a button
     this.buttonEl = document.createElement('button');
     this.buttonEl.setAttribute('type', 'button');
-    this.buttonEl.innerHTML = options.label; //TODO label en :after
+    this.buttonEl.innerHTML = options.label;
     this.buttonEl.addEventListener('click', evt => this.buttonAction(evt));
 
     // Add submenu below the button

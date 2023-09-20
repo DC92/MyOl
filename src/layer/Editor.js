@@ -8,15 +8,15 @@ import Button from '../control/Button';
 
 // Editor
 export default class Editor extends ol.layer.Vector {
-  constructor(opt) {
-    const options = {
+  constructor(options) {
+    options = {
       geoJsonId: 'geojson',
       format: new ol.format.GeoJSON(),
       dataProjection: 'EPSG:4326',
       featureProjection: 'EPSG:3857',
       featuresToSave: coordinates => this.source.getFeatures(coordinates, this.options.format),
       snapLayers: [], // Vector layers to snap on
-      ...opt,
+      ...options,
     };
 
     const geoJsonEl = document.getElementById(options.geoJsonId), // Read data in an html element
