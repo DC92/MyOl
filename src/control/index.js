@@ -29,11 +29,15 @@ export function collection(opt) {
     // Top left
     new ol.control.Zoom(options.zoom),
     new ol.control.FullScreen(options.fullScreen),
+    /*
     new MyGeocoder(options.geocoder),
     new MyGeolocation(options.geolocation),
+	*/
     new Load(options.load),
     new Download(options.download),
+    /*
     new Print(options.print),
+*/
 
     // Bottom left
     new LengthLine(options.lengthLine),
@@ -42,7 +46,6 @@ export function collection(opt) {
 
     // Bottom right
     new ol.control.Attribution(options.attribution),
-
     ...options.supplementaryControls,
   ];
 }

@@ -16,7 +16,5 @@ export default class MyControl extends ol.control.Control {
       element: document.createElement('div'),
       ...options,
     });
-
-    this.options = options || {}; // Mem for further use
   }
 }

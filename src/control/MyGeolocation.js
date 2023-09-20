@@ -56,12 +56,6 @@ export default class MyGeolocation extends MyButton {
     this.statusEl = document.createElement('p');
     this.element.appendChild(this.statusEl);
 
-    // Register action listeners
-    this.element.querySelectorAll('input')
-      .forEach(el => {
-        el.addEventListener('change', evt => this.action(evt));
-      });
-
     // Graticule
     this.graticuleFeature = new ol.Feature(); //BEST Use layer Graticule
     this.northGraticuleFeature = new ol.Feature();
@@ -104,7 +98,7 @@ export default class MyGeolocation extends MyButton {
     // Browser heading from the inertial & magnetic sensors
     window.addEventListener('deviceorientationabsolute', evt => {
       window.gpsValues.heading = evt.alpha || evt.webkitCompassHeading; // Android || iOS
-      this.action(evt);
+      this.change(evt);
     });
   }
 
@@ -112,20 +106,20 @@ export default class MyGeolocation extends MyButton {
     super.setMap(map);
 
     map.addLayer(this.graticuleLayer);
-    map.on('moveend', evt => this.action(evt)); // Refresh graticule after map zoom
+    map.on('moveend', evt => this.change(evt)); // Refresh graticule after map zoom
 
     this.geolocation = new ol.Geolocation({
       projection: map.getView().getProjection(),
       trackingOptions: this.options,
       ...this.options,
     });
-    this.geolocation.on('change', evt => this.action(evt));
+    this.geolocation.on('change', evt => this.change(evt));
     this.geolocation.on('error', error => {
       console.log('Geolocation error: ' + error.message);
     });
   }
 
-  action(evt) {
+  change(evt) {
     const sourceLevelEl = document.querySelector('input[name="myol-gps-source"]:checked'),
       displayLevelEl = document.querySelector('input[name="myol-gps-display"]:checked'),
       displayEls = document.getElementsByName('myol-gps-display'),

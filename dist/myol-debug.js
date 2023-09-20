@@ -59880,8 +59880,6 @@ var myol = (function () {
         element: document.createElement('div'),
         ...options,
       });
-
-      this.options = options || {}; // Mem for further use
     }
   }
 
@@ -59897,51 +59895,65 @@ var myol = (function () {
    */
   let MyButton$1 = class MyButton extends MyControl {
     constructor(options) {
-      // MyButton options
-      // className : to be added to the control.element
-      // label : one unicode character to decorate the button
-      // subMenuId : id of an existing html containing the scrolling menu
-      // subMenuHTML : html code of the scrolling menu
-      // action: (evt) => {}, // To run when the button is clicked / hovered, ...
-      super(options);
+      super({
+        label: '?', // An ascii or unicode character to decorate the button
+        className: '', // To be added to the control.element
+        // subMenuId : 'id', // Id of an existing html containing the scrolling menu
+        subMenuHTML: 'Unknown', // html code of the scrolling menu
+        buttonChange: evt => {
+        }, // To run when the button is clicked / hovered, ...
+        subMenuChange: evt => {
+        }, // To run when an <input> ot <a> of the subMenu is clicked / hovered, ...
+
+        ...options,
+      });
+
+      // Create a button
+      const buttonEl = document.createElement('button');
+      buttonEl.setAttribute('type', 'button');
+      buttonEl.innerHTML = this.options.label;
+      buttonEl.addEventListener('click', evt => this.buttonAction(evt));
 
       // Add submenu below the button
-      if (this.options.subMenuId)
-        this.subMenuEl = document.getElementById(this.options.subMenuId);
-      else {
-        this.subMenuEl = document.createElement('div');
-        if (this.options.subMenuHTML)
-          this.subMenuEl.innerHTML = this.options.subMenuHTML;
-      }
+      this.subMenuEl = document.getElementById(this.options.subMenuId);
+      this.subMenuEl ||= document.createElement('div');
+      this.subMenuEl.innerHTML ||= this.options.subMenuHTML;
 
-      // Display the button only if there are no label or submenu
-      if (this.options.label && this.subMenuEl && this.subMenuEl.innerHTML) {
-        // Create a button
-        const buttonEl = document.createElement('button');
-        buttonEl.setAttribute('type', 'button');
-        buttonEl.innerHTML = this.options.label;
-        buttonEl.addEventListener('click', evt => this.buttonAction(evt));
+      // Populate the control
+      this.element.className = 'ol-control myol-button ' + this.options.className;
+      this.element.appendChild(buttonEl); // Add the button
+      this.element.appendChild(this.subMenuEl); // Add the submenu
+      this.element.addEventListener('mouseover', evt => this.buttonAction(evt));
+      this.element.addEventListener('mouseout', evt => this.buttonAction(evt));
 
-        // Populate the control
-        this.element.className = 'ol-control myol-button' + (this.options.className ? ' ' + this.options.className : '');
-        this.element.appendChild(buttonEl); // Add the button
-        this.element.appendChild(this.subMenuEl); // Add the submenu
-        this.element.addEventListener('mouseover', evt => this.buttonAction(evt));
-        this.element.addEventListener('mouseout', evt => this.buttonAction(evt));
+      // Close the submenu when click or touch on the map
+      document.addEventListener('click', evt => {
+        const el = document.elementFromPoint(evt.x, evt.y);
 
-        // Close the submenu when click or touch on the map
-        document.addEventListener('click', evt => {
-          const el = document.elementFromPoint(evt.x, evt.y);
+        if (el && el.tagName == 'CANVAS')
+          this.element.classList.remove('myol-button-selected');
+      });
 
-          if (el && el.tagName == 'CANVAS')
-            this.element.classList.remove('myol-button-selected');
-        });
-      }
+      if (this.options.test)
+        this.test = this.options.test;
+    }
+
+    setMap(map) {
+      super.setMap(map);
+      this.test();
+
+      // Register subMenu action listeners when it is complete
+      this.subMenuEl.querySelectorAll('a,input')
+        .forEach(el =>
+          el.addEventListener(
+            'change',
+            evt => this.option.subMenuChange(evt)
+          )
+        );
     }
 
     buttonAction(evt) {
-      if (this.options.action)
-        this.options.action(evt);
+      this.options.buttonChange(evt);
 
       if (evt.type == 'mouseover')
         this.element.classList.add('myol-button-hover');
@@ -59969,12 +59981,14 @@ var myol = (function () {
       super({
         // MyButton options
         label: '&#128427;',
+        subMenuId: 'myol-button-load',
         subMenuHTML: '<p>Cliquer sur un format ci-dessous pour obtenir un fichier ' +
           'contenant les éléments visibles dans la fenêtre:</p>' +
           '<a mime="application/gpx+xml">GPX</a>' +
           '<a mime="vnd.google-earth.kml+xml">KML</a>' +
           '<a mime="application/json">GeoJSON</a>',
         fileName: document.title || 'openlayers', //BEST name from feature
+        subMenuChange: action,
 
         ...options,
       });
@@ -59984,81 +59998,75 @@ var myol = (function () {
       this.hiddenEl.style = 'display:none';
       document.body.appendChild(this.hiddenEl);
 
-      // Register action listeners
-      this.element.querySelectorAll('a')
-        .forEach(el => {
-          el.addEventListener('click', evt => this.action(evt));
-        });
-    }
+      function action(evt) {
+        const map = this.getMap(),
+          formatName = evt.target.innerText,
+          downloadFormat = new ol.format[formatName](),
+          mime = evt.target.getAttribute('mime');
+        let features = [],
+          extent = map.getView().calculateExtent();
 
-    action(evt) {
-      const map = this.getMap(),
-        formatName = evt.target.innerText,
-        downloadFormat = new ol.format[formatName](),
-        mime = evt.target.getAttribute('mime');
-      let features = [],
-        extent = map.getView().calculateExtent();
+        // Get all visible features
+        if (this.options.savedLayer)
+          getFeatures(this.options.savedLayer);
+        else
+          map.getLayers().forEach(getFeatures); //BEST what about (args)
 
-      // Get all visible features
-      if (this.options.savedLayer)
-        getFeatures(this.options.savedLayer);
-      else
-        map.getLayers().forEach(getFeatures); //BEST what about (args)
-
-      function getFeatures(savedLayer) { //BEST put in method
-        if (savedLayer.getSource() &&
-          savedLayer.getSource().forEachFeatureInExtent) // For vector layers only
-          savedLayer.getSource().forEachFeatureInExtent(extent, feature => {
-            if (!savedLayer.getProperties().dragable) // Don't save the cursor
-              features.push(feature);
-          });
-      }
-
-      if (formatName == 'GPX')
-        // Transform *Polygons in linestrings
-        for (let f in features) {
-          const geometry = features[f].getGeometry();
-
-          if (geometry.getType().includes('Polygon')) {
-            geometry.getCoordinates().forEach(coords => {
-              if (typeof coords[0][0] == 'number')
-                // Polygon
-                features.push(new ol.Feature(new ol.geom.LineString(coords)));
-              else
-                // MultiPolygon
-                coords.forEach(subCoords =>
-                  features.push(new ol.Feature(new ol.geom.LineString(subCoords)))
-                );
+        function getFeatures(savedLayer) { //BEST put in method
+          if (savedLayer.getSource() &&
+            savedLayer.getSource().forEachFeatureInExtent) // For vector layers only
+            savedLayer.getSource().forEachFeatureInExtent(extent, feature => {
+              if (!savedLayer.getProperties().dragable) // Don't save the cursor
+                features.push(feature);
             });
-          }
         }
 
-      const data = downloadFormat.writeFeatures(features, {
-          dataProjection: 'EPSG:4326',
-          featureProjection: map.getView().getProjection(), // Map projection
-          decimals: 5,
-        })
-        // Beautify the output
-        .replace(/<[a-z]*>(0|null|[[object Object]|[NTZa:-]*)<\/[a-z]*>/g, '')
-        .replace(/<Data name="[a-z_]*"\/>|<Data name="[a-z_]*"><\/Data>|,"[a-z_]*":""/g, '')
-        .replace(/<Data name="copy"><value>[a-z_.]*<\/value><\/Data>|,"copy":"[a-z_.]*"/g, '')
-        .replace(/(<\/gpx|<\/?wpt|<\/?trk>|<\/?rte>|<\/kml|<\/?Document)/g, '\n$1')
-        .replace(/(<\/?Placemark|POINT|LINESTRING|POLYGON|<Point|"[a-z_]*":|})/g, '\n$1')
-        .replace(/(<name|<ele|<sym|<link|<type|<rtept|<\/?trkseg|<\/?ExtendedData)/g, '\n\t$1')
-        .replace(/(<trkpt|<Data|<LineString|<\/?Polygon|<Style)/g, '\n\t\t$1')
-        .replace(/(<[a-z]+BoundaryIs)/g, '\n\t\t\t$1')
-        .replace(/ ([cvx])/g, '\n\t$1'),
+        if (formatName == 'GPX')
+          // Transform *Polygons in linestrings
+          for (let f in features) {
+            const geometry = features[f].getGeometry();
 
-        file = new Blob([data], {
-          type: mime,
-        });
+            if (geometry.getType().includes('Polygon')) {
+              geometry.getCoordinates().forEach(coords => {
+                if (typeof coords[0][0] == 'number')
+                  // Polygon
+                  features.push(new ol.Feature(new ol.geom.LineString(coords)));
+                else
+                  // MultiPolygon
+                  coords.forEach(subCoords =>
+                    features.push(new ol.Feature(new ol.geom.LineString(subCoords)))
+                  );
+              });
+            }
+          }
 
-      this.hiddenEl.download = this.options.fileName + '.' + formatName.toLowerCase();
-      this.hiddenEl.href = URL.createObjectURL(file);
-      this.hiddenEl.click();
+        const data = downloadFormat.writeFeatures(features, {
+            dataProjection: 'EPSG:4326',
+            featureProjection: map.getView().getProjection(), // Map projection
+            decimals: 5,
+          })
+          // Beautify the output
+          .replace(/<[a-z]*>(0|null|[[object Object]|[NTZa:-]*)<\/[a-z]*>/g, '')
+          .replace(/<Data name="[a-z_]*"\/>|<Data name="[a-z_]*"><\/Data>|,"[a-z_]*":""/g, '')
+          .replace(/<Data name="copy"><value>[a-z_.]*<\/value><\/Data>|,"copy":"[a-z_.]*"/g, '')
+          .replace(/(<\/gpx|<\/?wpt|<\/?trk>|<\/?rte>|<\/kml|<\/?Document)/g, '\n$1')
+          .replace(/(<\/?Placemark|POINT|LINESTRING|POLYGON|<Point|"[a-z_]*":|})/g, '\n$1')
+          .replace(/(<name|<ele|<sym|<link|<type|<rtept|<\/?trkseg|<\/?ExtendedData)/g, '\n\t$1')
+          .replace(/(<trkpt|<Data|<LineString|<\/?Polygon|<Style)/g, '\n\t\t$1')
+          .replace(/(<[a-z]+BoundaryIs)/g, '\n\t\t\t$1')
+          .replace(/ ([cvx])/g, '\n\t$1'),
 
-      // Close the submenu
-      this.element.classList.remove('myol-display-submenu');
+          file = new Blob([data], {
+            type: mime,
+          });
+
+        this.hiddenEl.download = this.options.fileName + '.' + formatName.toLowerCase();
+        this.hiddenEl.href = URL.createObjectURL(file);
+        this.hiddenEl.click();
+
+        // Close the submenu
+        this.element.classList.remove('myol-display-submenu');
+      }
     }
   }
 
@@ -60847,20 +60855,15 @@ var myol = (function () {
       super({
         // MyButton options
         label: '&#128194;',
+        subMenuId: 'myol-button-load',
         subMenuHTML: '<p>Importer un fichier de points ou de traces</p>' +
           '<input type="file" accept=".gpx,.kml,.geojson">',
 
         // Load options
-        // initFileUrl, url of a gpx file to be uploaded at the init
+        //TODO initFileUrl, url of a gpx file to be uploaded at the init
 
         ...options, //HACK default when options is undefined
       });
-
-      // Register action listeners
-      this.element.querySelectorAll('input')
-        .forEach(el =>
-          el.addEventListener('change', evt => this.change(evt))
-        );
 
       // Load file at init
       if (options.initFileUrl) {
@@ -60876,7 +60879,7 @@ var myol = (function () {
       this.reader = new FileReader();
     }
 
-    change(evt) {
+    subMenuChange(evt) {
       const blob = evt.target.files[0];
 
       this.reader.readAsText(blob);
@@ -60940,7 +60943,7 @@ var myol = (function () {
         else
           map.getView().fit(
             fileExtent, {
-              maxZoom: 17, //TODO replace by minResolution
+              minResolution: 1,
               padding: [5, 5, 5, 5],
             });
       }
@@ -89033,51 +89036,65 @@ var myol = (function () {
    */
   class MyButton extends MyControl {
     constructor(options) {
-      // MyButton options
-      // className : to be added to the control.element
-      // label : one unicode character to decorate the button
-      // subMenuId : id of an existing html containing the scrolling menu
-      // subMenuHTML : html code of the scrolling menu
-      // action: (evt) => {}, // To run when the button is clicked / hovered, ...
-      super(options);
+      super({
+        label: '?', // An ascii or unicode character to decorate the button
+        className: '', // To be added to the control.element
+        // subMenuId : 'id', // Id of an existing html containing the scrolling menu
+        subMenuHTML: 'Unknown', // html code of the scrolling menu
+        buttonChange: evt => {
+        }, // To run when the button is clicked / hovered, ...
+        subMenuChange: evt => {
+        }, // To run when an <input> ot <a> of the subMenu is clicked / hovered, ...
+
+        ...options,
+      });
+
+      // Create a button
+      const buttonEl = document.createElement('button');
+      buttonEl.setAttribute('type', 'button');
+      buttonEl.innerHTML = this.options.label;
+      buttonEl.addEventListener('click', evt => this.buttonAction(evt));
 
       // Add submenu below the button
-      if (this.options.subMenuId)
-        this.subMenuEl = document.getElementById(this.options.subMenuId);
-      else {
-        this.subMenuEl = document.createElement('div');
-        if (this.options.subMenuHTML)
-          this.subMenuEl.innerHTML = this.options.subMenuHTML;
-      }
+      this.subMenuEl = document.getElementById(this.options.subMenuId);
+      this.subMenuEl ||= document.createElement('div');
+      this.subMenuEl.innerHTML ||= this.options.subMenuHTML;
 
-      // Display the button only if there are no label or submenu
-      if (this.options.label && this.subMenuEl && this.subMenuEl.innerHTML) {
-        // Create a button
-        const buttonEl = document.createElement('button');
-        buttonEl.setAttribute('type', 'button');
-        buttonEl.innerHTML = this.options.label;
-        buttonEl.addEventListener('click', evt => this.buttonAction(evt));
+      // Populate the control
+      this.element.className = 'ol-control myol-button ' + this.options.className;
+      this.element.appendChild(buttonEl); // Add the button
+      this.element.appendChild(this.subMenuEl); // Add the submenu
+      this.element.addEventListener('mouseover', evt => this.buttonAction(evt));
+      this.element.addEventListener('mouseout', evt => this.buttonAction(evt));
 
-        // Populate the control
-        this.element.className = 'ol-control myol-button' + (this.options.className ? ' ' + this.options.className : '');
-        this.element.appendChild(buttonEl); // Add the button
-        this.element.appendChild(this.subMenuEl); // Add the submenu
-        this.element.addEventListener('mouseover', evt => this.buttonAction(evt));
-        this.element.addEventListener('mouseout', evt => this.buttonAction(evt));
+      // Close the submenu when click or touch on the map
+      document.addEventListener('click', evt => {
+        const el = document.elementFromPoint(evt.x, evt.y);
 
-        // Close the submenu when click or touch on the map
-        document.addEventListener('click', evt => {
-          const el = document.elementFromPoint(evt.x, evt.y);
+        if (el && el.tagName == 'CANVAS')
+          this.element.classList.remove('myol-button-selected');
+      });
 
-          if (el && el.tagName == 'CANVAS')
-            this.element.classList.remove('myol-button-selected');
-        });
-      }
+      if (this.options.test)
+        this.test = this.options.test;
+    }
+
+    setMap(map) {
+      super.setMap(map);
+      this.test();
+
+      // Register subMenu action listeners when it is complete
+      this.subMenuEl.querySelectorAll('a,input')
+        .forEach(el =>
+          el.addEventListener(
+            'change',
+            evt => this.option.subMenuChange(evt)
+          )
+        );
     }
 
     buttonAction(evt) {
-      if (this.options.action)
-        this.options.action(evt);
+      this.options.buttonChange(evt);
 
       if (evt.type == 'mouseover')
         this.element.classList.add('myol-button-hover');
@@ -89150,12 +89167,6 @@ var myol = (function () {
       this.statusEl = document.createElement('p');
       this.element.appendChild(this.statusEl);
 
-      // Register action listeners
-      this.element.querySelectorAll('input')
-        .forEach(el => {
-          el.addEventListener('change', evt => this.action(evt));
-        });
-
       // Graticule
       this.graticuleFeature = new ol.Feature(); //BEST Use layer Graticule
       this.northGraticuleFeature = new ol.Feature();
@@ -89198,7 +89209,7 @@ var myol = (function () {
       // Browser heading from the inertial & magnetic sensors
       window.addEventListener('deviceorientationabsolute', evt => {
         window.gpsValues.heading = evt.alpha || evt.webkitCompassHeading; // Android || iOS
-        this.action(evt);
+        this.change(evt);
       });
     }
 
@@ -89206,20 +89217,20 @@ var myol = (function () {
       super.setMap(map);
 
       map.addLayer(this.graticuleLayer);
-      map.on('moveend', evt => this.action(evt)); // Refresh graticule after map zoom
+      map.on('moveend', evt => this.change(evt)); // Refresh graticule after map zoom
 
       this.geolocation = new ol.Geolocation({
         projection: map.getView().getProjection(),
         trackingOptions: this.options,
         ...this.options,
       });
-      this.geolocation.on('change', evt => this.action(evt));
+      this.geolocation.on('change', evt => this.change(evt));
       this.geolocation.on('error', error => {
         console.log('Geolocation error: ' + error.message);
       });
     }
 
-    action(evt) {
+    change(evt) {
       const sourceLevelEl = document.querySelector('input[name="myol-gps-source"]:checked'),
         displayLevelEl = document.querySelector('input[name="myol-gps-display"]:checked'),
         displayEls = document.getElementsByName('myol-gps-display'),
@@ -89556,11 +89567,15 @@ var myol = (function () {
       // Top left
       new ol.control.Zoom(options.zoom),
       new ol.control.FullScreen(options.fullScreen),
+      /*
       new MyGeocoder(options.geocoder),
       new MyGeolocation(options.geolocation),
+  	*/
       new Load(options.load),
       new Download(options.download),
+      /*
       new Print(options.print),
+  */
 
       // Bottom left
       new LengthLine(options.lengthLine),
@@ -89569,7 +89584,6 @@ var myol = (function () {
 
       // Bottom right
       new ol.control.Attribution(options.attribution),
-
       ...options.supplementaryControls,
     ];
   }

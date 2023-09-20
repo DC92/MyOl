@@ -10,20 +10,15 @@ export default class Load extends MyButton {
     super({
       // MyButton options
       label: '&#128194;',
+      subMenuId: 'myol-button-load',
       subMenuHTML: '<p>Importer un fichier de points ou de traces</p>' +
         '<input type="file" accept=".gpx,.kml,.geojson">',
 
       // Load options
-      // initFileUrl, url of a gpx file to be uploaded at the init
+      //TODO initFileUrl, url of a gpx file to be uploaded at the init
 
       ...options, //HACK default when options is undefined
     });
-
-    // Register action listeners
-    this.element.querySelectorAll('input')
-      .forEach(el =>
-        el.addEventListener('change', evt => this.change(evt))
-      );
 
     // Load file at init
     if (options.initFileUrl) {
@@ -39,7 +34,7 @@ export default class Load extends MyButton {
     this.reader = new FileReader();
   }
 
-  change(evt) {
+  subMenuChange(evt) {
     const blob = evt.target.files[0];
 
     this.reader.readAsText(blob);
@@ -103,7 +98,7 @@ export default class Load extends MyButton {
       else
         map.getView().fit(
           fileExtent, {
-            maxZoom: 17, //TODO replace by minResolution
+            minResolution: 1,
             padding: [5, 5, 5, 5],
           });
     }

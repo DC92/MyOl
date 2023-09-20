@@ -44,7 +44,7 @@ Based on https://openlayers.org
     });
 
     map.getView().on('change:resolution', () =>
-      console.log('Resolution : ' + map.getView().getResolution())
+      console.log('Resolution : ' + map.getView().getResolution() + ', zoom : ' + map.getView().getZoom())
     );
   </script>
 

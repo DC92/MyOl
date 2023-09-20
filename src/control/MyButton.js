@@ -12,51 +12,67 @@ import './myButton.css';
  */
 export default class MyButton extends MyControl {
   constructor(options) {
-    // MyButton options
-    // className : to be added to the control.element
-    // label : one unicode character to decorate the button
-    // subMenuId : id of an existing html containing the scrolling menu
-    // subMenuHTML : html code of the scrolling menu
-    // action: (evt) => {}, // To run when the button is clicked / hovered, ...
-    super(options);
+    super({
+      label: '?', // An ascii or unicode character to decorate the button
+      className: '', // To be added to the control.element
+      // subMenuId : 'id', // Id of an existing html containing the scrolling menu
+      subMenuHTML: 'Unknown', // html code of the scrolling menu
+      buttonChange: evt => {
+        evt
+      }, // To run when the button is clicked / hovered, ...
+      subMenuChange: evt => {
+        evt
+      }, // To run when an <input> ot <a> of the subMenu is clicked / hovered, ...
+
+      ...options,
+    });
+
+    // Create a button
+    const buttonEl = document.createElement('button');
+    buttonEl.setAttribute('type', 'button');
+    buttonEl.innerHTML = this.options.label;
+    buttonEl.addEventListener('click', evt => this.buttonAction(evt));
 
     // Add submenu below the button
-    if (this.options.subMenuId)
-      this.subMenuEl = document.getElementById(this.options.subMenuId);
-    else {
-      this.subMenuEl = document.createElement('div');
-      if (this.options.subMenuHTML)
-        this.subMenuEl.innerHTML = this.options.subMenuHTML;
-    }
+    this.subMenuEl = document.getElementById(this.options.subMenuId);
+    this.subMenuEl ||= document.createElement('div');
+    this.subMenuEl.innerHTML ||= this.options.subMenuHTML;
 
-    // Display the button only if there are no label or submenu
-    if (this.options.label && this.subMenuEl && this.subMenuEl.innerHTML) {
-      // Create a button
-      const buttonEl = document.createElement('button');
-      buttonEl.setAttribute('type', 'button');
-      buttonEl.innerHTML = this.options.label;
-      buttonEl.addEventListener('click', evt => this.buttonAction(evt));
+    // Populate the control
+    this.element.className = 'ol-control myol-button ' + this.options.className;
+    this.element.appendChild(buttonEl); // Add the button
+    this.element.appendChild(this.subMenuEl); // Add the submenu
+    this.element.addEventListener('mouseover', evt => this.buttonAction(evt));
+    this.element.addEventListener('mouseout', evt => this.buttonAction(evt));
 
-      // Populate the control
-      this.element.className = 'ol-control myol-button' + (this.options.className ? ' ' + this.options.className : '');
-      this.element.appendChild(buttonEl); // Add the button
-      this.element.appendChild(this.subMenuEl); // Add the submenu
-      this.element.addEventListener('mouseover', evt => this.buttonAction(evt));
-      this.element.addEventListener('mouseout', evt => this.buttonAction(evt));
+    // Close the submenu when click or touch on the map
+    document.addEventListener('click', evt => {
+      const el = document.elementFromPoint(evt.x, evt.y);
 
-      // Close the submenu when click or touch on the map
-      document.addEventListener('click', evt => {
-        const el = document.elementFromPoint(evt.x, evt.y);
+      if (el && el.tagName == 'CANVAS')
+        this.element.classList.remove('myol-button-selected');
+    });
 
-        if (el && el.tagName == 'CANVAS')
-          this.element.classList.remove('myol-button-selected');
-      });
-    }
+    if (this.options.test)
+      this.test = this.options.test;
+  }
+
+  setMap(map) {
+    super.setMap(map);
+    this.test();
+
+    // Register subMenu action listeners when it is complete
+    this.subMenuEl.querySelectorAll('a,input')
+      .forEach(el =>
+        el.addEventListener(
+          'change',
+          evt => this.option.subMenuChange(evt)
+        )
+      );
   }
 
   buttonAction(evt) {
-    if (this.options.action)
-      this.options.action(evt);
+    this.options.buttonChange(evt);
 
     if (evt.type == 'mouseover')
       this.element.classList.add('myol-button-hover');
