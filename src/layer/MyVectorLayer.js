@@ -20,8 +20,7 @@ class MyVectorSource extends ol.source.Vector {
       bbox: bbox_, // (extent, resolution, projection) //TODO mettre en methode de la classe / appel par super s'il faut //TODO ALL OTHERS
       strategy: ol.loadingstrategy.bbox,
       projection: 'EPSG:4326',
-
-      addProperties: () => {}, // (default) properties => {} // add properties to each received features
+      addProperties: () => {}, // properties => {} // (default) Add properties to each received features
 
       // Any ol.source.Vector options
 
@@ -43,15 +42,17 @@ class MyVectorSource extends ol.source.Vector {
       if (this.statusEl) this.statusEl.innerHTML =
         evt.type == 'featuresloadstart' ? '&#8987;' :
         evt.type == 'featuresloadend' ? '' :
-        '&#9888;'; // Symbol error
+        '&#9888;'; // Error symbol
     });
 
     // Compute properties when the layer is loaded & before the cluster layer is computed
     this.on('change', () =>
-      this.getFeatures().forEach(f => {
+      this.getFeatures()
+      .forEach(f => {
         if (!f._yetAdded) {
           f._yetAdded = true;
-          f.setProperties(options.addProperties(f.getProperties()),
+          f.setProperties(
+            options.addProperties(f.getProperties()),
             true // Silent : add the feature without refresh the layer
           );
         }
@@ -99,9 +100,13 @@ class MyClusterSource extends ol.source.Cluster {
 
     // Any MyVectorSource options
 
+    // Source to handle the features
+    const initialSource = new MyVectorSource(options);
+
+    // Source to handle the clusters & the isolated features
     super({
       distance: options.browserClusterMinDistance,
-      source: new MyVectorSource(options), // Origin of mfeatures to cluster
+      source: initialSource,
       geometryFunction: geometryFunction_,
       createCluster: createCluster_,
     });
@@ -239,7 +244,7 @@ export class MyVectorLayer extends MyServerClusterVectorLayer {
       // bbox: (extent, resolution, projection)
       // strategy: ol.loadingstrategy.bbox,
       // projection: 'EPSG:4326',
-      // addProperties: (properties) => {properties => {}}, // add properties to each received features
+      // addProperties: properties => {}, // Add properties to each received feature
       // browserClusterMinDistance:50, // (pixels) distance above which the browser clusterises
       // browserClusterFeaturelMaxPerimeter: 300, // (pixels) perimeter of a line or poly above which we do not cluster
       // serverClusterMinResolution: 100, // (map units per pixel) resolution above which we ask clusters to the server

@@ -24,10 +24,10 @@ export class Chemineur extends MyVectorLayer {
   constructor(options) {
     super({
       host: 'https://chemineur.fr/',
-      // addProperties: (properties) => {properties => {}}, // add properties to each received features
       browserClusterMinDistance: 50,
       browserClusterFeaturelMaxPerimeter: 300,
       serverClusterMinResolution: 100,
+      // addProperties: properties => {}, // Add properties to each received feature
       // basicStylesOptions: stylesOptions.basic, // (feature, layer)
       // hoverStylesOptions: stylesOptions.hover,
       // selector: new Selector(options.selectName),
@@ -51,7 +51,6 @@ export class Alpages extends MyVectorLayer {
   constructor(options) {
     super({
       host: 'https://alpages.info/',
-      // addProperties: (properties) => {properties => {}}, // add properties to each received features
       browserClusterMinDistance: 50,
       browserClusterFeaturelMaxPerimeter: 300,
       // serverClusterMinResolution: 100, // (map units per pixel) resolution above which we ask clusters to the server
@@ -82,10 +81,10 @@ export class WRI extends MyVectorLayer {
   constructor(options) {
     super({
       host: 'https://www.refuges.info/',
-      // addProperties: (properties) => {properties => {}}, // add properties to each received features
       browserClusterMinDistance: 50,
       serverClusterMinResolution: 100,
       // browserClusterFeaturelMaxPerimeter: 300, // (pixels) perimeter of a line or poly above which we do not cluster
+      // addProperties: properties => {}, // Add properties to each received feature
       // basicStylesOptions: stylesOptions.basic, // (feature, layer)
       // hoverStylesOptions: stylesOptions.hover,
       // selector: new Selector(options.selectName),
@@ -123,7 +122,6 @@ export class PRC extends MyVectorLayer {
     super({
       url: 'https://www.pyrenees-refuges.com/api.php?type_fichier=GEOJSON',
       strategy: ol.loadingstrategy.all,
-      // addProperties: (properties) => {properties => {}}, // add properties to each received features
       browserClusterMinDistance: 50,
       // browserClusterFeaturelMaxPerimeter: 300, // (pixels) perimeter of a line or poly above which we do not cluster
       // serverClusterMinResolution: 100, // (map units per pixel) resolution above which we ask clusters to the server
@@ -162,7 +160,6 @@ export class C2C extends MyVectorLayer {
       }),
       projection: 'EPSG:3857',
       format: format_,
-      // addProperties: (properties) => {properties => {}}, // add properties to each received features
       browserClusterMinDistance: 50,
       // browserClusterFeaturelMaxPerimeter: 300, // (pixels) perimeter of a line or poly above which we do not cluster
       // serverClusterMinResolution: 100, // (map units per pixel) resolution above which we ask clusters to the server
@@ -224,11 +221,11 @@ export class Overpass extends MyVectorLayer {
       query: query_,
       bbox: () => null, // No bbox at the end of the url
       format: format_,
-      // addProperties: (properties) => {properties => {}}, // add properties to each received features
       maxResolution: 50,
       // browserClusterMinDistance:50, // (pixels) distance above which the browser clusterises
       // browserClusterFeaturelMaxPerimeter: 300, // (pixels) perimeter of a line or poly above which we do not cluster
       // serverClusterMinResolution: 100, // (map units per pixel) resolution above which we ask clusters to the server
+      // addProperties: properties => {}, // Add properties to each received feature
       // basicStylesOptions: stylesOptions.basic, // (feature, layer)
       // hoverStylesOptions: stylesOptions.hover,
       // selector: new Selector(options.selectName),
