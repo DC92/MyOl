@@ -97,7 +97,7 @@ export default class Editor extends ol.layer.Vector {
     this.options.snapLayers.push(this);
 
     // Snap on vector layers
-    //TODO snap when creating line or poly
+    //BEST snap when creating line or poly
     //TODO features & source are the same ! // Improve / Ces lignes sont bizares
     this.options.snapLayers.forEach(l => {
       l.getSource().on('change', () => { // Wait for layer end load

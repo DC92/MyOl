@@ -5,9 +5,16 @@ import json from '@rollup/plugin-json';
 import terser from '@rollup/plugin-terser'; // Rollup plugin to minify generated es bundle
 import * as fs from 'fs';
 
-const banner = fs.readFileSync('./build/banner.js', 'utf-8');
-//TODO dist without ol... included
-//TODO rollup date, version & module name in dist from package
+//BEST dist without ol... included
+
+const pkg = JSON.parse(fs.readFileSync('./package.json', 'utf-8'));
+const banner = fs.readFileSync('./build/banner.js', 'utf-8')
+  .replace('{name}', pkg.name)
+  .replace('{description}', pkg.description)
+  .replace('{homepage}', pkg.homepage)
+  .replace('{version}', pkg.version)
+  .replace('{time}', new Date().toLocaleString())
+  .replace('*/', '*/\n');
 
 export default [{
   // Full myol / debug library

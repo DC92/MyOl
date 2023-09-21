@@ -12,7 +12,10 @@ npm adduser myol
 npm whoami
 npm publish --access public
 
-Stub:
-    "@myol/geocoder": "1.0.1"
-
 npm unpublish @myol/geocoder@1.0.0
+
+PUBLISH github/Dominique92
+Read-me
+	DC92 -> Dominique92
+Stub:
+    "@myol/geocoder": "1.0.2" -> "latest"
