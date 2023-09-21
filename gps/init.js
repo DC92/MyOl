@@ -52,17 +52,22 @@ var loadControl = new myol.control.Load(),
 			// Bottom right
 			new myol.control.Permalink(),
 			new ol.control.Attribution(),
-
-			// No button
-			new myol.control.TilesBuffer(),
 		],
 	});
+	
+// Preload 2 more layers zoom
+map.on('precompose', () => {
+  map.getLayers().forEach(layer => {
+	if (typeof layer.setPreload == 'function')
+	  layer.setPreload(2);
+  });
+});
 
 // Load .gpx files included in the gps directory
 var gpxFiles = [ /*GPXFILES*/ ];
 
 // Add a menu to load .gpx files included in the gps/... directories
-if (gpxFiles) {
+if (gpxFiles) { //TODO don't display if no gpx available
 	const tracesEl = document.getElementById('myol-traces-gps');
 
 	gpxFiles.forEach(f => {

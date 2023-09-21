@@ -14,7 +14,6 @@ import MyGeolocation from './MyGeolocation';
 import MyMousePosition from './MyMousePosition';
 import Permalink from './Permalink';
 import Print from './Print';
-import TilesBuffer from './TilesBuffer';
 
 /**
  * Basic list of controls
@@ -51,6 +50,5 @@ export default {
   MyMousePosition: MyMousePosition,
   Permalink: Permalink,
   Print: Print,
-  TilesBuffer: TilesBuffer,
   collection,
 };

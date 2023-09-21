@@ -169,20 +169,25 @@ export default class Editor extends ol.layer.Vector {
     });
 
     this.buttons = [
-      new Button({ //
+      new Button({
         label: '&#128397;',
+        subMenuId: 'myol-edit-help-modify',
         subMenuHTML: '<p>Modification</p>',
-        action: evt => this.changeInteraction(0, evt.type),
+        buttonAction: evt => this.changeInteraction(0, evt.type),
       }),
       new Button({
         label: '&#3351;',
-        subMenuHTML: '<p>Création d\'une ligne</p>',
-        action: evt => this.changeInteraction(1, evt.type),
+        subMenuId: 'myol-edit-help-line',
+        subMenuHTML: '<p>New line</p>',
+        buttonAction: evt => this.changeInteraction(1, evt.type),
+        subMenuAction: evt => this.changeInteraction(1, evt.type),
       }),
       new Button({
         label: '&#9186;',
-        subMenuHTML: '<p>Création d\'une surface</p>',
-        action: evt => this.changeInteraction(2, evt.type),
+        subMenuId: 'myol-edit-help-poly',
+        subMenuHTML: '<p>New poly</p>',
+        buttonAction: evt => this.changeInteraction(2, evt.type),
+        subMenuAction: evt => this.changeInteraction(2, evt.type),
       }),
     ];
 
@@ -201,8 +206,8 @@ export default class Editor extends ol.layer.Vector {
   optimiseEdited(selectedVertex, reverseLine) {
     const coordinates = this.optimiseFeatures(
       this.source.getFeatures(),
-      false, //this.options.help[1],
-      false, //this.options.help[2],
+      true, //this.options.help[1],
+      true, //this.options.help[2],
       true,
       true,
       selectedVertex,

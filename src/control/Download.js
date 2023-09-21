@@ -13,9 +13,9 @@ export default class Download extends Button {
       label: '&#128427;',
       subMenuHTML: '<p>Cliquer sur un format ci-dessous pour obtenir un fichier ' +
         'contenant les éléments visibles dans la fenêtre:</p>' +
-        '<a mime="application/gpx+xml">GPX</a>' +
-        '<a mime="vnd.google-earth.kml+xml">KML</a>' +
-        '<a mime="application/json">GeoJSON</a>',
+        '<label><a mime="application/gpx+xml">GPX</a></label>' +
+        '<label><a mime="vnd.google-earth.kml+xml">KML</a></label>' +
+        '<label><a mime="application/json">GeoJSON</a></label>',
       fileName: document.title || 'openlayers', // Name of the file to be downloaded //BEST name from feature
 
       ...options,

@@ -17,10 +17,8 @@ export default class Button extends ol.control.Control {
       className: '', // To be added to the control.element
       // subMenuId : 'id', // Id of an existing html containing the scrolling menu
       subMenuHTML: 'Unknown', // html code of the scrolling menu
-
-      // Methods to overload
-      // buttonAction: (evt) => {}, // (evt) To run when the button is clicked / hovered, ...
-      // subMenuAction: (evt) => {}, // (evt)  To run when an <input> ot <a> of the subMenu is clicked / hovered, ...
+      subMenuAction() {}, // (evt) To run when the button is clicked / hovered, ...
+      // buttonAction(evt) {}, // (evt)  To run when an <input> ot <a> of the subMenu is clicked / hovered, ...
 
       // All ol.control.Control options
 
@@ -31,6 +29,9 @@ export default class Button extends ol.control.Control {
       element: document.createElement('div'),
       ...options,
     });
+
+    this.optionsButtonAction = options.buttonAction;
+    this.subMenuAction = options.subMenuAction;
 
     // Create a button
     this.buttonEl = document.createElement('button');
@@ -72,6 +73,9 @@ export default class Button extends ol.control.Control {
   }
 
   buttonAction(evt) {
+    if (this.optionsButtonAction)
+      this.optionsButtonAction(evt);
+
     if (evt.type == 'mouseover')
       this.element.classList.add('myol-button-hover');
     else // mouseout | click
@@ -85,6 +89,4 @@ export default class Button extends ol.control.Control {
       if (el != this.element)
         el.classList.remove('myol-button-selected');
   }
-
-  subMenuAction() {}
 }

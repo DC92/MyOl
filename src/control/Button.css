@@ -60,11 +60,13 @@
   font-size: 14px;
 }
 
-.myol-button label,
-.myol-button a {
+.myol-button label {
   display: block;
-  margin: 0;
   padding: 2px 0;
+  cursor: pointer;
+}
+
+.myol-button a {
   cursor: pointer;
 }
 

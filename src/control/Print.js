@@ -16,8 +16,8 @@ export default class Print extends Button {
         '<p>-imprimer.</p>' +
         '<label><input type="radio" value="0">Portrait A4</label>' +
         '<label><input type="radio" value="1">Paysage A4</label>' +
-        '<a id="print">Imprimer</a>' +
-        '<a onclick="location.reload()">Annuler</a>',
+        '<label><a id="print">Imprimer</a></label>' +
+        '<label><a onclick="location.reload()">Annuler</a></label>',
 
       ...options,
     });

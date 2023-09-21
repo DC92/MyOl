@@ -49,11 +49,6 @@ Based on https://openlayers.org
       editorlayer = new myol.layer.Editor({
         geoJsonId: 'geojson',
         snapLayers: [snaplayer],
-        help: [
-          document.getElementById('myol-edit-help-modify').innerHTML,
-          document.getElementById('myol-edit-help-line').innerHTML,
-          document.getElementById('myol-edit-help-poly').innerHTML,
-        ],
       });
 
     new ol.Map({
@@ -173,22 +168,22 @@ Based on https://openlayers.org
   <h4>Créer une ligne</h4>
   <div id="myol-edit-help-line">
     <p><u>Pour créer une ligne:</u></p>
+    <p>Cliquer sur <a>commencer</a></p>
     <p>Cliquer sur l'emplacement du début</p>
     <p>Puis sur chaque sommet</p>
     <p>Double cliquer sur le dernier sommet pour terminer</p>
-    <p>
-      <hr>Cliquer sur une extrémité d'une ligne existante pour l'étendre
-    </p>
+    <hr>
+    <p>Cliquer sur une extrémité d'une ligne existante pour l'étendre</p>
   </div>
   <h4>Créer un polygone</h4>
   <div id="myol-edit-help-poly">
     <p><u>Pour créer un polygone:</u></p>
+    <p>Cliquer sur <a>commencer</a></p>
     <p>Cliquer sur l'emplacement du premier sommet</p>
     <p>Puis sur chaque sommet</p>
     <p>Double cliquer sur le dernier sommet pour terminer</p>
-    <p>
-      <hr>Un polygone entièrement compris dans un autre crée un "trou"
-    </p>
+    <hr>
+    <p>Un polygone entièrement compris dans un autre crée un "trou"</p>
   </div>
 </body>
 
