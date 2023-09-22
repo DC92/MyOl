@@ -197,16 +197,16 @@ function fondsCarte(page, layersKeys) {
       format: 'image/png',
     }),
     'SwissTopo': 'nav,point'.includes(page) ?
-      new myol.layer.tile.SwissTopo(
-        'ch.swisstopo.pixelkarte-farbe'
-      ) : null,
+      new myol.layer.tile.SwissTopo({
+        subLayer: 'ch.swisstopo.pixelkarte-farbe',
+      }) : null,
     'Autriche': new myol.layer.tile.Kompass(), // No key
-    'Espagne': new myol.layer.tile.IgnES('mapa-raster', 'MTN'),
+    'Espagne': new myol.layer.tile.IgnES(),
     'Photo IGN': new myol.layer.tile.IGN({
       layer: 'ORTHOIMAGERY.ORTHOPHOTOS',
       key: 'essentiels',
     }),
-    'Photo ArcGIS': new myol.layer.tile.ArcGIS('World_Imagery'),
+    'Photo ArcGIS': new myol.layer.tile.ArcGIS(),
     'Photo Google': 'nav,point'.includes(page) ?
       new myol.layer.tile.Google('s') : null,
   };

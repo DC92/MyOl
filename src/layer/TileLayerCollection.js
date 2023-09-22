@@ -7,12 +7,9 @@ import ol from '../ol';
 
 // Virtual class to factorise XYZ layers code
 class XYZsource extends ol.layer.Tile {
-  constructor(options = {}) {
+  constructor(options) {
     super({
-      source: new ol.source.XYZ({
-        ...options,
-        url: typeof options.url == 'function' ? options.url(options) : options.url,
-      }),
+      source: new ol.source.XYZ(options),
       ...options,
     });
   }
@@ -29,24 +26,22 @@ export class OpenStreetMap extends ol.layer.Tile {
 }
 
 export class OpenTopo extends OpenStreetMap {
-  constructor(options) {
+  constructor() {
     super({
       url: 'https://{a-c}.tile.opentopomap.org/{z}/{x}/{y}.png',
       maxZoom: 17,
       attributions: '<a href="https://opentopomap.org">OpenTopoMap</a> ' +
         '(<a href="https://creativecommons.org/licenses/by-sa/3.0/">CC-BY-SA</a>)',
-      ...options,
     });
   }
 }
 
 export class MRI extends OpenStreetMap {
-  constructor(options) {
+  constructor() {
     super({
       url: 'https://maps.refuges.info/hiking/{z}/{x}/{y}.png',
       maxZoom: 18,
       attributions: '<a href="//wiki.openstreetmap.org/wiki/Hiking/mri">Refuges.info</a>',
-      ...options,
     });
   }
 }
@@ -115,7 +110,7 @@ export class IGN extends ol.layer.Tile {
 
         ...options, // Include key & layer
       }),
-      ...options,
+      ...options, // For layer limits
     });
   }
 }
@@ -157,9 +152,9 @@ export class SwissTopo extends ol.layer.Tile {
         }),
         requestEncoding: 'REST',
         crossOrigin: 'anonymous',
-        ...options,
       })),
-      ...options,
+
+      ...options, // For layer limits
     });
   }
 }
@@ -169,17 +164,22 @@ export class SwissTopo extends ol.layer.Tile {
  */
 export class IgnES extends XYZsource {
   constructor(options) {
-    super({
+    options = {
       host: 'https://www.ign.es/wmts/',
       server: 'mapa-raster',
       subLayer: 'MTN',
-      url: o => o.host + o.server + '?layer=' + o.subLayer +
+      maxZoom: 20,
+      attributions: '&copy; <a href="http://www.ign.es/">IGN España</a>',
+      ...options,
+    };
+
+    super({
+      url: options.host + options.server +
+        '?layer=' + options.subLayer +
         '&Service=WMTS&Request=GetTile&Version=1.0.0' +
         '&Format=image/jpeg' +
         '&style=default&tilematrixset=GoogleMapsCompatible' +
         '&TileMatrix={z}&TileCol={x}&TileRow={y}',
-      maxZoom: 20,
-      attributions: '&copy; <a href="http://www.ign.es/">IGN España</a>',
       ...options,
     });
   }
@@ -189,16 +189,14 @@ export class IgnES extends XYZsource {
  * Italy IGM
  */
 export class IGM extends ol.layer.Tile {
-  constructor(options) {
+  constructor() {
     super({
       source: new ol.source.TileWMS({
         url: 'https://chemineur.fr/assets/proxy/?s=minambiente.it', // Not available via https
         attributions: '&copy <a href="http://www.pcn.minambiente.it/viewer/">IGM</a>',
-        ...options,
       }),
       maxResolution: 1200,
       extent: [720000, 4380000, 2070000, 5970000],
-      ...options,
     });
   }
 
@@ -228,21 +226,24 @@ export class IGM extends ol.layer.Tile {
  * Ordnance Survey : Great Britain
  * key: Get your own (free) key at https://osdatahub.os.uk/
  */
-//BEST XYZsource
-export class OS extends ol.layer.Tile {
+export class OS extends XYZsource {
   constructor(options = {}) {
-    super({
+    options = {
       hidden: !options.key, // For LayerSwitcher
+      subLayer: 'Outdoor_3857',
       minZoom: 7,
       maxZoom: 16,
       extent: [-1198263, 6365000, 213000, 8702260],
-      source: new ol.source.XYZ({
-        url: 'https://api.os.uk/maps/raster/v1/zxy/' +
-          (options.subLayer || 'Outdoor_3857') +
-          '/{z}/{x}/{y}.png?key=' + options.key,
-        attributions: '&copy <a href="https://explore.osmaps.com">UK Ordnancesurvey maps</a>',
-        ...options, // Include key
-      }),
+      attributions: '&copy <a href="https://explore.osmaps.com">UK Ordnancesurvey maps</a>',
+
+      ...options,
+    };
+
+    super({
+      url: 'https://api.os.uk/maps/raster/v1/zxy/' +
+        options.subLayer +
+        '/{z}/{x}/{y}.png' +
+        '?key=' + options.key,
       ...options,
     });
   }
@@ -253,12 +254,16 @@ export class OS extends ol.layer.Tile {
  */
 export class ArcGIS extends XYZsource {
   constructor(options) {
-    super({
+    options = {
       host: 'https://server.arcgisonline.com/ArcGIS/rest/services/',
       subLayer: 'World_Imagery',
-      url: o => o.host + o.subLayer + '/MapServer/tile/{z}/{y}/{x}',
       maxZoom: 19,
       attributions: '&copy; <a href="https://www.arcgis.com/home/webmap/viewer.html">ArcGIS (Esri)</a>',
+      ...options,
+    };
+
+    super({
+      url: options.host + options.subLayer + '/MapServer/tile/{z}/{y}/{x}',
       ...options,
     });
   }
@@ -303,11 +308,15 @@ export class Maxbox extends XYZsource {
  */
 export class Google extends XYZsource {
   constructor(options) {
-    super({
-      subLayers: 'm', // Roads
-      url: o => 'https://mt{0-3}.google.com/vt/lyrs=' + o.subLayers + '&hl=fr&x={x}&y={y}&z={z}',
+    options = {
+      subLayers: 'p', // Terrain
       maxZoom: 22,
       attributions: '&copy; <a href="https://www.google.com/maps">Google</a>',
+      ...options,
+    };
+
+    super({
+      url: 'https://mt{0-3}.google.com/vt/lyrs=' + options.subLayers + '&hl=fr&x={x}&y={y}&z={z}',
       ...options,
     });
   }
@@ -325,7 +334,7 @@ export class Bing extends ol.layer.Tile {
       // No explicit zoom
       hidden: !options.key, // For LayerSwitcher
       // attributions, defined by ol.source.BingMaps
-      ...options,
+      ...options, // including key & imagerySet
     });
 
     //HACK : Avoid to call https://dev.virtualearth.net/... if no bing layer is visible
@@ -376,6 +385,8 @@ export function collection(options = {}) {
     'IGN cartes 1950': new IGN({
       layer: 'GEOGRAPHICALGRIDSYSTEMS.MAPS.SCAN50.1950',
       key: 'cartes/geoportail',
+      extent: [-580000, 506000, 1070000, 6637000],
+      minZoom: 6,
     }),
 
     'SwissTopo': new SwissTopo(),
@@ -391,6 +402,7 @@ export function collection(options = {}) {
     'Italie': new IGM(),
 
     'Espagne': new IgnES(),
+    'Google': new Google(),
 
     'Maxar': new Maxbox({
       tileset: 'mapbox.satellite',
@@ -415,19 +427,21 @@ export function collection(options = {}) {
       style: 'BDORTHOHISTORIQUE',
       format: 'image/png',
       extent: [-580000, 506000, 1070000, 6637000],
-      maxResolution: 2000,
+      minZoom: 12,
     }),
 
     'IGN E.M. 1820-66': new IGN({
       layer: 'GEOGRAPHICALGRIDSYSTEMS.ETATMAJOR40',
       key: 'cartes/geoportail',
       extent: [-580000, 506000, 1070000, 6637000],
-      maxResolution: 2000,
+      minZoom: 6,
     }),
     'Cadastre': new IGN({
       layer: 'CADASTRALPARCELS.PARCELLAIRE_EXPRESS',
       key: 'essentiels',
       format: 'image/png',
+      extent: [-580000, 506000, 1070000, 6637000],
+      minZoom: 6,
     }),
     /*'IGN Cassini': new IGN({ //BEST BUG what key for Cassini ?
     	...options.ign,
@@ -494,9 +508,8 @@ export function demo(options = {}) {
       subLayer: 'OI.OrthoimageCoverage',
     }),
 
-    'Google road': new Google(),
-    'Google terrain': new Google({
-      subLayers: 'p',
+    'Google road': new Google({
+      subLayers: 'm', // Roads
     }),
     'Google hybrid': new Google({
       subLayers: 's,h',
