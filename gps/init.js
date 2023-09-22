@@ -1,6 +1,10 @@
 /* global ol, myol, layersKeys */ // eslint context
 console.log('MyGPS version LAST_CHANGE_TIME');
 
+const helpId = document.getElementById('myol-gps-help');
+if(helpId)
+	helpId.insertAdjacentHTML('beforeend', '<p>LAST_CHANGE_TIME</p>');
+
 // Ask user to reload the PWA when a new version is loaded
 navigator.serviceWorker.addEventListener('controllerchange', () => {
 	console.log('PWA controllerchange');
@@ -10,7 +14,7 @@ navigator.serviceWorker.addEventListener('controllerchange', () => {
 			subMenuHTML: '<p>Une nouvelle version</p>' +
 				'<p>ou de nouvelles traces</p>' +
 				'<p>sont disponibles.</p>' +
-				'<p>LAST_CHANGE_TIME</p>' + //TODO add LAST_CHANGE_TIME in the help
+				'<p>LAST_CHANGE_TIME</p>' +
 				'<a href="">Recharger la page</a>',
 		}));
 }, {
@@ -27,14 +31,14 @@ var loadControl = new myol.control.Load(),
 		controls: [
 			//BEST full screen => no status bar
 			// Top left
-			//new ol.control.Zoom( ),
+			new ol.control.Zoom( ),
 			new myol.control.MyGeocoder(),
 			new myol.control.MyGeolocation(),
 			loadControl,
 			new myol.control.Download(),
 			new myol.control.Button({ // Help
 				label: '?',
-				subMenuId: 'myol-help-gps',
+				subMenuId: 'myol-gps-help',
 			}),
 
 			// Top right
@@ -65,8 +69,8 @@ map.on('precompose', () => {
 var gpxFiles = [ /*GPXFILES*/ ];
 
 // Add a menu to load .gpx files included in the gps/... directories
-if (gpxFiles) { //TODO don't display if no gpx available
-	const tracesEl = document.getElementById('myol-traces-gps');
+if (gpxFiles.length) {
+	const tracesEl = document.getElementById('myol-gps-traces');
 
 	gpxFiles.forEach(f => {
 		const name = f.match(/([^/]*)\./);
@@ -81,7 +85,7 @@ if (gpxFiles) { //TODO don't display if no gpx available
 	map.addControl(
 		new myol.control.Button({
 			label: '&#128694;',
-			subMenuId: 'myol-traces-gps',
+			subMenuId: 'myol-gps-traces',
 		})
 	);
 }

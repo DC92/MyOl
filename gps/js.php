@@ -1,4 +1,5 @@
 <?php
+// Used by js.php?service-worker & js.php?init
 error_reporting(E_ALL);
 ini_set("display_errors", "on");
 

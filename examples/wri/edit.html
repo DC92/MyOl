@@ -57,12 +57,12 @@ Based on https://openlayers.org
       controlEditor = new myol.layer.Editor({
         geoJsonId: 'edit-json',
         snapLayers: [coucheContours],
-        help: [
-          //TODO reprendre nouveau standard
-          document.getElementById('myol-edit-help-modify').innerHTML,
-          null, // Pas d'édition de ligne
-          document.getElementById('myol-edit-help-poly').innerHTML,
-        ],
+        /*        help: [
+                  //TODO reprendre nouveau standard
+                  document.getElementById('myol-edit-help-modify').innerHTML,
+                  null, // Pas d'édition de ligne
+                  document.getElementById('myol-edit-help-poly').innerHTML,
+                ],*/
         featuresToSave: coordinates => [new ol.Feature({
           geometry: new ol.geom.MultiPolygon(coordinates.polys),
         })],
