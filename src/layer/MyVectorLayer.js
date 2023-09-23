@@ -201,10 +201,10 @@ class MyServerClusterVectorLayer extends MyBrowserClusterVectorLayer {
 export class MyVectorLayer extends MyServerClusterVectorLayer {
   constructor(options) {
     options = {
-      url: url_, // (extent, resolution, projection) // Calculate the url //TODO mettre en methode de la classe / appel par super s'il faut
+      // url: (extent, resolution, projection) // Calculate the url
       // host: '',
       // query: (extent, resolution, projection ,options) => ({_path: '...'}), //TODO mettre en methode de la classe / appel par super s'il faut
-      bbox: bbox_, // (extent, resolution, projection) => {}
+      // bbox: (extent, resolution, projection) => {}
       strategy: ol.loadingstrategy.bbox,
       projection: 'EPSG:4326',
       addProperties: () => {}, // properties => {} // (default) Add properties to each received features
@@ -236,68 +236,57 @@ export class MyVectorLayer extends MyServerClusterVectorLayer {
           .map(so => new ol.style.Style(so)); // Transform into an array of Style objects
       },
 
-      /*//TODO
-       */
-      source: options.browserClusterMinDistance ?
-        new MyClusterSource(options) : // Use a cluster source and a vector source to manages clusters
-        new MyVectorSource(options), // or a vector source to get the data
-
       maxResolution: options.serverClusterMinResolution,
     });
 
-    /*//TODO
-    options.url  = url_;
-	if (options.browserClusterMinDistance)
-      this.setSource(new MyClusterSource(options));
-    else
-      this.setSource(new MyVectorSource(options));
-
+    //TODO limit options -> methods heritage
     this.host = options.host;
     this.query = options.query;
     this.strategy = options.strategy;
     this.projection = options.projection;
-    if (options.bbox)
-      this.bbox = options.bbox;
-    */
+    if (options.bbox) this.bbox = options.bbox;
 
+    // Set the source
+    options = {
+      url: (extent, resolution, projection) => this.url(extent, resolution, projection, options),
+      ...options,
+    };
+
+    if (options.browserClusterMinDistance)
+      this.setSource(new MyClusterSource(options));
+    else
+      this.setSource(new MyVectorSource(options));
+
+    // Define the selector action
     options.selector.callbacks.push(() => this.reload());
     this.reload();
-
-    function url_() {
-      const args = options.query(...arguments, options),
-        url = options.host + args._path; // Mem _path
-
-      if (options.strategy == ol.loadingstrategy.bbox)
-        args.bbox = options.bbox(...arguments);
-
-      // Clean null & not relative parameters
-      Object.keys(args).forEach(k => {
-        if (k == '_path' || args[k] == 'on' || !args[k] || !args[k].toString())
-          delete args[k];
-      });
-
-      return url + '?' + new URLSearchParams(args).toString();
-    }
-
-    function bbox_(extent, resolution, projection) {
-      return ol.proj.transformExtent(
-        extent,
-        projection,
-        options.projection, // Received projection
-      ).map(c => c.toPrecision(6)); // Limit the number of digits (10 m)
-    }
   }
 
-  /*
-    bbox(extent, resolution, projection) {
-      return ol.proj.transformExtent(
-        extent,
-        projection,
-        this.projection, // Received projection
-      ).map(c => c.toPrecision(6)); // Limit the number of digits (10 m)
-    }
-    */
+  url() {
+    const args = this.query(...arguments),
+      url = this.host + args._path; // Mem _path
 
+    if (this.strategy == ol.loadingstrategy.bbox)
+      args.bbox = this.bbox(...arguments);
+
+    // Clean null & not relative parameters
+    Object.keys(args).forEach(k => {
+      if (k == '_path' || args[k] == 'on' || !args[k] || !args[k].toString())
+        delete args[k];
+    });
+
+    return url + '?' + new URLSearchParams(args).toString();
+  }
+
+  bbox(extent, resolution, projection) {
+    return ol.proj.transformExtent(
+      extent,
+      projection,
+      this.projection, // Received projection
+    ).map(c => c.toPrecision(6)); // Limit the number of digits (10 m)
+  }
+
+  // Define reload action
   reload() {
     super.reload(this.options.selector.getSelection().length);
   }
