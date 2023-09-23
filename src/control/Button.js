@@ -17,8 +17,8 @@ export default class Button extends ol.control.Control {
       className: '', // To be added to the control.element
       // subMenuId : 'id', // Id of an existing html containing the scrolling menu
       subMenuHTML: 'Unknown', // html code of the scrolling menu
-      subMenuAction() {}, // (evt) To run when the button is clicked / hovered, ...
-      // buttonAction(evt) {}, // (evt)  To run when an <input> ot <a> of the subMenu is clicked / hovered, ...
+      // subMenuAction() {}, // (evt) To run when the button is clicked / hovered, ...
+      // buttonAction() {}, // (evt) To run when an <input> ot <a> of the subMenu is clicked / hovered, ...
 
       // All ol.control.Control options
 
@@ -30,14 +30,13 @@ export default class Button extends ol.control.Control {
       ...options,
     });
 
-    this.optionsButtonAction = options.buttonAction;
-    this.subMenuAction = options.subMenuAction;
+    this.buttonAction ||= options.buttonAction;
+    this.subMenuAction ||= options.subMenuAction;
 
     // Create a button
     this.buttonEl = document.createElement('button');
     this.buttonEl.setAttribute('type', 'button');
     this.buttonEl.innerHTML = options.label;
-    this.buttonEl.addEventListener('click', evt => this.buttonAction(evt));
 
     // Add submenu below the button
     this.subMenuEl = document.getElementById(options.subMenuId);
@@ -54,8 +53,9 @@ export default class Button extends ol.control.Control {
     super.setMap(map);
 
     // Register action listeners when html is fully loaded
-    this.element.addEventListener('mouseover', evt => this.buttonAction(evt));
-    this.element.addEventListener('mouseout', evt => this.buttonAction(evt));
+    this.buttonEl.addEventListener('click', evt => this.buttonListener(evt));
+    this.element.addEventListener('mouseover', evt => this.buttonListener(evt));
+    this.element.addEventListener('mouseout', evt => this.buttonListener(evt));
 
     // Close the submenu when click or touch on the map
     document.addEventListener('click', evt => {
@@ -72,9 +72,11 @@ export default class Button extends ol.control.Control {
         )));
   }
 
-  buttonAction(evt) {
-    if (this.optionsButtonAction)
-      this.optionsButtonAction(evt);
+  subMenuAction() {}
+  buttonAction() {}
+
+  buttonListener(evt) {
+    this.buttonAction(evt);
 
     if (evt.type == 'mouseover')
       this.element.classList.add('myol-button-hover');
