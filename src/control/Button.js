@@ -30,8 +30,10 @@ export default class Button extends ol.control.Control {
       ...options,
     });
 
-    this.buttonAction ||= options.buttonAction;
-    this.subMenuAction ||= options.subMenuAction;
+    if (options.buttonAction)
+      this.buttonAction = options.buttonAction;
+    if (options.subMenuAction)
+      this.subMenuAction = options.subMenuAction;
 
     // Create a button
     this.buttonEl = document.createElement('button');

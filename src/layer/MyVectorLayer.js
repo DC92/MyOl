@@ -13,25 +13,12 @@ import * as stylesOptions from './stylesOptions';
  */
 class MyVectorSource extends ol.source.Vector {
   constructor(options) {
-    options = {
-      url: url_, // (extent, resolution, projection) // Calculate the url
-      // host: '',
-      // query: (extent, resolution, projection ,options) => ({_path: '...'}),
-      bbox: bbox_, // (extent, resolution, projection) //TODO mettre en methode de la classe / appel par super s'il faut //TODO ALL OTHERS
-      strategy: ol.loadingstrategy.bbox,
-      projection: 'EPSG:4326',
-      addProperties: () => {}, // properties => {} // (default) Add properties to each received features
-
-      // Any ol.source.Vector options
-
-      ...options,
-    };
-
     super({
       format: new ol.format.GeoJSON({ //BEST treat & display JSON errors
         dataProjection: options.projection,
       }),
 
+      // Any ol.source.Vector options
       ...options,
     });
 
@@ -58,30 +45,6 @@ class MyVectorSource extends ol.source.Vector {
         }
       })
     );
-
-    function url_() {
-      const args = options.query(...arguments, options),
-        url = options.host + args._path; // Mem _path
-
-      if (options.strategy == ol.loadingstrategy.bbox)
-        args.bbox = options.bbox(...arguments);
-
-      // Clean null & not relative parameters
-      Object.keys(args).forEach(k => {
-        if (k == '_path' || args[k] == 'on' || !args[k] || !args[k].toString())
-          delete args[k];
-      });
-
-      return url + '?' + new URLSearchParams(args).toString();
-    }
-
-    function bbox_(extent, resolution, projection) {
-      return ol.proj.transformExtent(
-        extent,
-        projection,
-        options.projection, // Received projection
-      ).map(c => c.toPrecision(6)); // Limit the number of digits (10 m)
-    }
   }
 
   // Redirection for cluster.source compatibility
@@ -238,13 +201,13 @@ class MyServerClusterVectorLayer extends MyBrowserClusterVectorLayer {
 export class MyVectorLayer extends MyServerClusterVectorLayer {
   constructor(options) {
     options = {
-      // url: (extent, resolution, projection) => Calculate the url
+      url: url_, // (extent, resolution, projection) // Calculate the url //TODO mettre en methode de la classe / appel par super s'il faut
       // host: '',
-      // query: (extent, resolution, projection ,options) => ({_path: '...'}),
-      // bbox: (extent, resolution, projection)
-      // strategy: ol.loadingstrategy.bbox,
-      // projection: 'EPSG:4326',
-      // addProperties: properties => {}, // Add properties to each received feature
+      // query: (extent, resolution, projection ,options) => ({_path: '...'}), //TODO mettre en methode de la classe / appel par super s'il faut
+      bbox: bbox_, // (extent, resolution, projection) => {}
+      strategy: ol.loadingstrategy.bbox,
+      projection: 'EPSG:4326',
+      addProperties: () => {}, // properties => {} // (default) Add properties to each received features
       // browserClusterMinDistance:50, // (pixels) distance above which the browser clusterises
       // browserClusterFeaturelMaxPerimeter: 300, // (pixels) perimeter of a line or poly above which we do not cluster
       // serverClusterMinResolution: 100, // (map units per pixel) resolution above which we ask clusters to the server
@@ -273,15 +236,67 @@ export class MyVectorLayer extends MyServerClusterVectorLayer {
           .map(so => new ol.style.Style(so)); // Transform into an array of Style objects
       },
 
+      /*//TODO
+       */
       source: options.browserClusterMinDistance ?
         new MyClusterSource(options) : // Use a cluster source and a vector source to manages clusters
         new MyVectorSource(options), // or a vector source to get the data
+
       maxResolution: options.serverClusterMinResolution,
     });
 
+    /*//TODO
+    options.url  = url_;
+	if (options.browserClusterMinDistance)
+      this.setSource(new MyClusterSource(options));
+    else
+      this.setSource(new MyVectorSource(options));
+
+    this.host = options.host;
+    this.query = options.query;
+    this.strategy = options.strategy;
+    this.projection = options.projection;
+    if (options.bbox)
+      this.bbox = options.bbox;
+    */
+
     options.selector.callbacks.push(() => this.reload());
     this.reload();
+
+    function url_() {
+      const args = options.query(...arguments, options),
+        url = options.host + args._path; // Mem _path
+
+      if (options.strategy == ol.loadingstrategy.bbox)
+        args.bbox = options.bbox(...arguments);
+
+      // Clean null & not relative parameters
+      Object.keys(args).forEach(k => {
+        if (k == '_path' || args[k] == 'on' || !args[k] || !args[k].toString())
+          delete args[k];
+      });
+
+      return url + '?' + new URLSearchParams(args).toString();
+    }
+
+    function bbox_(extent, resolution, projection) {
+      return ol.proj.transformExtent(
+        extent,
+        projection,
+        options.projection, // Received projection
+      ).map(c => c.toPrecision(6)); // Limit the number of digits (10 m)
+    }
   }
+
+  /*
+    bbox(extent, resolution, projection) {
+      return ol.proj.transformExtent(
+        extent,
+        projection,
+        this.projection, // Received projection
+      ).map(c => c.toPrecision(6)); // Limit the number of digits (10 m)
+    }
+    */
 
   reload() {
     super.reload(this.options.selector.getSelection().length);
