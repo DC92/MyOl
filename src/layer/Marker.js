@@ -79,9 +79,25 @@ export default class Marker extends ol.layer.Vector {
       if (this.options.focus)
         this.view.setZoom(this.options.focus);
 
+      // Change the cursor over a dragable feature
+      map.on('pointermove', evt => {
+        const hoverDragable = map.getFeaturesAtPixel(evt.pixel, {
+          layerFilter: l => {
+            if (this.options.dragable)
+              return l.ol_uid == this.ol_uid;
+          }
+        });
+
+        map.getTargetElement().style.cursor = hoverDragable.length ? 'move' : 'auto';
+      });
+
       // Edit the marker position
       if (this.options.dragable) {
-        //TODO change the cursor
+        map.addInteraction(new ol.interaction.Select({
+          layers: [this],
+          //style:,
+        }));
+
         map.addInteraction(new ol.interaction.Pointer({
           handleDownEvent: evt => {
             return map.getFeaturesAtPixel(evt.pixel, {

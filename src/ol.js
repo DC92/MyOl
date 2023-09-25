@@ -42,6 +42,7 @@ export default {
     Modify: interaction.Modify,
     MouseWheelZoom: interaction.MouseWheelZoom,
     Pointer: interaction.Pointer,
+    Select: interaction.Select,
     Snap: interaction.Snap,
   },
   layer: {
