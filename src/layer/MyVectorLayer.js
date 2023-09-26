@@ -8,7 +8,6 @@ import * as stylesOptions from './stylesOptions';
 
 /**
  * GeoJSON vector display
- * url calculation
  * display the loading status
  */
 class MyVectorSource extends ol.source.Vector {
@@ -136,8 +135,7 @@ class MyClusterSource extends ol.source.Cluster {
 //TODO clusters KO sur index.html / chemineur & wri
 class MyBrowserClusterVectorLayer extends ol.layer.Vector {
   constructor(options) {
-    // browserClusterMinDistance:50, // (pixels) distance above which the browser clusterises
-    // serverClusterMinResolution: 100, // (map units per pixel) resolution above which we ask clusters to the server
+    // browserClusterMinDistance: 50, // (pixels) distance above which the browser clusterises
 
     // Any ol.source.layer.Vector
 
@@ -145,14 +143,14 @@ class MyBrowserClusterVectorLayer extends ol.layer.Vector {
       source: options.browserClusterMinDistance ?
         new MyClusterSource(options) : // Use a cluster source and a vector source to manages clusters
         new MyVectorSource(options), // or a vector source to get the data
-      maxResolution: options.serverClusterMinResolution,
 
       ...options,
     });
 
-    this.options = options; // Mem for further use //TODO replace by options.toto => this.toto //TODO ALL
+    this.options = options; // Mem for further use
   }
 
+  // Propagate reload
   reload(visible) {
     this.setVisible(visible);
     if (visible && this.state_) //BEST find better than this.state_
@@ -165,19 +163,22 @@ class MyServerClusterVectorLayer extends MyBrowserClusterVectorLayer {
     // serverClusterMinResolution: 100, // (map units per pixel) resolution above which we ask clusters to the server
 
     // Low resolutions layer to display the normal data
-    super(options);
+    super({
+      ...options,
+
+      maxResolution: options.serverClusterMinResolution,
+    });
 
     // High resolutions layer to get and display the clusters delivered by the server at hight resolutions
     if (options.serverClusterMinResolution)
       this.altLayer = new MyBrowserClusterVectorLayer({
-        maxResolution: undefined,
         minResolution: options.serverClusterMinResolution,
 
         ...options,
       });
   }
 
-  setMapInternal(map) { //HACK execute actions on Map init
+  setMapInternal(map) {
     super.setMapInternal(map);
 
     if (this.altLayer)
@@ -235,8 +236,6 @@ export class MyVectorLayer extends MyServerClusterVectorLayer {
         return sof(feature, this) // Call the styleOptions function
           .map(so => new ol.style.Style(so)); // Transform into an array of Style objects
       },
-
-      maxResolution: options.serverClusterMinResolution,
     });
 
     //TODO limit options -> methods heritage
@@ -307,7 +306,7 @@ export class Hover extends ol.layer.Vector {
   }
 
   // Attach an hover & click listener to the map
-  setMapInternal(map) { //HACK execute actions on Map init
+  setMapInternal(map) {
     super.setMapInternal(map);
 
     const mapEl = map.getTargetElement();
