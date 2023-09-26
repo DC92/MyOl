@@ -25,7 +25,6 @@ export default class BackgroundLayer extends layerTile.StadiaMaps {
   }
 
   setMapInternal(map) {
-    //HACK execute actions on Map init
     super.setMapInternal(map);
 
     // Substitution for low resoltions

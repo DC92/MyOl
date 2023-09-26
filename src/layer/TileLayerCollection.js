@@ -200,7 +200,7 @@ export class IGM extends ol.layer.Tile {
     });
   }
 
-  setMapInternal(map) { //HACK execute actions on Map init
+  setMapInternal(map) {
     super.setMapInternal(map);
 
     const view = map.getView(),

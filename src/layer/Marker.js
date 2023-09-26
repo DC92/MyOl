@@ -93,11 +93,6 @@ export default class Marker extends ol.layer.Vector {
 
       // Edit the marker position
       if (this.options.dragable) {
-        map.addInteraction(new ol.interaction.Select({
-          layers: [this],
-          //style:,
-        }));
-
         map.addInteraction(new ol.interaction.Pointer({
           handleDownEvent: evt => {
             return map.getFeaturesAtPixel(evt.pixel, {
