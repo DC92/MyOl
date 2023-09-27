@@ -36,13 +36,15 @@ export class Chemineur extends MyVectorLayer {
       // Any ol.source.layer.Vector
 
       ...options,
-
-      query: (extent, resolution, projection, options) => ({
-        _path: 'ext/Dominique92/GeoBB/gis.php',
-        cat: options.selector.getSelection(),
-        layer: resolution < options.serverClusterMinResolution ? null : 'cluster', // For server cluster layer
-      }),
     });
+  }
+
+  query(extent, resolution) {
+    return {
+      _path: 'ext/Dominique92/GeoBB/gis.php',
+      cat: this.options.selector.getSelection(),
+      layer: resolution < this.options.serverClusterMinResolution ? null : 'cluster', // For server cluster layer
+    };
   }
 }
 
@@ -148,7 +150,7 @@ export class PRC extends MyVectorLayer {
 // CampToCamp.org
 export class C2C extends MyVectorLayer {
   constructor(options) {
-    const format_ = new ol.format.GeoJSON({ // Format of received data
+    const format_ = new ol.format.GeoJSON({ // Format of received data //TODO use this.format from MyVectorLayer
       dataProjection: 'EPSG:3857',
     });
 
@@ -159,7 +161,7 @@ export class C2C extends MyVectorLayer {
         wtyp: options.selector.getSelection(),
       }),
       projection: 'EPSG:3857',
-      format: format_,
+      format: format_, //TODO use this.format from MyVectorLayer
       browserClusterMinDistance: 50,
       // browserClusterFeaturelMaxPerimeter: 300, // (pixels) perimeter of a line or poly above which we do not cluster
       // serverClusterMinResolution: 100, // (map units per pixel) resolution above which we ask clusters to the server

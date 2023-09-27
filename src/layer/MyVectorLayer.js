@@ -13,11 +13,10 @@ import * as stylesOptions from './stylesOptions';
 class MyVectorSource extends ol.source.Vector {
   constructor(options) {
     super({
-      format: new ol.format.GeoJSON({ //BEST treat & display JSON errors
-        dataProjection: options.projection,
-      }),
-
+      // dataProjection: 'EPSG:4326',
       // Any ol.source.Vector options
+
+      format: new ol.format.GeoJSON(options), //BEST treat & display JSON errors
       ...options,
     });
 
@@ -132,11 +131,9 @@ class MyClusterSource extends ol.source.Cluster {
 /**
  * Browser & server clustered layer
  */
-//TODO clusters KO sur index.html / chemineur & wri
 class MyBrowserClusterVectorLayer extends ol.layer.Vector {
   constructor(options) {
     // browserClusterMinDistance: 50, // (pixels) distance above which the browser clusterises
-
     // Any ol.source.layer.Vector
 
     super({
@@ -165,7 +162,6 @@ class MyServerClusterVectorLayer extends MyBrowserClusterVectorLayer {
     // Low resolutions layer to display the normal data
     super({
       ...options,
-
       maxResolution: options.serverClusterMinResolution,
     });
 
@@ -173,7 +169,6 @@ class MyServerClusterVectorLayer extends MyBrowserClusterVectorLayer {
     if (options.serverClusterMinResolution)
       this.altLayer = new MyBrowserClusterVectorLayer({
         minResolution: options.serverClusterMinResolution,
-
         ...options,
       });
   }
@@ -202,13 +197,9 @@ class MyServerClusterVectorLayer extends MyBrowserClusterVectorLayer {
 export class MyVectorLayer extends MyServerClusterVectorLayer {
   constructor(options) {
     options = {
-      // url: (extent, resolution, projection) // Calculate the url
       // host: '',
-      // query: (extent, resolution, projection ,options) => ({_path: '...'}), //TODO mettre en methode de la classe / appel par super s'il faut
-      // bbox: (extent, resolution, projection) => {}
       strategy: ol.loadingstrategy.bbox,
-      projection: 'EPSG:4326',
-      addProperties: () => {}, // properties => {} // (default) Add properties to each received features
+      dataProjection: 'EPSG:4326',
       // browserClusterMinDistance:50, // (pixels) distance above which the browser clusterises
       // browserClusterFeaturelMaxPerimeter: 300, // (pixels) perimeter of a line or poly above which we do not cluster
       // serverClusterMinResolution: 100, // (map units per pixel) resolution above which we ask clusters to the server
@@ -221,44 +212,39 @@ export class MyVectorLayer extends MyServerClusterVectorLayer {
       // Any ol.source.Vector options
       // Any ol.source.layer.Vector
 
+      // Methods to instantiate
+      // url (extent, resolution, mapProjection) // Calculate the url
+      // query (extent, resolution, mapProjection ,options) ({_path: '...'}),
+      // bbox (extent, resolution, mapProjection) => {}
+      // addProperties (properties) => {}, // Add properties to each received features
+
       ...options,
     };
 
     super({
+      url: (e, r, p) => this.url(e, r, p),
+      addProperties: (p) => this.addProperties(p),
+      style: style_,
       ...options,
-
-      style: (feature, resolution) => {
-        // Function returning an array of styles options
-        const sof = !feature.getProperties().cluster ? options.basicStylesOptions :
-          resolution < options.spreadClusterMaxResolution ? stylesOptions.spreadCluster :
-          stylesOptions.cluster;
-
-        return sof(feature, this) // Call the styleOptions function
-          .map(so => new ol.style.Style(so)); // Transform into an array of Style objects
-      },
     });
 
-    //TODO limit options -> methods heritage
     this.host = options.host;
-    this.query = options.query;
     this.strategy = options.strategy;
-    this.projection = options.projection;
-    if (options.bbox) this.bbox = options.bbox;
-
-    // Set the source
-    options = {
-      url: (extent, resolution, projection) => this.url(extent, resolution, projection, options),
-      ...options,
-    };
-
-    if (options.browserClusterMinDistance)
-      this.setSource(new MyClusterSource(options));
-    else
-      this.setSource(new MyVectorSource(options));
+    this.dataProjection = options.dataProjection;
 
     // Define the selector action
     options.selector.callbacks.push(() => this.reload());
     this.reload();
+
+    function style_(feature, resolution) {
+      // Function returning an array of styles options
+      const sof = !feature.getProperties().cluster ? options.basicStylesOptions :
+        resolution < options.spreadClusterMaxResolution ? stylesOptions.spreadCluster :
+        stylesOptions.cluster;
+
+      return sof(feature, this) // Call the styleOptions function
+        .map(so => new ol.style.Style(so)); // Transform into an array of Style objects
+    }
   }
 
   url() {
@@ -277,13 +263,15 @@ export class MyVectorLayer extends MyServerClusterVectorLayer {
     return url + '?' + new URLSearchParams(args).toString();
   }
 
-  bbox(extent, resolution, projection) {
+  bbox(extent, resolution, mapProjection) {
     return ol.proj.transformExtent(
       extent,
-      projection,
-      this.projection, // Received projection
+      mapProjection,
+      this.dataProjection, // Received projection
     ).map(c => c.toPrecision(6)); // Limit the number of digits (10 m)
   }
+
+  addProperties() {}
 
   // Define reload action
   reload() {
