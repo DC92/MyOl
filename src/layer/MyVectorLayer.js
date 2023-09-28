@@ -214,7 +214,7 @@ export class MyVectorLayer extends MyServerClusterVectorLayer {
 
       // Methods to instantiate
       // url (extent, resolution, mapProjection) // Calculate the url
-      // query (extent, resolution, mapProjection ,options) ({_path: '...'}),
+      // query (extent, resolution, mapProjection) ({_path: '...'}),
       // bbox (extent, resolution, mapProjection) => {}
       // addProperties (properties) => {}, // Add properties to each received features
 
@@ -223,28 +223,29 @@ export class MyVectorLayer extends MyServerClusterVectorLayer {
 
     super({
       url: (e, r, p) => this.url(e, r, p),
-      addProperties: (p) => this.addProperties(p),
-      style: style_,
+      addProperties: p => this.addProperties(p),
+      style: (f, r) => this.style(f, r),
       ...options,
     });
 
     this.host = options.host;
     this.strategy = options.strategy;
     this.dataProjection = options.dataProjection;
+    this.selector = options.selector;
 
     // Define the selector action
-    options.selector.callbacks.push(() => this.reload());
+    this.selector.callbacks.push(() => this.reload());
     this.reload();
+  }
 
-    function style_(feature, resolution) {
-      // Function returning an array of styles options
-      const sof = !feature.getProperties().cluster ? options.basicStylesOptions :
-        resolution < options.spreadClusterMaxResolution ? stylesOptions.spreadCluster :
-        stylesOptions.cluster;
+  style(feature, resolution) {
+    // Function returning an array of styles options
+    const sof = !feature.getProperties().cluster ? this.options.basicStylesOptions :
+      resolution < this.options.spreadClusterMaxResolution ? stylesOptions.spreadCluster :
+      stylesOptions.cluster;
 
-      return sof(feature, this) // Call the styleOptions function
-        .map(so => new ol.style.Style(so)); // Transform into an array of Style objects
-    }
+    return sof(feature, this) // Call the styleOptions function
+      .map(so => new ol.style.Style(so)); // Transform into an array of Style objects
   }
 
   url() {
@@ -275,7 +276,7 @@ export class MyVectorLayer extends MyServerClusterVectorLayer {
 
   // Define reload action
   reload() {
-    super.reload(this.options.selector.getSelection().length);
+    super.reload(this.selector.getSelection().length);
   }
 }
 
