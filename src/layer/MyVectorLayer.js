@@ -12,13 +12,7 @@ import * as stylesOptions from './stylesOptions';
  */
 class MyVectorSource extends ol.source.Vector {
   constructor(options) {
-    super({
-      // dataProjection: 'EPSG:4326',
-      // Any ol.source.Vector options
-
-      format: new ol.format.GeoJSON(options), //BEST treat & display JSON errors
-      ...options,
-    });
+    super(options);
 
     this.statusEl = document.getElementById(options.selectName + '-status');
 
@@ -220,6 +214,7 @@ export class MyVectorLayer extends MyServerClusterVectorLayer {
 
       ...options,
     };
+    options.format ||= new ol.format.GeoJSON(options); //BEST treat & display JSON errors
 
     super({
       url: (e, r, p) => this.url(e, r, p),
@@ -231,6 +226,7 @@ export class MyVectorLayer extends MyServerClusterVectorLayer {
     this.host = options.host;
     this.strategy = options.strategy;
     this.dataProjection = options.dataProjection;
+    this.format = options.format;
     this.selector = options.selector;
 
     // Define the selector action

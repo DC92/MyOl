@@ -24,6 +24,8 @@ export class Chemineur extends MyVectorLayer {
   constructor(options) {
     super({
       host: 'https://chemineur.fr/',
+      attribution: '&copy;chemineur.fr',
+
       browserClusterMinDistance: 50,
       browserClusterFeaturelMaxPerimeter: 300,
       serverClusterMinResolution: 100,
@@ -31,7 +33,7 @@ export class Chemineur extends MyVectorLayer {
       // basicStylesOptions: stylesOptions.basic, // (feature, layer)
       // hoverStylesOptions: stylesOptions.hover,
       // selector: new Selector(options.selectName),
-      attribution: '&copy;chemineur.fr',
+
       // Any ol.source.Vector options
       // Any ol.source.layer.Vector
 
@@ -53,13 +55,15 @@ export class Alpages extends MyVectorLayer {
   constructor(options) {
     super({
       host: 'https://alpages.info/',
+      attribution: '&copy;alpages.info',
+
       browserClusterMinDistance: 50,
       browserClusterFeaturelMaxPerimeter: 300,
       // serverClusterMinResolution: 100, // (map units per pixel) resolution above which we ask clusters to the server
       // basicStylesOptions: stylesOptions.basic, // (feature, layer)
       // hoverStylesOptions: stylesOptions.hover,
       // selector: new Selector(options.selectName),
-      attribution: '&copy;alpages.info',
+
       // Any ol.source.Vector options
       // Any ol.source.layer.Vector
 
@@ -87,6 +91,8 @@ export class WRI extends MyVectorLayer {
   constructor(options) {
     super({
       host: 'https://www.refuges.info/',
+      attribution: '&copy;refuges.info',
+
       browserClusterMinDistance: 50,
       serverClusterMinResolution: 100,
       // browserClusterFeaturelMaxPerimeter: 300, // (pixels) perimeter of a line or poly above which we do not cluster
@@ -94,7 +100,7 @@ export class WRI extends MyVectorLayer {
       // basicStylesOptions: stylesOptions.basic, // (feature, layer)
       // hoverStylesOptions: stylesOptions.hover,
       // selector: new Selector(options.selectName),
-      attribution: '&copy;refuges.info',
+
       // Any ol.source.Vector options
       // Any ol.source.layer.Vector
 
@@ -130,13 +136,15 @@ export class PRC extends MyVectorLayer {
     super({
       url: 'https://www.pyrenees-refuges.com/api.php?type_fichier=GEOJSON',
       strategy: ol.loadingstrategy.all,
+      attribution: '&copy;Pyrenees-Refuges',
+
       browserClusterMinDistance: 50,
       // browserClusterFeaturelMaxPerimeter: 300, // (pixels) perimeter of a line or poly above which we do not cluster
       // serverClusterMinResolution: 100, // (map units per pixel) resolution above which we ask clusters to the server
       // basicStylesOptions: stylesOptions.basic, // (feature, layer)
       // hoverStylesOptions: stylesOptions.hover,
       // selector: new Selector(options.selectName),
-      attribution: '&copy;Pyrenees-Refuges',
+
       // Any ol.source.Vector options
       // Any ol.source.layer.Vector
 
@@ -158,28 +166,25 @@ export class PRC extends MyVectorLayer {
 // CampToCamp.org
 export class C2C extends MyVectorLayer {
   constructor(options) {
-    const format_ = new ol.format.GeoJSON({ // Format of received data //TODO use this.format from MyVectorLayer
-      dataProjection: 'EPSG:3857',
-    });
-
     super({
       host: 'https://api.camptocamp.org/',
       dataProjection: 'EPSG:3857',
-      format: format_, //TODO use this.format from MyVectorLayer
+      attribution: '&copy;Camp2camp',
+
       browserClusterMinDistance: 50,
       // browserClusterFeaturelMaxPerimeter: 300, // (pixels) perimeter of a line or poly above which we do not cluster
       // serverClusterMinResolution: 100, // (map units per pixel) resolution above which we ask clusters to the server
       // basicStylesOptions: stylesOptions.basic, // (feature, layer)
       // hoverStylesOptions: stylesOptions.hover,
       // selector: new Selector(options.selectName),
-      attribution: '&copy;Camp2camp',
+
       // Any ol.source.Vector options
       // Any ol.source.layer.Vector
 
       ...options,
     });
 
-    format_.readFeatures = json => {
+    this.format.readFeatures = json => {
       const features = [],
         objects = JSON.parse(json);
 
@@ -200,7 +205,7 @@ export class C2C extends MyVectorLayer {
         });
       }
 
-      return format_.readFeaturesFromObject({
+      return this.format.readFeaturesFromObject({
         type: 'FeatureCollection',
         features: features,
       });
@@ -222,17 +227,18 @@ export class C2C extends MyVectorLayer {
  */
 export class Overpass extends MyVectorLayer {
   constructor(options) {
-    const format_ = new ol.format.OSMXML(),
-      statusEl = document.getElementById(options.selectName),
+    const statusEl = document.getElementById(options.selectName),
       selectEls = document.getElementsByName(options.selectName);
 
     super({
       host: 'https://overpass-api.de',
       //host: 'https://lz4.overpass-api.de',
       //host: 'https://overpass.kumi.systems',
-      browserClusterMinDistance: 50,
       bbox: () => null, // No bbox at the end of the url
-      format: format_,
+      format: new ol.format.OSMXML(),
+      attribution: '&copy;OpenStreetMap',
+
+      browserClusterMinDistance: 50,
       maxResolution: 50,
       // browserClusterMinDistance:50, // (pixels) distance above which the browser clusterises
       // browserClusterFeaturelMaxPerimeter: 300, // (pixels) perimeter of a line or poly above which we do not cluster
@@ -241,7 +247,7 @@ export class Overpass extends MyVectorLayer {
       // basicStylesOptions: stylesOptions.basic, // (feature, layer)
       // hoverStylesOptions: stylesOptions.hover,
       // selector: new Selector(options.selectName),
-      attribution: '&copy;OpenStreetMap',
+
       // Any ol.source.Vector options
       // Any ol.source.layer.Vector
 
@@ -256,7 +262,7 @@ export class Overpass extends MyVectorLayer {
         tags += selectEls[e].value.replace('private', '');
 
     // Extract features from data when received
-    format_.readFeatures = function(doc, options) {
+    this.format.readFeatures = function(doc, options) {
       // Transform an area to a node (picto) at the center of this area
 
       for (let node = doc.documentElement.firstElementChild; node; node = node.nextSibling) {
