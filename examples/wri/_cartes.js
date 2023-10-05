@@ -129,7 +129,7 @@ function coucheMassifsColores(options) {
 function coucheContourMassif(options) {
   return new myol.layer.MyVectorLayer({
     // Construction de l'url
-    query: (extent, resolution, projection) => ({
+    query: (extent, resolution, projection, options) => ({
       _path: 'api/polygones',
       type_polygon: 1, // Massifs
       massif: options.selector.getSelection(),
@@ -159,9 +159,9 @@ function controlesCartes(page) {
     new ol.control.FullScreen(),
     new myol.control.MyGeocoder(),
     new myol.control.MyGeolocation(),
-    'nav,edit,modif'.includes(page) ? new myol.control.Load() : new myol.control.Button(), //TODO error : Button display ?
-    'nav,edit,point'.includes(page) ? new myol.control.Download() : new myol.control.Button(),
-    'nav,point'.includes(page) ? new myol.control.Print() : new myol.control.Button(),
+    'nav,edit,modif'.includes(page) ? new myol.control.Load() : new myol.control.NoButton(),
+    'nav,edit,point'.includes(page) ? new myol.control.Download() : new myol.control.NoButton(),
+    'nav,point'.includes(page) ? new myol.control.Print() : new myol.control.NoButton(),
 
     // Bas gauche
     new myol.control.MyMousePosition(),

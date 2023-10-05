@@ -208,7 +208,7 @@ export class MyVectorLayer extends MyServerClusterVectorLayer {
 
       // Methods to instantiate
       // url (extent, resolution, mapProjection) // Calculate the url
-      // query (extent, resolution, mapProjection) ({_path: '...'}),
+      // query (extent, resolution, mapProjection, optioons) ({_path: '...'}),
       // bbox (extent, resolution, mapProjection) => {}
       // addProperties (properties) => {}, // Add properties to each received features
 
@@ -240,7 +240,7 @@ export class MyVectorLayer extends MyServerClusterVectorLayer {
   }
 
   url() {
-    const args = this.query(...arguments),
+    const args = this.query(...arguments, this.options),
       url = this.host + args._path; // Mem _path
 
     if (this.strategy == ol.loadingstrategy.bbox)

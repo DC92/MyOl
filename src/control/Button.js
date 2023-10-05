@@ -92,3 +92,15 @@ export default class Button extends ol.control.Control {
         el.classList.remove('myol-button-selected');
   }
 }
+
+/**
+ * No button
+ * To be used to replace an unused button
+ */
+export class NoButton extends ol.control.Control {
+  constructor(options) {
+    super({
+      element: document.createElement('div'),
+    });
+  }
+}

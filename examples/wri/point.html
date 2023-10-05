@@ -67,8 +67,9 @@ Based on https://openlayers.org
       ],
       layers: [
         // Les autres points refuges.info
+        //TODO BUG affiche un petit rond bleu style par défaut quand hover
         couchePointsWRI({
-          //host: '<?=$config_wri["sous_dossier_installation"]?>',
+          host: 'https://www.refuges.info/', // '<?=$config_wri["sous_dossier_installation"]?>',
         }),
         // Le cadre rouge autour du point de la fiche
         new myol.layer.Marker({

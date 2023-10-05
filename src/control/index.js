@@ -8,7 +8,7 @@ import Download from './Download';
 import LayerSwitcher from './LayerSwitcher';
 import LengthLine from './LengthLine';
 import Load from './Load';
-import Button from './Button';
+import * as button from './Button';
 import MyGeocoder from './MyGeocoder';
 import MyGeolocation from './MyGeolocation';
 import MyMousePosition from './MyMousePosition';
@@ -40,14 +40,15 @@ export function collection(options = {}) {
 }
 
 export default {
+  Button: button.Button,
   Download: Download,
-  LayerSwitcher: LayerSwitcher,
   LengthLine: LengthLine,
+  LayerSwitcher: LayerSwitcher,
   Load: Load,
-  Button: Button,
   MyGeocoder: MyGeocoder,
   MyGeolocation: MyGeolocation,
   MyMousePosition: MyMousePosition,
+  NoButton: button.NoButton,
   Permalink: Permalink,
   Print: Print,
   collection,
