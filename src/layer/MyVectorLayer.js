@@ -281,7 +281,6 @@ export class MyVectorLayer extends MyServerClusterVectorLayer {
  * Display the hovered feature with the hover style
  * Go to the link property when click a feature
  */
-//TODO BUG affiche un petit ronf bleu style par défaut quand hover
 export class Hover extends ol.layer.Vector {
   constructor() {
     super({
