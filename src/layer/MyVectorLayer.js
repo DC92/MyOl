@@ -224,6 +224,11 @@ export class MyVectorLayer extends MyServerClusterVectorLayer {
     });
 
     this.host = options.host;
+    this.url ||= options.url;
+    this.query ||= options.query;
+    this.bbox ||= options.bbox;
+    this.addProperties ||= options.addProperties;
+    this.style ||= options.style;
     this.strategy = options.strategy;
     this.dataProjection = options.dataProjection;
     this.format = options.format;
@@ -232,16 +237,6 @@ export class MyVectorLayer extends MyServerClusterVectorLayer {
     // Define the selector action
     this.selector.callbacks.push(() => this.reload());
     this.reload();
-  }
-
-  style(feature, resolution) {
-    // Function returning an array of styles options
-    const sof = !feature.getProperties().cluster ? this.options.basicStylesOptions :
-      resolution < this.options.spreadClusterMaxResolution ? stylesOptions.spreadCluster :
-      stylesOptions.cluster;
-
-    return sof(feature, this) // Call the styleOptions function
-      .map(so => new ol.style.Style(so)); // Transform into an array of Style objects
   }
 
   url() {
@@ -269,6 +264,16 @@ export class MyVectorLayer extends MyServerClusterVectorLayer {
   }
 
   addProperties() {}
+
+  style(feature, resolution) {
+    // Function returning an array of styles options
+    const sof = !feature.getProperties().cluster ? this.options.basicStylesOptions :
+      resolution < this.options.spreadClusterMaxResolution ? stylesOptions.spreadCluster :
+      stylesOptions.cluster;
+
+    return sof(feature, this) // Call the styleOptions function
+      .map(so => new ol.style.Style(so)); // Transform into an array of Style objects
+  }
 
   // Define reload action
   reload() {

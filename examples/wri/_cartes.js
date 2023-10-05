@@ -129,7 +129,7 @@ function coucheMassifsColores(options) {
 function coucheContourMassif(options) {
   return new myol.layer.MyVectorLayer({
     // Construction de l'url
-    query: (extent, resolution, projection, options) => ({
+    query: (extent, resolution, projection) => ({
       _path: 'api/polygones',
       type_polygon: 1, // Massifs
       massif: options.selector.getSelection(),
