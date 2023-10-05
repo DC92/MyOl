@@ -7,7 +7,7 @@ import ol from '../ol';
 import Button from '../control/Button';
 
 // Editor
-export default class Editor extends ol.layer.Vector {
+export class Editor extends ol.layer.Vector {
   constructor(options) {
     options = {
       geoJsonId: 'geojson',
@@ -378,3 +378,5 @@ export default class Editor extends ol.layer.Vector {
     return a[0] == b[0] && a[1] == b[1]; // 2 coordinates
   }
 }
+
+export default Editor;

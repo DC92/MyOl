@@ -326,7 +326,7 @@ export class Hover extends ol.layer.Vector {
       hoveredFeature = map.forEachFeatureAtPixel(
         map.getEventPixel(evt.originalEvent),
         function(f, l) {
-          if (l && l.options) {
+          if (l && l.options && l.options.hoverStylesOptions) {
             hoveredLayer = l;
             return f; // Return feature & stop the search
           }

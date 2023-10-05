@@ -4,7 +4,7 @@
 
 import ol from '../ol'; //BEST come back to direct import (optim ???)
 
-export default class MyMousePosition extends ol.control.MousePosition {
+export class MyMousePosition extends ol.control.MousePosition {
   constructor(options) {
     super({
       // From MousePosition options
@@ -30,3 +30,5 @@ export default class MyMousePosition extends ol.control.MousePosition {
     });
   }
 }
+
+export default MyMousePosition;

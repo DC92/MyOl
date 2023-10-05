@@ -6,7 +6,7 @@
 
 import ol from '../ol';
 
-export default class Permalink extends ol.control.Control {
+export class Permalink extends ol.control.Control {
   constructor(options) {
     options = {
       init: true, // {true | false} use url hash or localStorage to position the map.
@@ -79,3 +79,5 @@ export default class Permalink extends ol.control.Control {
     }
   }
 }
+
+export default Permalink;

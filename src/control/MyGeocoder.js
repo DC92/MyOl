@@ -10,7 +10,7 @@ import Geocoder from '@myol/geocoder/src/base';
 import '@myol/geocoder/dist/ol-geocoder.css';
 import './myGeocoder.css'; // After ol-geocoder.css
 
-export default class MyGeocoder extends Geocoder {
+export class MyGeocoder extends Geocoder {
   constructor(options) {
     super('nominatim', {
       // See https://github.com/kirtan-desai/ol-geocoder#user-content-api
@@ -44,3 +44,5 @@ export default class MyGeocoder extends Geocoder {
     });
   }
 }
+
+export default MyGeocoder;

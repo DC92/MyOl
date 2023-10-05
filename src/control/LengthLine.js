@@ -5,7 +5,7 @@
 
 import ol from '../ol';
 
-export default class LengthLine extends ol.control.Control {
+export class LengthLine extends ol.control.Control {
   constructor() {
     super({
       element: document.createElement('div'), //HACK button not visible
@@ -78,3 +78,5 @@ export default class LengthLine extends ol.control.Control {
     return fcs;
   }
 }
+
+export default LengthLine;

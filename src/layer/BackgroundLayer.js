@@ -7,7 +7,7 @@
 import ol from '../ol';
 import * as layerTile from './TileLayerCollection';
 
-export default class BackgroundLayer extends layerTile.StadiaMaps {
+export class BackgroundLayer extends layerTile.StadiaMaps {
   constructor(options) {
     // High resolution background layer
     super({
@@ -47,3 +47,5 @@ export default class BackgroundLayer extends layerTile.StadiaMaps {
     });
   }
 }
+
+export default BackgroundLayer;

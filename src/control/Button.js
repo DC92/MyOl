@@ -10,7 +10,7 @@ import './Button.css';
  * Control button
  * Abstract class to be used by other control buttons definitions
  */
-export default class Button extends ol.control.Control {
+export class Button extends ol.control.Control {
   constructor(options) {
     options = {
       label: '?', // An ascii or unicode character to decorate the button
@@ -104,3 +104,5 @@ export class NoButton extends ol.control.Control {
     });
   }
 }
+
+export default Button;

@@ -6,7 +6,7 @@ import ol from '../ol'; //BEST ??? come back to direct import (optim ???)
 import Button from './Button.js';
 
 //BEST BUG incompatible with clusters
-export default class Download extends Button {
+export class Download extends Button {
   constructor(options) {
     options = {
       // Button options
@@ -100,3 +100,5 @@ export default class Download extends Button {
     this.element.classList.remove('myol-display-submenu');
   }
 }
+
+export default Download;

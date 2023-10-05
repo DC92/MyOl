@@ -5,7 +5,7 @@
 import ol from '../ol'; //BEST ??? come back to direct import (optim ???)
 import Button from './Button.js';
 
-export default class Load extends Button {
+export class Load extends Button {
   constructor(options) {
     super({
       // Button options
@@ -94,3 +94,5 @@ export default class Load extends Button {
     this.element.classList.remove('myol-display-submenu');
   }
 }
+
+export default Load;

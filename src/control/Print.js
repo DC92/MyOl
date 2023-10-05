@@ -5,7 +5,7 @@
 import ol from '../ol'; //BEST ??? come back to direct import (optim ???)
 import Button from './Button.js';
 
-export default class Print extends Button {
+export class Print extends Button {
   constructor(options) {
     super({
       // Button options
@@ -69,3 +69,5 @@ export default class Print extends Button {
       });
   }
 }
+
+export default Print;

@@ -6,7 +6,7 @@
 import ol from '../ol'; //BEST come back to direct import (optim ???)
 import Button from './Button';
 
-export default class MyGeolocation extends Button {
+export class MyGeolocation extends Button {
   constructor(options) {
     const subMenu = location.href.match(/(https|localhost)/) ?
       //BEST use .html content / option / Included file / deendig of language
@@ -225,3 +225,5 @@ export default class MyGeolocation extends Button {
       this.element.classList.remove('myol-display-submenu');
   }
 }
+
+export default MyGeolocation;
