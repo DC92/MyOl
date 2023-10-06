@@ -5,8 +5,6 @@
 
 import ol from '../ol';
 import Button from '../control/Button';
-//TODO focus on imported file
-//TODO optimize on imported file
 
 // Editor
 export class Editor extends ol.layer.Vector {
@@ -93,6 +91,7 @@ export class Editor extends ol.layer.Vector {
     // Add features loaded from GPX file
     map.on('myol:onfeatureload', evt => {
       this.getSource().addFeatures(evt.features);
+      this.optimiseEdited();
       return false; // Warn control.load that the editor got the included feature
     });
 

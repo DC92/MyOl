@@ -47,49 +47,47 @@ export class Load extends Button {
         dataProjection: receivedProjection,
         featureProjection: map.getView().getProjection(), // Map projection
       }),
+      gpxSource = new ol.source.Vector({
+        format: loadFormat,
+        features: features,
+      }),
+      gpxLayer = new ol.layer.Vector({
+        source: gpxSource,
+        style: feature => {
+          const properties = feature.getProperties();
+
+          return new ol.style.Style({
+            stroke: new ol.style.Stroke({
+              color: 'blue',
+              width: 2,
+            }),
+            image: properties.sym ? new ol.style.Icon({
+              src: 'https://chemineur.fr/ext/Dominique92/GeoBB/icones/' + properties.sym + '.svg',
+            }) : null,
+          });
+        },
+      }),
+      fileExtent = gpxSource.getExtent();
+
+    if (ol.extent.isEmpty(fileExtent))
+      alert(url + ' ne comporte pas de point ni de trace.');
+    else {
       // Warn everyone that features have been loaded
-      used = map.dispatchEvent({
+      const used = map.dispatchEvent({
         type: 'myol:onfeatureload',
         features: features,
       });
 
-    // If no one used the feature, display them as a new layer
-    if (used !== false) {
-      const gpxSource = new ol.source.Vector({
-          format: loadFormat,
-          features: features,
-        }),
-        gpxLayer = new ol.layer.Vector({
-          source: gpxSource,
-          style: feature => {
-            const properties = feature.getProperties();
-
-            return new ol.style.Style({
-              stroke: new ol.style.Stroke({
-                color: 'blue',
-                width: 2,
-              }),
-              image: properties.sym ? new ol.style.Icon({
-                src: 'https://chemineur.fr/ext/Dominique92/GeoBB/icones/' + properties.sym + '.svg',
-              }) : null,
-            });
-          },
-        });
-
-      map.addLayer(gpxLayer);
+      // If no one used the feature, display them as a new layer
+      if (used !== false)
+        map.addLayer(gpxLayer);
 
       // Zoom the map on the added features
-      const fileExtent = gpxSource.getExtent();
-
-      //TODO factoriser with Editor.js
-      if (ol.extent.isEmpty(fileExtent))
-        alert(url + ' ne comporte pas de point ni de trace.');
-      else
-        map.getView().fit(
-          fileExtent, {
-            minResolution: 1,
-            padding: [5, 5, 5, 5],
-          });
+      map.getView().fit(
+        fileExtent, {
+          minResolution: 1,
+          padding: [5, 5, 5, 5],
+        });
     }
 
     // Close the submenu
