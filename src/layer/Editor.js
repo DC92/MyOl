@@ -170,13 +170,13 @@ export class Editor extends ol.layer.Vector {
 
     this.buttons = [
       new Button({
-        label: '&#128397;',
+        label: '&#10021;',
         subMenuId: 'myol-edit-help-modify',
         subMenuHTML: '<p>Modification</p>',
         buttonAction: evt => this.changeInteraction(0, evt.type),
       }),
       new Button({
-        label: '&#3351;',
+        label: '&#128397;',
         subMenuId: 'myol-edit-help-line',
         subMenuHTML: '<p>New line</p>',
         buttonAction: evt => this.changeInteraction(1, evt.type),

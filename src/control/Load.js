@@ -22,7 +22,9 @@ export class Load extends Button {
   subMenuAction(evt) {
     const blob = evt.target.files[0];
 
-    this.reader.readAsText(blob);
+    if (evt.type == 'change' && evt.target.files)
+      this.reader.readAsText(blob);
+
     this.reader.onload = () => this.loadText(this.reader.result, blob.name);
   }
 
