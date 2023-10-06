@@ -2,66 +2,66 @@
 console.log('MyGPS version LAST_CHANGE_TIME');
 
 const helpId = document.getElementById('myol-gps-help');
-if(helpId)
-	helpId.insertAdjacentHTML('beforeend', '<p>LAST_CHANGE_TIME</p>');
+if (helpId)
+  helpId.insertAdjacentHTML('beforeend', '<p>LAST_CHANGE_TIME</p>');
 
 // Ask user to reload the PWA when a new version is loaded
 navigator.serviceWorker.addEventListener('controllerchange', () => {
-	console.log('PWA controllerchange');
-	map.addControl(
-		new myol.control.Button({
-			label: '&#127381;',
-			subMenuHTML: '<p>Une nouvelle version</p>' +
-				'<p>ou de nouvelles traces</p>' +
-				'<p>sont disponibles.</p>' +
-				'<p>LAST_CHANGE_TIME</p>' +
-				'<a href="">Recharger la page</a>',
-		}));
+  console.log('PWA controllerchange');
+  map.addControl(
+    new myol.control.Button({
+      label: '&#127381;',
+      subMenuHTML: '<p>Une nouvelle version</p>' +
+        '<p>ou de nouvelles traces</p>' +
+        '<p>sont disponibles.</p>' +
+        '<p>LAST_CHANGE_TIME</p>' +
+        '<a href="">Recharger la page</a>',
+    }));
 }, {
-	once: true,
+  once: true,
 });
 
 // Display the map
 var loadControl = new myol.control.Load(),
-	map = new ol.Map({
-		target: 'map',
-		view: new ol.View({
-			constrainResolution: true, // Force zoom on the available tile's definition
-		}),
-		controls: [
-			//BEST full screen => no status bar
-			// Top left
-			new ol.control.Zoom( ),
-			new myol.control.MyGeocoder(),
-			new myol.control.MyGeolocation(),
-			loadControl,
-			new myol.control.Download(),
-			new myol.control.Button({ // Help
-				label: '?',
-				subMenuId: 'myol-gps-help',
-			}),
+  map = new ol.Map({
+    target: 'map',
+    view: new ol.View({
+      constrainResolution: true, // Force zoom on the available tile's definition
+    }),
+    controls: [
+      //BEST full screen => no status bar
+      // Top left
+      new ol.control.Zoom(),
+      new myol.control.MyGeocoder(),
+      new myol.control.MyGeolocation(),
+      loadControl,
+      new myol.control.Download(),
+      new myol.control.Button({ // Help
+        label: '?',
+        subMenuId: 'myol-gps-help',
+      }),
 
-			// Top right
-			new myol.control.LayerSwitcher({
-				layers: myol.layer.tile.collection(layersKeys),
-			}),
+      // Top right
+      new myol.control.LayerSwitcher({
+        layers: myol.layer.tile.collection(layersKeys),
+      }),
 
-			// Bottom left
-			new myol.control.LengthLine(),
-			new myol.control.MyMousePosition(),
-			new ol.control.ScaleLine(),
+      // Bottom left
+      new myol.control.LengthLine(),
+      new myol.control.MyMousePosition(),
+      new ol.control.ScaleLine(),
 
-			// Bottom right
-			new myol.control.Permalink(),
-			new ol.control.Attribution(),
-		],
-	});
-	
+      // Bottom right
+      new myol.control.Permalink(),
+      new ol.control.Attribution(),
+    ],
+  });
+
 // Preload 2 more layers zoom
 map.on('precompose', () => {
   map.getLayers().forEach(layer => {
-	if (typeof layer.setPreload == 'function')
-	  layer.setPreload(2);
+    if (typeof layer.setPreload == 'function')
+      layer.setPreload(2);
   });
 });
 
@@ -70,36 +70,36 @@ var gpxFiles = [ /*GPXFILES*/ ];
 
 // Add a menu to load .gpx files included in the gps/... directories
 if (gpxFiles.length) {
-	const tracesEl = document.getElementById('myol-gps-traces');
+  const tracesEl = document.getElementById('myol-gps-traces');
 
-	gpxFiles.forEach(f => {
-		const name = f.match(/([^/]*)\./);
+  gpxFiles.forEach(f => {
+    const name = f.match(/([^/]*)\./);
 
-		if (name)
-			tracesEl.insertAdjacentHTML(
-				'beforeend',
-				'<p><a onclick="loadControl.loadUrl(\'' + f + '\')">' + name[1] + '</a></p>'
-			);
-	});
+    if (name)
+      tracesEl.insertAdjacentHTML(
+        'beforeend',
+        '<p><a onclick="loadControl.loadUrl(\'' + f + '\')">' + name[1] + '</a></p>'
+      );
+  });
 
-	map.addControl(
-		new myol.control.Button({
-			label: '&#128694;',
-			subMenuId: 'myol-gps-traces',
-		})
-	);
+  map.addControl(
+    new myol.control.Button({
+      label: '&#128694;',
+      subMenuId: 'myol-gps-traces',
+    })
+  );
 }
 
 // Load server .gpx file from url #name (part of filename, case insensitive
 if (location.hash) {
-	const initFileName = gpxFiles.find(fileName =>
-		fileName.toLowerCase()
-		.includes(
-			location.hash.replace('#', '')
-			.toLowerCase()
-		)
-	);
+  const initFileName = gpxFiles.find(fileName =>
+    fileName.toLowerCase()
+    .includes(
+      location.hash.replace('#', '')
+      .toLowerCase()
+    )
+  );
 
-	if (initFileName)
-		loadControl.loadUrl(initFileName);
+  if (initFileName)
+    loadControl.loadUrl(initFileName);
 }
