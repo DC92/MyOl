@@ -5,6 +5,8 @@
 
 import ol from '../ol';
 import Button from '../control/Button';
+//TODO focus on imported file
+//TODO optimize on imported file
 
 // Editor
 export class Editor extends ol.layer.Vector {
@@ -107,7 +109,7 @@ export class Editor extends ol.layer.Vector {
       });
     });
 
-    //TODO    this.optimiseEdited(); // Treat the geoJson input as any other edit
+    this.optimiseEdited(); // Optimise at init
 
     // End of modify
     this.interactions[0].on('modifyend', evt => {
@@ -204,15 +206,16 @@ export class Editor extends ol.layer.Vector {
   }
 
   optimiseEdited(selectedVertex, reverseLine) {
-    const coordinates = this.optimiseFeatures(
-      this.source.getFeatures(),
-      true, //this.options.help[1],
-      true, //this.options.help[2],
-      true,
-      true,
-      selectedVertex,
-      reverseLine
-    );
+    const view = this.map.getView(),
+      coordinates = this.optimiseFeatures(
+        this.source.getFeatures(),
+        true, //this.options.help[1],
+        true, //this.options.help[2],
+        true,
+        true,
+        selectedVertex,
+        reverseLine
+      );
 
     // Recreate features
     this.source.clear();
@@ -227,11 +230,11 @@ export class Editor extends ol.layer.Vector {
       }));
 
     // Save geometries in <EL> as geoJSON at every change
-    if (this.geoJsonEl)
+    if (this.geoJsonEl && view)
       this.geoJsonEl.value = this.options.format.writeFeatures(
         this.options.featuresToSave(coordinates), {
           dataProjection: this.options.projection,
-          featureProjection: this.map.getView().getProjection(),
+          featureProjection: view.getProjection(),
           decimals: 5,
         })
       .replace(/,"properties":(\{[^}]*}|null)/, '');
@@ -344,37 +347,40 @@ export class Editor extends ol.layer.Vector {
   // Get all lines fragments (lines, polylines, polygons, multipolygons, hole polygons, ...)
   // at the same level & split if one point = selectedVertex
   flatCoord(lines, coords, selectedVertex, reverseLine) {
-    let begCoords = [], // Coords before the selectedVertex
-      selectedLine = false;
-
-    // Multi*
-    if (typeof coords[0][0] == 'object')
+    if (typeof coords[0][0] == 'object') {
+      // Multi*
       for (let c1 in coords)
         this.flatCoord(lines, coords[c1], selectedVertex, reverseLine);
+    } else {
+      // LineString
+      let begCoords = [], // Coords before the selectedVertex
+        selectedLine = false;
 
-    // 	LineString
-    else if (selectedVertex) {
       while (coords.length) {
         const c = coords.shift();
-        if (this.compareCoords(c, selectedVertex)) {
+
+        // Remove duplicated points
+        if (coords.length && this.compareCoords(c, coords[0]))
+          continue;
+
+        if (selectedVertex && this.compareCoords(c, selectedVertex)) {
           selectedLine = true;
           break; // Ignore this point and stop selection
-        } else
-          begCoords.push(c);
+        }
+
+        begCoords.push(c);
       }
+
       if (selectedLine && reverseLine)
         lines.push(begCoords.concat(coords).reverse());
       else
         lines.push(begCoords, coords);
-    } else
-      lines.push(coords);
+    }
   }
 
   compareCoords(a, b) {
-    if (!a)
-      return false;
-    if (!b)
-      return this.compareCoords(a[0], a[a.length - 1]); // Compare start with end
+    if (!a) return false;
+    if (!b) return this.compareCoords(a[0], a[a.length - 1]); // Compare start with end
     return a[0] == b[0] && a[1] == b[1]; // 2 coordinates
   }
 }
