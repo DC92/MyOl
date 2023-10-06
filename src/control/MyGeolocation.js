@@ -50,8 +50,6 @@ export class MyGeolocation extends Button {
       ...options,
     });
 
-    this.options = options;
-
     // Add status display element
     this.statusEl = document.createElement('p');
     this.element.appendChild(this.statusEl);

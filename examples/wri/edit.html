@@ -54,7 +54,7 @@ Based on https://openlayers.org
       coucheContours = coucheContourMassif({
         host: 'https://www.refuges.info/', // '<?=$config_wri["sous_dossier_installation"]?>',
       }),
-      controlEditor = new myol.layer.Editor({
+      editorlayer = new myol.layer.Editor({
         geoJsonId: 'edit-json',
         snapLayers: [coucheContours],
         /*        help: [
@@ -76,6 +76,9 @@ Based on https://openlayers.org
         }),
         controls: [
           ...controlesCartes('edit'),
+          new myol.control.Download({
+            savedLayer: editorlayer.layer,
+          }),
           new myol.control.Permalink({ // Permet de garder le même réglage de carte
             display: false, // Cache le lien
             init: false, // <?=$vue->polygone->id_polygone?'false':'true'?>, // On cadre le massif, s'il y a massif
@@ -83,7 +86,7 @@ Based on https://openlayers.org
           new myol.control.LayerSwitcher({
             layers: fondsCarte('edit', layersKeys),
           }),
-          controlEditor,
+          editorlayer,
         ],
         layers: [
           coucheContours,

@@ -8,17 +8,17 @@ import proj4Lib from 'proj4/lib/index';
 export class Marker extends ol.layer.Vector {
   constructor(options) {
     options = {
-      // src, url of marker image
-      // position: [0, 0], Initial position of the marker (default : center of the map)
-      // dragable : can draw the marker to edit position
-      // focus : number : center & value of zoom on the marker
+      // src: 'imageUrl', // url of marker image
+      // position: [0, 0], // Initial position of the marker (default : center of the map)
+      // dragable: false, // Can draw the marker to edit position
+      // focus: number // Center & value of zoom on the marker
       zIndex: 400, // Above points
 
       prefix: 'marker', // Will take the values on
-      // marker-json, <input> json form
+      // marker-json, // <input> json form
       // marker-lon, marker-lat, // <input> longitude / latitude
       // marker-x, marker-y', // <input> Swiss EPSG:21781
-      // marker-select, marker-string, select / display coords format
+      // marker-select, marker-string, select // display coords format
 
       ...options,
     };
@@ -30,6 +30,9 @@ export class Marker extends ol.layer.Vector {
           src: options.src,
         }),
       }),
+      properties: {
+        marker: true,
+      },
 
       ...options
     });

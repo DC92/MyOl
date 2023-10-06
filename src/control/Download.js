@@ -34,45 +34,42 @@ export class Download extends Button {
     const map = this.getMap(),
       formatName = evt.target.innerText,
       downloadFormat = new ol.format[formatName](),
-      mime = evt.target.getAttribute('mime');
-    let features = [],
-      extent = map.getView().calculateExtent();
+      mime = evt.target.getAttribute('mime'),
+      mapExtent = map.getView().calculateExtent();
+    let featuresToSave = [];
 
-    // Get all visible features
-    if (this.savedLayer) //TODO KESAKO ? TEST
-      getFeatures(this.savedLayer);
+    if (this.savedLayer)
+      featuresToSave = this.savedLayer.getSource().getFeatures();
     else
-      map.getLayers().forEach(getFeatures); //BEST what about (args)
-
-    function getFeatures(savedLayer) { //BEST put in method
-      if (savedLayer.getSource() &&
-        savedLayer.getSource().forEachFeatureInExtent) // For vector layers only
-        savedLayer.getSource().forEachFeatureInExtent(extent, feature => {
-          if (!savedLayer.getProperties().dragable) // Don't save the cursor
-            features.push(feature);
-        });
-    }
+      // Get all visible features
+      map.getLayers().forEach(layer => {
+        if (!layer.getProperties().marker &&
+          layer.getSource() && layer.getSource().forEachFeatureInExtent) // For vector layers only
+          layer.getSource().forEachFeatureInExtent(mapExtent, feature =>
+            featuresToSave.push(feature)
+          );
+      });
 
     if (formatName == 'GPX')
       // Transform *Polygons in linestrings
-      for (let f in features) {
-        const geometry = features[f].getGeometry();
+      for (let f in featuresToSave) {
+        const geometry = featuresToSave[f].getGeometry();
 
         if (geometry.getType().includes('Polygon')) {
           geometry.getCoordinates().forEach(coords => {
             if (typeof coords[0][0] == 'number')
               // Polygon
-              features.push(new ol.Feature(new ol.geom.LineString(coords)));
+              featuresToSave.push(new ol.Feature(new ol.geom.LineString(coords)));
             else
               // MultiPolygon
               coords.forEach(subCoords =>
-                features.push(new ol.Feature(new ol.geom.LineString(subCoords)))
+                featuresToSave.push(new ol.Feature(new ol.geom.LineString(subCoords)))
               );
           });
         }
       }
 
-    const data = downloadFormat.writeFeatures(features, {
+    const data = downloadFormat.writeFeatures(featuresToSave, {
         dataProjection: 'EPSG:4326',
         featureProjection: map.getView().getProjection(), // Map projection
         decimals: 5,
@@ -92,7 +89,7 @@ export class Download extends Button {
         type: mime,
       });
 
-    this.hiddenEl.download = this.fileName + '.' + formatName.toLowerCase();
+    this.hiddenEl.download = this.options.fileName + '.' + formatName.toLowerCase();
     this.hiddenEl.href = URL.createObjectURL(file);
     this.hiddenEl.click();
 

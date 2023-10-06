@@ -30,6 +30,8 @@ export class Button extends ol.control.Control {
       ...options,
     });
 
+    this.options = options;
+
     if (options.buttonAction) this.buttonAction = options.buttonAction;
     if (options.subMenuAction) this.subMenuAction = options.subMenuAction;
 

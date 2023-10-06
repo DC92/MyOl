@@ -49,7 +49,7 @@ export class LengthLine extends ol.control.Control {
       }
 
       // Display
-      //TODO BUG display length of GPS colimator
+      //BEST BUG display length of GPS colimator
       if (length) {
         this.element.innerHTML =
           // Line length

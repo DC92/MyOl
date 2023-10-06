@@ -24,6 +24,7 @@ function couchePointsWRI(options) {
       label: properties.nom, // Permanence de l'étiquette dès l'affichage de la carte
       name: properties.nom, // Nom utilisé dans les listes affichées au survol des ronds des clusters
       icon: options.host + 'images/icones/' + properties.type.icone + '.svg',
+      type: properties.type.valeur, // Pour export
       link: properties.lien, // Lien sur lequel cliquer
     }),
 
@@ -160,7 +161,7 @@ function controlesCartes(page) {
     new myol.control.MyGeocoder(),
     new myol.control.MyGeolocation(),
     'nav,edit,modif'.includes(page) ? new myol.control.Load() : new myol.control.NoButton(),
-    'nav,edit,point'.includes(page) ? new myol.control.Download() : new myol.control.NoButton(),
+    'nav,point'.includes(page) ? new myol.control.Download() : new myol.control.NoButton(),
     'nav,point'.includes(page) ? new myol.control.Print() : new myol.control.NoButton(),
 
     // Bas gauche
