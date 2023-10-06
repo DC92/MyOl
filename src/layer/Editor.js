@@ -15,7 +15,6 @@ export class Editor extends ol.layer.Vector {
       dataProjection: 'EPSG:4326',
       featureProjection: 'EPSG:3857',
       featuresToSave: coordinates => this.source.getFeatures(coordinates, this.options.format),
-      snapLayers: [], // Vector layers to snap on
       ...options,
     };
 
@@ -95,19 +94,6 @@ export class Editor extends ol.layer.Vector {
       return false; // Warn control.load that the editor got the included feature
     });
 
-    this.options.snapLayers.push(this);
-
-    // Snap on vector layers
-    //BEST snap when creating line or poly
-    //TODO features & source are the same ! // Improve / Ces lignes sont bizares
-    this.options.snapLayers.forEach(l => {
-      l.getSource().on('change', () => { // Wait for layer end load
-        const fs = l.getSource().getFeatures();
-        for (let f in fs)
-          this.interactions[3].addFeature(fs[f]);
-      });
-    });
-
     this.optimiseEdited(); // Optimise at init
 
     // End of modify
@@ -131,17 +117,17 @@ export class Editor extends ol.layer.Vector {
       }
 
       // Alt+click on segment : delete the segment & split the line
-      const newFeature = this.interactions[3].snapTo(
+      const tmpFeature = this.interactions[3].snapTo(
         evt.mapBrowserEvent.pixel,
         evt.mapBrowserEvent.coordinate,
         map
       );
 
-      if (newFeature && evt.mapBrowserEvent.originalEvent.altKey)
-        this.optimiseEdited(newFeature.vertex);
+      if (tmpFeature && evt.mapBrowserEvent.originalEvent.altKey)
+        this.optimiseEdited(tmpFeature.vertex);
 
-      else if (newFeature && evt.mapBrowserEvent.originalEvent.shiftKey)
-        this.optimiseEdited(newFeature.vertex, true);
+      else if (tmpFeature && evt.mapBrowserEvent.originalEvent.shiftKey)
+        this.optimiseEdited(tmpFeature.vertex, true);
       else
         this.optimiseEdited();
 
@@ -176,6 +162,7 @@ export class Editor extends ol.layer.Vector {
         subMenuHTML: '<p>Modification</p>',
         buttonAction: evt => this.changeInteraction(0, evt.type),
       }),
+      //TODO TODO click "commencer" close the menu
       new Button({
         label: '&#128397;',
         subMenuId: 'myol-edit-help-line',
@@ -201,6 +188,13 @@ export class Editor extends ol.layer.Vector {
       this.interactions.forEach(i => this.map.removeInteraction(i));
       this.map.addInteraction(this.interactions[interaction]);
       this.map.addInteraction(this.interactions[3]); // Snap must be added after the others
+
+      this.map.getLayers().forEach(l => {
+        if (l.getSource().getFeatures)
+          l.getSource().getFeatures()
+          .forEach(f =>
+            this.interactions[3].addFeature(f));
+      });
     }
   }
 

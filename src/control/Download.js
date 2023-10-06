@@ -42,10 +42,10 @@ export class Download extends Button {
       featuresToSave = this.savedLayer.getSource().getFeatures();
     else
       // Get all visible features
-      map.getLayers().forEach(layer => {
-        if (!layer.getProperties().marker &&
-          layer.getSource() && layer.getSource().forEachFeatureInExtent) // For vector layers only
-          layer.getSource().forEachFeatureInExtent(mapExtent, feature =>
+      map.getLayers().forEach(l => {
+        if (!l.getProperties().marker &&
+          l.getSource() && l.getSource().forEachFeatureInExtent) // For vector layers only
+          l.getSource().forEachFeatureInExtent(mapExtent, feature =>
             featuresToSave.push(feature)
           );
       });

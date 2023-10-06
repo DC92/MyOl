@@ -56,14 +56,13 @@ Based on https://openlayers.org
       }),
       editorlayer = new myol.layer.Editor({
         geoJsonId: 'edit-json',
-        snapLayers: [coucheContours],
         /*        help: [
-                  //TODO BUG n'édite pas le massif
-                  //TODO reprendre nouveau standard
-                  document.getElementById('myol-edit-help-modify').innerHTML,
-                  null, // Pas d'édition de ligne
-                  document.getElementById('myol-edit-help-poly').innerHTML,
-                ],*/
+                 //TODO BUG n'édite pas le massif
+                 //TODO reprendre nouveau standard
+                 document.getElementById('myol-edit-help-modify').innerHTML,
+                 null, // Pas d'édition de ligne
+                 document.getElementById('myol-edit-help-poly').innerHTML,
+               ],*/
         featuresToSave: coordinates => [new ol.Feature({
           geometry: new ol.geom.MultiPolygon(coordinates.polys),
         })],
