@@ -98,7 +98,7 @@ export class Button extends ol.control.Control {
  * To be used to replace an unused button
  */
 export class NoButton extends ol.control.Control {
-  constructor(options) {
+  constructor() {
     super({
       element: document.createElement('div'),
     });

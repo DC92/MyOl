@@ -47,7 +47,6 @@ export class MRI extends OpenStreetMap {
 }
 
 export class Kompass extends OpenStreetMap { // Austria
-  //TODO BUG semble charger 2 couches à l'init
   constructor(options = {}) {
     super({
       url: options.key ?
