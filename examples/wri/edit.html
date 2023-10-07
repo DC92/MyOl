@@ -56,10 +56,9 @@ Based on https://openlayers.org
       }),
       editorlayer = new myol.layer.Editor({
         geoJsonId: 'edit-json',
-        //TODO display or not buttons
+        editOnly: 'poly',
 
         featuresToSave: function(coordinates) {
-          //TODO simplify with MultiPolygon in editor
           return this.format.writeGeometry(
             new ol.geom.MultiPolygon(coordinates.polys), {
               featureProjection: 'EPSG:3857',

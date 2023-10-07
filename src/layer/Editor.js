@@ -14,13 +14,20 @@ export class Editor extends ol.layer.Vector {
       format: new ol.format.GeoJSON(),
       dataProjection: 'EPSG:4326',
       featureProjection: 'EPSG:3857',
+
+      // styleOptions: {}, // Style options to apply to the edited features
+      withHoles: true, // Authorize holes in polygons
+      canMerge: true, // Merge lines having a common end
+      // editOnly: 'line' | 'poly',
+
       featuresToSave: () => this.format.writeFeatures(
-        //TODO put getfeatures in main method
+        //BEST put getfeatures in main method
         this.source.getFeatures(), {
           dataProjection: this.dataProjection,
           featureProjection: this.map.getView().getProjection(),
           decimals: 5,
         }),
+
       ...options,
     };
 
@@ -50,6 +57,7 @@ export class Editor extends ol.layer.Vector {
       fill: new ol.style.Fill({
         color: 'rgba(0,0,255,0.2)',
       }),
+      ...options.styleOptions,
     });
 
     super({
@@ -164,31 +172,32 @@ export class Editor extends ol.layer.Vector {
       }
     });
 
-    this.buttons = [
-      new Button({
-        label: '&#10021;',
-        subMenuId: 'myol-edit-help-modify',
-        subMenuHTML: '<p>Modification</p>',
-        buttonAction: evt => this.changeInteraction(0, evt.type),
-      }),
-      //TODO TODO click "commencer" close the menu
-      new Button({
+    this.map.addControl(new Button({
+      label: '&#10021;',
+      subMenuId: 'myol-edit-help-modify',
+      subMenuHTML: '<p>Modification</p>',
+      buttonAction: evt => this.changeInteraction(0, evt.type),
+    }));
+
+    if (this.options.editOnly != 'poly')
+      this.map.addControl(new Button({
         label: '&#128397;',
         subMenuId: 'myol-edit-help-line',
         subMenuHTML: '<p>New line</p>',
         buttonAction: evt => this.changeInteraction(1, evt.type),
         subMenuAction: evt => this.changeInteraction(1, evt.type),
-      }),
-      new Button({
+      }));
+
+    if (this.options.editOnly != 'line')
+      this.map.addControl(new Button({
         label: '&#9186;',
         subMenuId: 'myol-edit-help-poly',
         subMenuHTML: '<p>New poly</p>',
         buttonAction: evt => this.changeInteraction(2, evt.type),
         subMenuAction: evt => this.changeInteraction(2, evt.type),
-      }),
-    ];
+      }));
+    //TODO TODO click "commencer" close the menu
 
-    this.buttons.forEach(b => this.map.addControl(b));
     this.changeInteraction(0); // Init to modify
   } // End setMapInternal
 
@@ -211,10 +220,6 @@ export class Editor extends ol.layer.Vector {
     const view = this.map.getView(),
       coordinates = this.optimiseFeatures(
         this.source.getFeatures(),
-        true, //this.options.help[1],
-        true, //this.options.help[2],
-        true,
-        true,
         selectedVertex,
         reverseLine
       );
@@ -222,7 +227,7 @@ export class Editor extends ol.layer.Vector {
     // Recreate features
     this.source.clear();
 
-    //TODO Multilinestring / Multipolygon
+    //BEST Multilinestring / Multipolygon
     for (let l in coordinates.lines)
       this.source.addFeature(new ol.Feature({
         geometry: new ol.geom.LineString(coordinates.lines[l]),
@@ -240,7 +245,7 @@ export class Editor extends ol.layer.Vector {
 
   // Refurbish Lines & Polygons
   // Split lines having a summit at selectedVertex
-  optimiseFeatures(features, withLines, withPolygons, merge, holes, selectedVertex, reverseLine) {
+  optimiseFeatures(features, selectedVertex, reverseLine) {
     const points = [],
       lines = [],
       polys = [];
@@ -255,7 +260,7 @@ export class Editor extends ol.layer.Vector {
         delete lines[a];
 
       // Merge lines having a common end
-      else if (merge)
+      else if (this.options.canMerge)
       for (let b = 0; b < a; b++) // Once each combination
         if (lines[b]) {
           const m = [a, b];
@@ -274,10 +279,10 @@ export class Editor extends ol.layer.Vector {
 
     // Make polygons with looped lines
     for (let a in lines)
-      if (withPolygons && // Only if polygons are autorized
+      if (this.options.editOnly != 'line' &&
         lines[a]) {
         // Close open lines
-        if (!withLines) // If only polygons are autorized
+        if (this.options.editOnly == 'poly')
           if (!this.compareCoords(lines[a]))
             lines[a].push(lines[a][0]);
 
@@ -302,7 +307,7 @@ export class Editor extends ol.layer.Vector {
 
     // Makes holes if a polygon is included in a biggest one
     for (let p1 in polys) // Explore all Polygons combinaison
-      if (holes && // Make holes option
+      if (this.options.withHoles &&
         polys[p1]) {
         const fs = new ol.geom.Polygon(polys[p1]);
         for (let p2 in polys)
