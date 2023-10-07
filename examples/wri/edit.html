@@ -56,16 +56,16 @@ Based on https://openlayers.org
       }),
       editorlayer = new myol.layer.Editor({
         geoJsonId: 'edit-json',
-        /*        help: [
-                 //TODO BUG n'édite pas le massif
-                 //TODO reprendre nouveau standard
-                 document.getElementById('myol-edit-help-modify').innerHTML,
-                 null, // Pas d'édition de ligne
-                 document.getElementById('myol-edit-help-poly').innerHTML,
-               ],*/
-        featuresToSave: coordinates => [new ol.Feature({
-          geometry: new ol.geom.MultiPolygon(coordinates.polys),
-        })],
+        //TODO display or not buttons
+
+        featuresToSave: function(coordinates) {
+          //TODO simplify with MultiPolygon in editor
+          return this.format.writeGeometry(
+            new ol.geom.MultiPolygon(coordinates.polys), {
+              featureProjection: 'EPSG:3857',
+              decimals: 5,
+            });
+        },
       }),
 
       map = new ol.Map({
@@ -76,7 +76,7 @@ Based on https://openlayers.org
         controls: [
           ...controlesCartes('edit'),
           new myol.control.Download({
-            savedLayer: editorlayer.layer,
+            savedLayer: editorlayer,
           }),
           new myol.control.Permalink({ // Permet de garder le même réglage de carte
             display: false, // Cache le lien
@@ -85,24 +85,24 @@ Based on https://openlayers.org
           new myol.control.LayerSwitcher({
             layers: fondsCarte('edit', layersKeys),
           }),
-          editorlayer,
         ],
         layers: [
           coucheContours,
+          editorlayer,
         ],
       });
 
     // Centrer sur la zone du polygone
     map.getView().fit(ol.proj.transformExtent([5, 44.68, 5.72, 45.33], 'EPSG:4326', 'EPSG:3857'));
     /*
-    		<?if ($vue->polygone->id_polygone) { ?>
-    			map.getView().fit(ol.proj.transformExtent([
-    				<?=$vue->polygone->ouest?>,
-    				<?=$vue->polygone->sud?>,
-    				<?=$vue->polygone->est?>,
-    				<?=$vue->polygone->nord?>,
-    			], 'EPSG:4326', 'EPSG:3857'));
-    		<? } ?>
+    <?if ($vue->polygone->id_polygone) { ?>
+      map.getView().fit(ol.proj.transformExtent([
+        <?=$vue->polygone->ouest?>,
+        <?=$vue->polygone->sud?>,
+        <?=$vue->polygone->est?>,
+        <?=$vue->polygone->nord?>,
+      ], 'EPSG:4326', 'EPSG:3857'));
+    <? } ?>
     */
   </script>
 </head>
@@ -116,16 +116,16 @@ Based on https://openlayers.org
   <h4>/vues/edit.html</h4>
   <div id="carte-edit"></div>
 
-  <label id="myol-edit-help-modify">
+  <div id="myol-edit-help-modify">
     <p><u>Déplacer un sommet:</u> cliquer sur le sommet et le déplacer</p>
     <p><u>Ajouter un sommet au milieu d'un côté:</u> cliquer le long du côté puis déplacer</p>
     <p><u>Supprimer un sommet:</u> Alt+cliquer sur le sommet</p>
     <p><u>Scinder un polygone:</u> joindre 2 sommets du polygone puis Alt+cliquer sur le sommet commun</p>
     'de chaque polygone puis Alt+cliquer dessus</p>
     <p><u>Supprimer un polygone:</u> Ctrl+Alt+cliquer sur un côté du polygone</p>
-  </label>
+  </div>
   <hr>
-  <label id="myol-edit-help-poly">
+  <div id="myol-edit-help-poly">
     <p><u>Pour créer un polygone:</u></p>
     <p>Cliquer sur le bouton &#x1F58D; et choisissez "Création polygone"</p>
     <p>Cliquer sur l'emplacement du premier sommet</p>
@@ -133,36 +133,38 @@ Based on https://openlayers.org
     <p>Double cliquer sur le dernier sommet pour terminer</p>
     <hr>
     <p>Un polygone entièrement compris dans un autre crée un "trou"</p>
-  </label>
+  </div>
 
-  <input id="edit-json" type="text" value='{
-		"type": "MultiPolygon",
-		"coordinates": [
-			[
-				[
-					[5.72, 45.18],
-					[5.6, 45.32],
-					[5.2, 45.08],
-					[5.11632, 44.91339],
-					[5.03, 44.73],
-					[5.19035, 44.7282],
-					[5.25558, 44.7755],
-					[5.29266, 44.78525],
-					[5.38193, 44.78866],
-					[5.44, 44.74],
-					[5.48, 44.69],
-					[5.54398, 44.69648],
-					[5.61, 44.76],
-					[5.62438, 44.7841],
-					[5.59, 44.87],
-					[5.63, 44.91],
-					[5.64, 45.02],
-					[5.72, 45.09],
-					[5.72, 45.18]
-				]
-			]
-		]
-	}'>
+  <input id="edit-json" type="text" value='
+    {
+      "type": "MultiPolygon",
+      "coordinates": [
+        [
+          [
+            [5.72, 45.18],
+            [5.6, 45.32],
+            [5.2, 45.08],
+            [5.11632, 44.91339],
+            [5.03, 44.73],
+            [5.19035, 44.7282],
+            [5.25558, 44.7755],
+            [5.29266, 44.78525],
+            [5.38193, 44.78866],
+            [5.44, 44.74],
+            [5.48, 44.69],
+            [5.54398, 44.69648],
+            [5.61, 44.76],
+            [5.62438, 44.7841],
+            [5.59, 44.87],
+            [5.63, 44.91],
+            [5.64, 45.02],
+            [5.72, 45.09],
+            [5.72, 45.18]
+          ]
+        ]
+      ]
+    }
+  '>
 </body>
 
 </html>

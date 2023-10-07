@@ -14,7 +14,13 @@ export class Editor extends ol.layer.Vector {
       format: new ol.format.GeoJSON(),
       dataProjection: 'EPSG:4326',
       featureProjection: 'EPSG:3857',
-      featuresToSave: coordinates => this.source.getFeatures(coordinates, this.options.format),
+      featuresToSave: () => this.format.writeFeatures(
+        //TODO put getfeatures in main method
+        this.source.getFeatures(), {
+          dataProjection: this.dataProjection,
+          featureProjection: this.map.getView().getProjection(),
+          decimals: 5,
+        }),
       ...options,
     };
 
@@ -53,8 +59,11 @@ export class Editor extends ol.layer.Vector {
       ...options,
     });
 
-    this.options = options;
+    this.featuresToSave = options.featuresToSave;
+    this.format = options.format;
     this.geoJsonEl = geoJsonEl;
+    this.options = options;
+    this.dataProjection = options.dataProjection;
     this.source = source;
     this.style = style;
   } // End constructor
@@ -213,6 +222,7 @@ export class Editor extends ol.layer.Vector {
     // Recreate features
     this.source.clear();
 
+    //TODO Multilinestring / Multipolygon
     for (let l in coordinates.lines)
       this.source.addFeature(new ol.Feature({
         geometry: new ol.geom.LineString(coordinates.lines[l]),
@@ -224,12 +234,7 @@ export class Editor extends ol.layer.Vector {
 
     // Save geometries in <EL> as geoJSON at every change
     if (this.geoJsonEl && view)
-      this.geoJsonEl.value = this.options.format.writeFeatures(
-        this.options.featuresToSave(coordinates), {
-          dataProjection: this.options.projection,
-          featureProjection: view.getProjection(),
-          decimals: 5,
-        })
+      this.geoJsonEl.value = this.featuresToSave(coordinates)
       .replace(/,"properties":(\{[^}]*}|null)/, '');
   }
 
