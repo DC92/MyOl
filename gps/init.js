@@ -29,7 +29,6 @@ var loadControl = new myol.control.Load(),
       constrainResolution: true, // Force zoom on the available tile's definition
     }),
     controls: [
-      //BEST full screen => no status bar
       // Top left
       new ol.control.Zoom(),
       new myol.control.MyGeocoder(),

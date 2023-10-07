@@ -2,7 +2,7 @@
  * File downloader control
  */
 
-import ol from '../ol'; //BEST ??? come back to direct import (optim ???)
+import ol from '../ol';
 import Button from './Button.js';
 
 //BEST BUG incompatible with clusters

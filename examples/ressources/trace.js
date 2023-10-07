@@ -17,7 +17,7 @@
   if ('serviceWorker' in navigator)
     await navigator.serviceWorker.getRegistrations().then(registrations => {
       if (registrations.length) {
-        data.push('service-workers:'); //BEST BUG displayed event when we have nothing
+        data.push('service-workers:'); //BEST BUG displayed even when we have nothing
 
         for (let registration of registrations)
           if (registration.active)

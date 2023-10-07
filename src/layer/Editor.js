@@ -21,7 +21,7 @@ export class Editor extends ol.layer.Vector {
       // editOnly: 'line' | 'poly',
 
       featuresToSave: () => this.format.writeFeatures(
-        //BEST put getfeatures in main method
+        //BEST put getFeatures in main method
         this.source.getFeatures(), {
           dataProjection: this.dataProjection,
           featureProjection: this.map.getView().getProjection(),

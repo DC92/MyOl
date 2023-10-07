@@ -2,7 +2,7 @@
  * Control to display the mouse position
  */
 
-import ol from '../ol'; //BEST come back to direct import (optim ???)
+import ol from '../ol';
 
 export class MyMousePosition extends ol.control.MousePosition {
   constructor(options) {

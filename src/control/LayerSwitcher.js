@@ -7,7 +7,6 @@ import BackgroundLayer from '../layer/BackgroundLayer';
 import './layerSwitcher.css';
 
 //BEST how do we do on touch terminal ? alt key to switch layers / transparency
-//BEST keep selector open when click on the button (as other buttons)
 export class LayerSwitcher extends Button {
   constructor(options) {
     super({

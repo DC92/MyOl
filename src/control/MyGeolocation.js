@@ -3,13 +3,13 @@
  * Display status, altitude & speed
  */
 
-import ol from '../ol'; //BEST come back to direct import (optim ???)
+import ol from '../ol';
 import Button from './Button';
 
 export class MyGeolocation extends Button {
   constructor(options) {
     const subMenu = location.href.match(/(https|localhost)/) ?
-      //BEST use .html content / option / Included file / deendig of language
+      //BEST use .html content / options / Included file / dependig of language
       '<p>Localisation GPS:</p>' +
       '<label>' +
       '<input type="radio" name="myol-gps-source" value="0" checked="checked">' +
@@ -55,7 +55,7 @@ export class MyGeolocation extends Button {
     this.element.appendChild(this.statusEl);
 
     // Graticule
-    this.graticuleFeature = new ol.Feature(); //BEST Use layer Graticule
+    this.graticuleFeature = new ol.Feature();
     this.northGraticuleFeature = new ol.Feature();
 
     this.graticuleLayer = new ol.layer.Vector({

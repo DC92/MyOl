@@ -5,8 +5,6 @@ import json from '@rollup/plugin-json';
 import terser from '@rollup/plugin-terser'; // Rollup plugin to minify generated es bundle
 import * as fs from 'fs';
 
-//BEST dist without ol... included
-
 const pkg = JSON.parse(fs.readFileSync('./package.json', 'utf-8'));
 const banner = fs.readFileSync('./build/banner.js', 'utf-8')
   .replace('{name}', pkg.name)
