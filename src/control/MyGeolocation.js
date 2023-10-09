@@ -8,38 +8,24 @@ import Button from './Button';
 
 export class MyGeolocation extends Button {
   constructor(options) {
-    const subMenu = location.href.match(/(https|localhost)/) ?
-      //BEST use .html content / options / Included file / dependig of language
-      '<p>Localisation GPS:</p>' +
-      '<label>' +
-      '<input type="radio" name="myol-gps-source" value="0" checked="checked">' +
-      'Inactif</label><label>' +
-      '<input type="radio" name="myol-gps-source" value="1">' +
-      'Position GPS <span>(1) extérieur</span></label><label>' +
-      '<input type="radio" name="myol-gps-source" value="2">' +
-      'Position GPS ou IP <span>(2) intérieur</span></label><hr><label>' +
-      '<input type="radio" name="myol-gps-display" value="0" checked="checked">' +
-      'Graticule, carte libre</label><label>' +
-      '<input type="radio" name="myol-gps-display" value="1">' +
-      'Centre la carte, nord en haut</label><label>' +
-      '<input type="radio" name="myol-gps-display" value="2">' +
-      'Centre et oriente la carte <span>(3)</span></label>' +
-
-      '<hr><p>(1) plus précis en extérieur mais plus lent à initialiser, ' +
-      'nécessite un capteur et une réception GPS.</p>' +
-      '<p>(2) plus précis et rapide en intérieur ou en zone urbaine ' +
-      'mais peut être très erroné en extérieur à l&apos;initialisation. ' +
-      'Utilise les position des points WiFi proches en plus du GPS dont il peut se passer.</p>' +
-      '<p>(3) nécessite un capteur magnétique et un explorateur le supportant.</p>' :
-
-      // Si on est en http
-      '<p>L&apos;utilisation du GPS nécessite https</p>' +
-      '<a href="' + document.location.href.replace('http:', 'https:') + '">Passer en https<a>';
+    if (!location.href.match(/(https|localhost)/)) {
+      super();
+      return;
+    }
 
     super({
       // Button options
       label: '&#8853;',
-      subMenuHTML: subMenu,
+      subMenuId: 'myol-button-geolocation',
+      subMenuHTML: '<p>' +
+        '<input type="radio" name="myol-gps-source" value="0" checked="checked">None &nbsp; ' +
+        '<input type="radio" name="myol-gps-source" value="1">Outdoor &nbsp; ' +
+        '<input type="radio" name="myol-gps-source" value="2">Indoor &nbsp; ' +
+        '</p><hr><p>' +
+        '<input type="radio" name="myol-gps-display" value="0" checked="checked">Free map&nbsp; ' +
+        '<input type="radio" name="myol-gps-display" value="1">Center &nbsp; ' +
+        '<input type="radio" name="myol-gps-display" value="2">Center & orient &nbsp; ' +
+        '</p>',
 
       // ol.Geolocation options
       // https://www.w3.org/TR/geolocation/#position_options_interface
@@ -49,6 +35,7 @@ export class MyGeolocation extends Button {
 
       ...options,
     });
+
 
     // Add status display element
     this.statusEl = document.createElement('p');

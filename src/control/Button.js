@@ -5,6 +5,7 @@
 
 import ol from '../ol';
 import './Button.css';
+//TODO revoir click, touch, coloration & hover subMenuHTML
 
 /**
  * Control button
@@ -16,7 +17,7 @@ export class Button extends ol.control.Control {
       label: '?', // An ascii or unicode character to decorate the button
       className: '', // To be added to the control.element
       // subMenuId : 'id', // Id of an existing html containing the scrolling menu
-      subMenuHTML: 'Unknown', // html code of the scrolling menu
+      subMenuHTML: '', // html code of the scrolling menu
       // subMenuAction() {}, // (evt) To run when the button is clicked / hovered, ...
       // buttonAction() {}, // (evt) To run when an <input> ot <a> of the subMenu is clicked / hovered, ...
 

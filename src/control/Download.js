@@ -11,9 +11,8 @@ export class Download extends Button {
     options = {
       // Button options
       label: '&#128427;',
-      subMenuHTML: '<p>Cliquer sur un format ci-dessous pour obtenir un fichier ' +
-        'contenant les éléments visibles dans la fenêtre:</p>' +
-        '<label><a mime="application/gpx+xml">GPX</a></label>' +
+      subMenuId: 'myol-button-download',
+      subMenuHTML: '<label><a mime="application/gpx+xml">GPX</a></label>' +
         '<label><a mime="vnd.google-earth.kml+xml">KML</a></label>' +
         '<label><a mime="application/json">GeoJSON</a></label>',
       fileName: document.title || 'openlayers', // Name of the file to be downloaded //BEST name from feature

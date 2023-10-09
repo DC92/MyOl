@@ -10,8 +10,8 @@ export class Load extends Button {
     super({
       // Button options
       label: '&#128194;',
-      subMenuHTML: '<p>Importer un fichier de points ou de traces</p>' +
-        '<input type="file" accept=".gpx,.kml,.geojson">',
+      subMenuId: 'myol-button-load',
+      subMenuHTML: '<input type="file" accept=".gpx,.kml,.geojson">',
 
       ...options,
     });

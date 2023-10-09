@@ -185,7 +185,6 @@ export class Editor extends ol.layer.Vector {
         subMenuId: 'myol-edit-help-line',
         subMenuHTML: '<p>New line</p>',
         buttonAction: evt => this.changeInteraction(1, evt.type),
-        subMenuAction: evt => this.changeInteraction(1, evt.type),
       }));
 
     if (this.options.editOnly != 'line')
@@ -194,9 +193,7 @@ export class Editor extends ol.layer.Vector {
         subMenuId: 'myol-edit-help-poly',
         subMenuHTML: '<p>New poly</p>',
         buttonAction: evt => this.changeInteraction(2, evt.type),
-        subMenuAction: evt => this.changeInteraction(2, evt.type),
       }));
-    //TODO TODO click "commencer" close the menu
 
     this.changeInteraction(0); // Init to modify
   } // End setMapInternal
@@ -207,8 +204,9 @@ export class Editor extends ol.layer.Vector {
       this.map.addInteraction(this.interactions[interaction]);
       this.map.addInteraction(this.interactions[3]); // Snap must be added after the others
 
+      // Register again the full list of features as addFeature manages already registered
       this.map.getLayers().forEach(l => {
-        if (l.getSource().getFeatures)
+        if (l.getSource().getFeatures) // Vector layers only
           l.getSource().getFeatures()
           .forEach(f =>
             this.interactions[3].addFeature(f));
@@ -216,6 +214,7 @@ export class Editor extends ol.layer.Vector {
     }
   }
 
+  // Processing the data
   optimiseEdited(selectedVertex, reverseLine) {
     const view = this.map.getView(),
       coordinates = this.optimiseFeatures(

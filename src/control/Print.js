@@ -10,14 +10,11 @@ export class Print extends Button {
     super({
       // Button options
       label: '&#128438;',
-      subMenuHTML: '<p>Pour imprimer la carte:</p>' +
-        '<p>-Choisir portrait ou paysage,</p>' +
-        '<p>-zoomer et déplacer la carte dans le format,</p>' +
-        '<p>-imprimer.</p>' +
-        '<label><input type="radio" value="0">Portrait A4</label>' +
-        '<label><input type="radio" value="1">Paysage A4</label>' +
-        '<label><a id="print">Imprimer</a></label>' +
-        '<label><a onclick="location.reload()">Annuler</a></label>',
+      subMenuId: 'myol-button-print',
+      subMenuHTML: '<label><input type="radio" value="0">portrait</label>' +
+        '<label><input type="radio" value="1">landscape</label>' +
+        '<label><a id="print">Print</a></label>' +
+        '<label><a onclick="location.reload()">Cancel</a></label>',
 
       ...options,
     });
