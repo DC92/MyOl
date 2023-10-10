@@ -10,6 +10,7 @@ export class Load extends Button {
     super({
       // Button options
       label: '&#128194;',
+      className: 'myol-button-load',
       subMenuId: 'myol-button-load',
       subMenuHTML: '<input type="file" accept=".gpx,.kml,.geojson">',
 

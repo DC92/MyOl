@@ -6,6 +6,7 @@
 import ol from '../ol';
 import './Button.css';
 //TODO revoir click, touch, coloration & hover subMenuHTML
+//TODO button unicode as append in CSS
 
 /**
  * Control button
@@ -57,6 +58,22 @@ export class Button extends ol.control.Control {
 
     // Register action listeners when html is fully loaded
     this.buttonEl.addEventListener('click', evt => this.buttonListener(evt));
+    /*
+    this.buttonEl.addEventListener('click', evt => this.buttonListener(evt));
+    this.buttonEl.addEventListener('mouseover', evt => this.buttonListener(evt));
+    this.buttonEl.addEventListener('mouseout', evt => this.buttonListener(evt));
+    this.buttonEl.addEventListener('mouseenter', evt => this.buttonListener(evt));
+    this.buttonEl.addEventListener('mouseleave', evt => this.buttonListener(evt));
+    this.buttonEl.addEventListener('mousedown', evt => this.buttonListener(evt));
+    this.buttonEl.addEventListener('mouseup', evt => this.buttonListener(evt));
+    this.buttonEl.addEventListener('mousemove', evt => this.buttonListener(evt));
+    this.buttonEl.addEventListener('contextmenu', evt => this.buttonListener(evt));
+
+    this.buttonEl.addEventListener('touchcancel', evt => this.buttonListener(evt));
+    this.buttonEl.addEventListener('touchend', evt => this.buttonListener(evt));
+    this.buttonEl.addEventListener('touchmove', evt => this.buttonListener(evt));
+    this.buttonEl.addEventListener('touch', evt => this.buttonListener(evt));
+	*/
     this.element.addEventListener('mouseover', evt => this.buttonListener(evt));
     this.element.addEventListener('mouseout', evt => this.buttonListener(evt));
 
@@ -75,9 +92,6 @@ export class Button extends ol.control.Control {
         )));
   }
 
-  subMenuAction() {}
-  buttonAction() {}
-
   buttonListener(evt) {
     this.buttonAction(evt);
 
@@ -94,6 +108,10 @@ export class Button extends ol.control.Control {
       if (el != this.element)
         el.classList.remove('myol-button-selected');
   }
+
+  buttonAction() {}
+
+  subMenuAction() {}
 }
 
 /**

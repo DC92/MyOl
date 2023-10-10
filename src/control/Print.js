@@ -9,7 +9,8 @@ export class Print extends Button {
   constructor(options) {
     super({
       // Button options
-      label: '&#128438;',
+      label: '&#128424;',
+      className: 'myol-button-print',
       subMenuId: 'myol-button-print',
       subMenuHTML: '<label><input type="radio" value="0">portrait</label>' +
         '<label><input type="radio" value="1">landscape</label>' +

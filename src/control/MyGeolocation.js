@@ -16,6 +16,7 @@ export class MyGeolocation extends Button {
     super({
       // Button options
       label: '&#8853;',
+      className: 'myol-button-geolocation',
       subMenuId: 'myol-button-geolocation',
       subMenuHTML: '<p>' +
         '<input type="radio" name="myol-gps-source" value="0" checked="checked">None &nbsp; ' +
@@ -36,14 +37,25 @@ export class MyGeolocation extends Button {
       ...options,
     });
 
-
-    // Add status display element
-    this.statusEl = document.createElement('p');
-    this.element.appendChild(this.statusEl);
-
     // Graticule
     this.graticuleFeature = new ol.Feature();
     this.northGraticuleFeature = new ol.Feature();
+
+    this.graticuleFeature.setStyle(new ol.style.Style({
+      stroke: new ol.style.Stroke({ //TODO doublon ?
+        color: '#000',
+        lineDash: [16, 14],
+        width: 1,
+      }),
+    }));
+
+    this.northGraticuleFeature.setStyle(new ol.style.Style({
+      stroke: new ol.style.Stroke({
+        color: '#c00',
+        lineDash: [16, 14],
+        width: 1,
+      }),
+    }));
 
     this.graticuleLayer = new ol.layer.Vector({
       source: new ol.source.Vector({
@@ -62,21 +74,9 @@ export class MyGeolocation extends Button {
       }),
     });
 
-    this.graticuleFeature.setStyle(new ol.style.Style({
-      stroke: new ol.style.Stroke({
-        color: '#000',
-        lineDash: [16, 14],
-        width: 1,
-      }),
-    }));
-
-    this.northGraticuleFeature.setStyle(new ol.style.Style({
-      stroke: new ol.style.Stroke({
-        color: '#c00',
-        lineDash: [16, 14],
-        width: 1,
-      }),
-    }));
+    // Add status display element
+    this.statusEl = document.createElement('p');
+    this.element.appendChild(this.statusEl);
 
     window.gpsValues = {}; // Store the measures for internal use & other controls
 
@@ -85,6 +85,9 @@ export class MyGeolocation extends Button {
       window.gpsValues.heading = evt.alpha || evt.webkitCompassHeading; // Android || iOS
       this.subMenuAction(evt);
     });
+  } // End constructor
+
+  addGraticule() { //TODO
   }
 
   setMap(map) {
@@ -104,10 +107,19 @@ export class MyGeolocation extends Button {
     });
   }
 
+  buttonAction(evt) {
+    const sourceEls = document.getElementsByName('myol-gps-source'),
+      //TODO button5 = document.querySelector('.myol-button-geolocation'),
+      buttonSelected = document.querySelector('.myol-button-geolocation.myol-button-selected');
+
+    if (evt.type == 'click' && !buttonSelected && sourceEls[0].checked)
+      sourceEls[1].click();
+  }
+
   subMenuAction(evt) {
     const sourceLevelEl = document.querySelector('input[name="myol-gps-source"]:checked'),
-      displayLevelEl = document.querySelector('input[name="myol-gps-display"]:checked'),
       displayEls = document.getElementsByName('myol-gps-display'),
+      displayLevelEl = document.querySelector('input[name="myol-gps-display"]:checked'),
       sourceLevel = sourceLevelEl ? parseInt(sourceLevelEl.value) : 0, // On/off, GPS, GPS&WiFi
       displayLevel = displayLevelEl ? parseInt(displayLevelEl.value) : 0, // Graticule & sourceLevel
       map = this.getMap(),
@@ -131,7 +143,7 @@ export class MyGeolocation extends Button {
         window.gpsValues[valueName.toLowerCase()] = value;
     });
 
-    // State 1 only takes positions from the GPS (which have an altitude)
+    // State 1 only takes positions from the GPS which have an altitude
     if (sourceLevel == 1 && !window.gpsValues.altitude)
       window.gpsValues.position = null;
 
@@ -208,7 +220,7 @@ export class MyGeolocation extends Button {
     // Close the submenu
     if (evt.target.name) // Only when an input is hit
       this.element.classList.remove('myol-display-submenu');
-  }
+  } // End subMenuAction
 }
 
 export default MyGeolocation;

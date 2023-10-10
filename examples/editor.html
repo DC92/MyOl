@@ -59,10 +59,13 @@ Based on https://openlayers.org
       }),
       controls: [
         new ol.control.Zoom(),
+        new myol.control.MyGeocoder(),
+        new myol.control.MyGeolocation(),
         new myol.control.Load(),
         new myol.control.Download({
           savedLayer: editorlayer.layer,
         }),
+        new myol.control.Print(),
       ],
       layers: [
         new ol.layer.Tile({
@@ -184,7 +187,7 @@ Based on https://openlayers.org
   <h4>Créer une ligne</h4>
   <div id="myol-edit-help-line">
     <p><u>Pour créer une ligne:</u></p>
-    <p>Cliquer sur le bouton &#128397;</p>
+    <p>Cliquer sur <a>le bouton &#128397;</a></p>
     <p>Cliquer sur l'emplacement du début</p>
     <p>Puis sur chaque sommet</p>
     <p>Double cliquer sur le dernier sommet pour terminer</p>
@@ -194,7 +197,7 @@ Based on https://openlayers.org
   <h4>Créer un polygone</h4>
   <div id="myol-edit-help-poly">
     <p><u>Pour créer un polygone:</u></p>
-    <p>Cliquer sur le bouton &#9186;</p>
+    <p>Cliquer sur <a>le bouton &#9186;</a></p>
     <p>Cliquer sur l'emplacement du premier sommet</p>
     <p>Puis sur chaque sommet</p>
     <p>Double cliquer sur le dernier sommet pour terminer</p>

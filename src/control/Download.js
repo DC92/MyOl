@@ -10,7 +10,8 @@ export class Download extends Button {
   constructor(options) {
     options = {
       // Button options
-      label: '&#128427;',
+      label: '&#8681;',
+      className: 'myol-button-download',
       subMenuId: 'myol-button-download',
       subMenuHTML: '<label><a mime="application/gpx+xml">GPX</a></label>' +
         '<label><a mime="vnd.google-earth.kml+xml">KML</a></label>' +
