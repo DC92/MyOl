@@ -10,7 +10,7 @@ navigator.serviceWorker.addEventListener('controllerchange', () => {
   console.log('PWA controllerchange');
   map.addControl(
     new myol.control.Button({
-      label: '&#127381;',
+      label: '&#127381;', //BEST hex ?
       subMenuHTML: '<p>Une nouvelle version</p>' +
         '<p>ou de nouvelles traces</p>' +
         '<p>sont disponibles.</p>' +

@@ -159,7 +159,7 @@ function controlesCartes(page) {
     new ol.control.Zoom(),
     new ol.control.FullScreen(),
     new myol.control.MyGeocoder(),
-    new myol.control.MyGeolocation(),
+    'nav,point,modif'.includes(page) ? new myol.control.MyGeolocation() : new myol.control.NoButton(),
     'nav,edit,modif'.includes(page) ? new myol.control.Load() : new myol.control.NoButton(),
     'nav,point'.includes(page) ? new myol.control.Download() : new myol.control.NoButton(),
     'nav,point'.includes(page) ? new myol.control.Print() : new myol.control.NoButton(),
