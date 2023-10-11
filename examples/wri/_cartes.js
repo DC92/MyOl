@@ -65,7 +65,7 @@ function etiquetteComplette(properties) {
   lignes.push(properties.name);
   if (caracteristiques.length)
     lignes.push(caracteristiques.join(','));
-  lignes.push(properties.type.valeur);
+  lignes.push(properties.type);
 
   return lignes.join('\n');
 }

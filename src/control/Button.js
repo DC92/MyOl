@@ -5,8 +5,9 @@
 
 import ol from '../ol';
 import './Button.css';
-//TODO revoir click, touch, coloration & hover subMenuHTML
+//TODO revoir click, touch, coloration & hover subMenuHTML / Editor
 //TODO button unicode as append in CSS
+//TODO largeur submenu sur petit terminal
 
 /**
  * Control button
@@ -15,7 +16,7 @@ import './Button.css';
 export class Button extends ol.control.Control {
   constructor(options) {
     options = {
-      label: '?', // An ascii or unicode character to decorate the button
+      label: ' ', // An ascii or unicode character to decorate the button
       className: '', // To be added to the control.element
       // subMenuId : 'id', // Id of an existing html containing the scrolling menu
       subMenuHTML: '', // html code of the scrolling menu
@@ -58,7 +59,7 @@ export class Button extends ol.control.Control {
 
     // Register action listeners when html is fully loaded
     this.buttonEl.addEventListener('click', evt => this.buttonListener(evt));
-    /*
+    /*//TODO DELETE
     this.buttonEl.addEventListener('click', evt => this.buttonListener(evt));
     this.buttonEl.addEventListener('mouseover', evt => this.buttonListener(evt));
     this.buttonEl.addEventListener('mouseout', evt => this.buttonListener(evt));

@@ -5,6 +5,7 @@
 
 import ol from '../ol';
 import Button from '../control/Button';
+import './Editor.css';
 
 // Editor
 export class Editor extends ol.layer.Vector {
@@ -173,7 +174,7 @@ export class Editor extends ol.layer.Vector {
     });
 
     this.map.addControl(new Button({
-      label: '&#10021;',
+      className: 'myol-button-edit-modify',
       subMenuId: 'myol-edit-help-modify',
       subMenuHTML: '<p>Modification</p>',
       buttonAction: evt => this.changeInteraction(0, evt.type),
@@ -181,7 +182,7 @@ export class Editor extends ol.layer.Vector {
 
     if (this.options.editOnly != 'poly')
       this.map.addControl(new Button({
-        label: '&#128397;',
+        className: 'myol-button-edit-line',
         subMenuId: 'myol-edit-help-line',
         subMenuHTML: '<p>New line</p>',
         buttonAction: evt => this.changeInteraction(1, evt.type),
@@ -189,7 +190,7 @@ export class Editor extends ol.layer.Vector {
 
     if (this.options.editOnly != 'line')
       this.map.addControl(new Button({
-        label: '&#9186;',
+        className: 'myol-button-edit-poly',
         subMenuId: 'myol-edit-help-poly',
         subMenuHTML: '<p>New poly</p>',
         buttonAction: evt => this.changeInteraction(2, evt.type),
@@ -198,6 +199,7 @@ export class Editor extends ol.layer.Vector {
     this.changeInteraction(0); // Init to modify
   } // End setMapInternal
 
+  //TODO close submenu after enable draw
   changeInteraction(interaction, type = 'click') {
     if (type == 'click') {
       this.interactions.forEach(i => this.map.removeInteraction(i));

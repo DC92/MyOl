@@ -39,6 +39,7 @@ Based on https://openlayers.org
   <script src="_cartes.js"></script>
   <!-- The main script must be defer or module to be run after the myol import -->
   <script type="module">
+    //TODO add html buttons content
     var layersKeys = { // <?=json_encode($config_wri['mapKeys'])?>,
         ign: 'iejxbx4obzhco6c8klxrfbto',
         thunderforest: 'ee751f43b3af4614b01d1bce72785369',
@@ -46,7 +47,6 @@ Based on https://openlayers.org
         bing: 'AldBMbaKNyat-j6CBRKxxH05uaxP7dvQu1RnMWCQEGGC3z0gjBu-bLniE_8WZvcC',
         kompass: '2ba8c124-38b6-11e7-ade1-e0cb4e28e847',
       },
-      //TODO add html buttons content
 
       // Les couches vectorielles
       contourMassif = coucheContourMassif({

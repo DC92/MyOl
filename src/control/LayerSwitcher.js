@@ -12,7 +12,6 @@ export class LayerSwitcher extends Button {
     super({
       // Button options
       className: 'myol-button-switcher',
-      label: '&#10063;',
       subMenuHTML: '<div>',
 
       ...options,

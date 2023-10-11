@@ -8,6 +8,7 @@ import Button from './Button';
 
 export class MyGeolocation extends Button {
   constructor(options) {
+    // Redirect if http
     if (!location.href.match(/(https|localhost)/)) {
       super();
       return;
@@ -15,7 +16,6 @@ export class MyGeolocation extends Button {
 
     super({
       // Button options
-      label: '&#8853;',
       className: 'myol-button-geolocation',
       subMenuId: 'myol-button-geolocation',
       subMenuHTML: '<p>' +
@@ -37,13 +37,28 @@ export class MyGeolocation extends Button {
       ...options,
     });
 
-    // Graticule
+    // Add status display element
+    this.statusEl = document.createElement('p');
+    this.element.appendChild(this.statusEl);
+
+    this.addGraticule();
+
+    window.gpsValues = {}; // Store the measures for internal use & other controls
+
+    // Browser heading from the inertial & magnetic sensors
+    window.addEventListener('deviceorientationabsolute', evt => {
+      window.gpsValues.heading = evt.alpha || evt.webkitCompassHeading; // Android || iOS
+      this.subMenuAction(evt);
+    });
+  } // End constructor
+
+  addGraticule() {
     this.graticuleFeature = new ol.Feature();
     this.northGraticuleFeature = new ol.Feature();
 
     this.graticuleFeature.setStyle(new ol.style.Style({
-      stroke: new ol.style.Stroke({ //TODO doublon ?
-        color: '#000',
+      stroke: new ol.style.Stroke({
+        color: '#00f',
         lineDash: [16, 14],
         width: 1,
       }),
@@ -62,32 +77,7 @@ export class MyGeolocation extends Button {
         features: [this.graticuleFeature, this.northGraticuleFeature],
       }),
       zIndex: 300, // Above the features
-      style: new ol.style.Style({
-        fill: new ol.style.Fill({
-          color: 'rgba(128,128,255,0.2)',
-        }),
-        stroke: new ol.style.Stroke({
-          color: '#20b',
-          lineDash: [16, 14],
-          width: 1,
-        }),
-      }),
     });
-
-    // Add status display element
-    this.statusEl = document.createElement('p');
-    this.element.appendChild(this.statusEl);
-
-    window.gpsValues = {}; // Store the measures for internal use & other controls
-
-    // Browser heading from the inertial & magnetic sensors
-    window.addEventListener('deviceorientationabsolute', evt => {
-      window.gpsValues.heading = evt.alpha || evt.webkitCompassHeading; // Android || iOS
-      this.subMenuAction(evt);
-    });
-  } // End constructor
-
-  addGraticule() { //TODO
   }
 
   setMap(map) {
@@ -109,7 +99,6 @@ export class MyGeolocation extends Button {
 
   buttonAction(evt) {
     const sourceEls = document.getElementsByName('myol-gps-source'),
-      //TODO button5 = document.querySelector('.myol-button-geolocation'),
       buttonSelected = document.querySelector('.myol-button-geolocation.myol-button-selected');
 
     if (evt.type == 'click' && !buttonSelected && sourceEls[0].checked)

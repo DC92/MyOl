@@ -11,6 +11,10 @@
   right: 0;
 }
 
+.myol-button-switcher button::after {
+  content: "\274f";
+}
+
 .select-ext {
   background: #fcffd1 !important;
 }
