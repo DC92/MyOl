@@ -6,7 +6,7 @@
 import ol from '../ol';
 
 // Virtual class to factorise XYZ layers code
-class XYZsource extends ol.layer.Tile {
+class XYZ extends ol.layer.Tile {
   constructor(options) {
     super({
       source: new ol.source.XYZ(options),
@@ -70,6 +70,16 @@ export class Thunderforest extends OpenStreetMap {
       hidden: !options.key, // For LayerSwitcher
       attributions: '<a href="http://www.thunderforest.com">Thunderforest</a>',
       ...options, // Include key
+    });
+  }
+}
+
+export class Positron extends XYZ {
+  constructor(options) {
+    super({
+      url: 'https://cartodb-basemaps-a.global.ssl.fastly.net/light_all/{z}/{x}/{y}.png',
+      attributions: '<a href="https://carto.com/attribution/#basemaps">CartoDB</a>',
+      ...options,
     });
   }
 }
@@ -161,7 +171,7 @@ export class SwissTopo extends ol.layer.Tile {
 /**
  * Spain
  */
-export class IgnES extends XYZsource {
+export class IgnES extends XYZ {
   constructor(options) {
     options = {
       host: 'https://www.ign.es/wmts/',
@@ -225,7 +235,7 @@ export class IGM extends ol.layer.Tile {
  * Ordnance Survey : Great Britain
  * key: Get your own (free) key at https://osdatahub.os.uk/
  */
-export class OS extends XYZsource {
+export class OS extends XYZ {
   constructor(options = {}) {
     options = {
       hidden: !options.key, // For LayerSwitcher
@@ -251,7 +261,7 @@ export class OS extends XYZsource {
 /**
  * ArcGIS (Esri)
  */
-export class ArcGIS extends XYZsource {
+export class ArcGIS extends XYZ {
   constructor(options) {
     options = {
       host: 'https://server.arcgisonline.com/ArcGIS/rest/services/',
@@ -269,30 +279,10 @@ export class ArcGIS extends XYZsource {
 }
 
 /**
- * StadiaMaps https://stadiamaps.com/
- * layer: alidade_smooth, alidade_smooth_dark, outdoors,
- *   stamen_terrain, stamen_terrain_background, stamen_terrain_labels, stamen_terrain_lines,
- *   stamen_toner_background, stamen_toner, stamen_toner_labels, stamen_toner_lines, stamen_toner_lite,
- *   stamen_watercolor, and osm_bright
- */
-export class StadiaMaps extends ol.layer.Tile {
-  constructor(options) {
-    super({
-      source: new ol.source.StadiaMaps({
-        layer: 'stamen_toner_lite',
-        maxZoom: 16,
-        ...options,
-      }),
-      ...options,
-    });
-  }
-}
-
-/**
  * Maxbox (Maxar)
  * Get your own key at https://www.mapbox.com/
  */
-export class Maxbox extends XYZsource {
+export class Maxbox extends XYZ {
   constructor(options = {}) {
     super({
       url: 'https://api.mapbox.com/v4/' + options.tileset + '/{z}/{x}/{y}@2x.webp?access_token=' + options.key,
@@ -305,7 +295,7 @@ export class Maxbox extends XYZsource {
 /**
  * Google
  */
-export class Google extends XYZsource {
+export class Google extends XYZ {
   constructor(options) {
     options = {
       subLayers: 'p', // Terrain
@@ -325,6 +315,7 @@ export class Google extends XYZsource {
  * Bing (Microsoft)
  * Doc: https://docs.microsoft.com/en-us/bingmaps/getting-started/
  */
+//TODO BUG display also backup tiles
 export class Bing extends ol.layer.Tile {
   constructor(options = {}) {
     super({
@@ -345,7 +336,7 @@ export class Bing extends ol.layer.Tile {
   }
 }
 
-export class noTile extends XYZsource {
+export class NoTile extends XYZ {
   constructor(options) {
     super({
       url: 'https://ecn.t0.tiles.virtualearth.net/tiles/r000000000000000000.jpeg?g=13897&mkt=en-us&shading=hill',
@@ -454,6 +445,10 @@ export function demo(options = {}) {
     ...collection(options),
 
     'OSM': new OpenStreetMap(),
+    'OSM orthos FR': new OpenStreetMap({
+      url: 'http://wms.openstreetmap.fr/tms/1.0.0/tous_fr/{z}/{x}/{y}',
+    }),
+    'Positron': new Positron(),
 
     'ThF cycle': new Thunderforest({
       ...options.thunderforest, // Include key
@@ -513,11 +508,7 @@ export function demo(options = {}) {
     'Google hybrid': new Google({
       subLayers: 's,h',
     }),
-    'Toner': new StadiaMaps(), // layer: stamen_toner_lite
-    'Watercolor': new StadiaMaps({
-      layer: 'stamen_watercolor',
-    }),
-    'No tile': new noTile(),
+    'No tile': new NoTile(),
     'Blank': new ol.layer.Tile(),
   };
 }

@@ -7,7 +7,7 @@
 import ol from '../ol';
 import * as layerTile from './TileLayerCollection';
 
-export class BackgroundLayer extends layerTile.StadiaMaps {
+export class BackgroundLayer extends layerTile.Positron {
   constructor(options) {
     // High resolution background layer
     super({
@@ -18,7 +18,7 @@ export class BackgroundLayer extends layerTile.StadiaMaps {
     });
 
     // Low resolution background layer
-    this.lowResLayer = new layerTile.noTile({
+    this.lowResLayer = new layerTile.NoTile({
       maxResolution: this.getMinResolution(),
       visible: false,
     });

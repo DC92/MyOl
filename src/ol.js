@@ -59,7 +59,6 @@ export default {
     BingMaps: source.BingMaps,
     Cluster: source.Cluster,
     OSM: source.OSM,
-    StadiaMaps: source.StadiaMaps,
     TileWMS: source.TileWMS,
     Vector: source.Vector,
     WMTS: source.WMTS,
