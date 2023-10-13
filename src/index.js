@@ -6,6 +6,8 @@ import control from './control';
 import layer from './layer';
 import * as stylesOptions from './layer/stylesOptions';
 
+import './lang_frFR.js';
+
 export default {
   control: control,
   layer: layer,

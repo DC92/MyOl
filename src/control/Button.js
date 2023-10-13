@@ -5,8 +5,6 @@
 
 import ol from '../ol';
 import './Button.css';
-//TODO revoir click, touch, coloration & hover subMenuHTML / Editor
-//TODO largeur submenu sur petit terminal
 
 /**
  * Control button
@@ -15,7 +13,7 @@ import './Button.css';
 export class Button extends ol.control.Control {
   constructor(options) {
     options = {
-      label: ' ', // An ascii or unicode character to decorate the button
+      label: ' ', // An ascii or unicode character to decorate the button (OR : css button::after)
       className: '', // To be added to the control.element
       // subMenuId : 'id', // Id of an existing html containing the scrolling menu
       subMenuHTML: '', // html code of the scrolling menu
@@ -43,9 +41,11 @@ export class Button extends ol.control.Control {
     this.buttonEl.innerHTML = options.label;
 
     // Add submenu below the button
+    const subMenuVarName = (options.subMenuId + '_' + navigator.language).replaceAll('-', '');
     this.subMenuEl = document.getElementById(options.subMenuId);
     this.subMenuEl ||= document.createElement('div');
-    this.subMenuEl.innerHTML ||= options.subMenuHTML;
+    this.subMenuEl.innerHTML ||= window[subMenuVarName] || options.subMenuHTML;
+    //TODO largeur submenu sur petit terminal
 
     // Populate the control
     this.element.className = 'ol-control myol-button ' + options.className;
@@ -58,22 +58,6 @@ export class Button extends ol.control.Control {
 
     // Register action listeners when html is fully loaded
     this.buttonEl.addEventListener('click', evt => this.buttonListener(evt));
-    /*//TODO DELETE
-    this.buttonEl.addEventListener('click', evt => this.buttonListener(evt));
-    this.buttonEl.addEventListener('mouseover', evt => this.buttonListener(evt));
-    this.buttonEl.addEventListener('mouseout', evt => this.buttonListener(evt));
-    this.buttonEl.addEventListener('mouseenter', evt => this.buttonListener(evt));
-    this.buttonEl.addEventListener('mouseleave', evt => this.buttonListener(evt));
-    this.buttonEl.addEventListener('mousedown', evt => this.buttonListener(evt));
-    this.buttonEl.addEventListener('mouseup', evt => this.buttonListener(evt));
-    this.buttonEl.addEventListener('mousemove', evt => this.buttonListener(evt));
-    this.buttonEl.addEventListener('contextmenu', evt => this.buttonListener(evt));
-
-    this.buttonEl.addEventListener('touchcancel', evt => this.buttonListener(evt));
-    this.buttonEl.addEventListener('touchend', evt => this.buttonListener(evt));
-    this.buttonEl.addEventListener('touchmove', evt => this.buttonListener(evt));
-    this.buttonEl.addEventListener('touch', evt => this.buttonListener(evt));
-	*/
     this.element.addEventListener('mouseover', evt => this.buttonListener(evt));
     this.element.addEventListener('mouseout', evt => this.buttonListener(evt));
 
