@@ -199,7 +199,6 @@ export class Editor extends ol.layer.Vector {
     this.changeInteraction(0); // Init to modify
   } // End setMapInternal
 
-  //TODO close submenu after enable draw
   changeInteraction(interaction, type = 'click') {
     if (type == 'click') {
       this.interactions.forEach(i => this.map.removeInteraction(i));

@@ -6,7 +6,6 @@
 import ol from '../ol';
 import './Button.css';
 //TODO revoir click, touch, coloration & hover subMenuHTML / Editor
-//TODO button unicode as append in CSS
 //TODO largeur submenu sur petit terminal
 
 /**

@@ -9,3 +9,9 @@
 .myol-button-edit-poly button::after {
   content: "\23E2";
 }
+
+/* Close submenu after enable draw */
+.myol-button-edit-line.myol-button-selected div,
+.myol-button-edit-poly.myol-button-selected div {
+  display: none;
+}
