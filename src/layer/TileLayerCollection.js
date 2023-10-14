@@ -204,7 +204,7 @@ export class IGM extends ol.layer.Tile {
         url: 'https://chemineur.fr/assets/proxy/?s=minambiente.it', // Not available via https
         attributions: '&copy <a href="http://www.pcn.minambiente.it/viewer/">IGM</a>',
       }),
-      maxResolution: 1200,
+      maxResolution: 120,
       extent: [720000, 4380000, 2070000, 5970000],
     });
   }
@@ -314,17 +314,20 @@ export class Google extends XYZ {
 /**
  * Bing (Microsoft)
  * Doc: https://docs.microsoft.com/en-us/bingmaps/getting-started/
+ * Get your own (free) key at https://www.bingmapsportal.com
  */
-//TODO BUG display also backup tiles
 export class Bing extends ol.layer.Tile {
   constructor(options = {}) {
     super({
-      // imagerySet: 'Road',
-      // key, Get your own (free) key at https://www.bingmapsportal.com
-      // No explicit zoom
+      // Mandatory
+      // 'key',
+      imagerySet: 'Road',
+
       hidden: !options.key, // For LayerSwitcher
+      // No explicit zoom
       // attributions, defined by ol.source.BingMaps
-      ...options, // including key & imagerySet
+
+      ...options,
     });
 
     //HACK : Avoid to call https://dev.virtualearth.net/... if no bing layer is visible

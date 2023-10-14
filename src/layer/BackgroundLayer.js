@@ -27,24 +27,24 @@ export class BackgroundLayer extends layerTile.Positron {
   setMapInternal(map) {
     super.setMapInternal(map);
 
-    // Substitution for low resoltions
-    map.addLayer(this.lowResLayer);
+    map.addLayer(this.lowResLayer); // Substitution for low resoltions
+    map.on('precompose', () => this.tuneDisplay(map));
+  }
 
-    map.on('precompose', () => {
-      const mapExtent = map.getView().calculateExtent(map.getSize());
-      let needed = true;
+  tuneDisplay(map) {
+    const mapExtent = map.getView().calculateExtent(map.getSize());
+    let needed = true;
 
-      map.getLayers().forEach(l => {
-        if (l.getSource() && l.getSource().urls && // Is a tile layer
-          l.isVisible && l.isVisible() && // Is visible
-          l != this && l != this.lowResLayer && // Not one of the background layers
-          ol.extent.containsExtent(l.getExtent() || mapExtent, mapExtent)) // The layer covers the map extent or the entiere worl
-          needed = false;
-      });
-
-      this.setVisible(needed);
-      this.lowResLayer.setVisible(needed);
+    map.getLayers().forEach(l => {
+      if (l.getUseInterimTilesOnError && // Is a tile layer
+        l != this && l != this.lowResLayer && // Not one of the background layers
+        l.isVisible() && // Is visible
+        ol.extent.containsExtent(l.getExtent() || mapExtent, mapExtent))
+        needed = false;
     });
+
+    this.setVisible(needed);
+    this.lowResLayer.setVisible(needed);
   }
 }
 
