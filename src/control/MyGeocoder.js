@@ -6,7 +6,7 @@
  */
 
 // Geocoder
-//BEST click on button keep input open
+//TODO todo : click on button keep input open
 import Geocoder from '@myol/geocoder/src/base';
 import '@myol/geocoder/dist/ol-geocoder.css';
 import './myGeocoder.css'; // After ol-geocoder.css

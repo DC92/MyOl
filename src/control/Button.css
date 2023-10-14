@@ -28,6 +28,13 @@
   z-index: 30;
 }
 
+@media screen and (max-width: 350px) {
+  .myol-button>div {
+    width: 100%;
+    left: 0;
+  }
+}
+
 .ol-control button:hover {
   box-shadow: 1px 1px 10px black;
 }

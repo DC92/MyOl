@@ -10,12 +10,17 @@ navigator.serviceWorker.addEventListener('controllerchange', () => {
   console.log('PWA controllerchange');
   map.addControl(
     new myol.control.Button({
-      label: '&#127381;', //BEST hex ?
-      subMenuHTML: '<p>Une nouvelle version</p>' +
-        '<p>ou de nouvelles traces</p>' +
-        '<p>sont disponibles.</p>' +
-        '<p>LAST_CHANGE_TIME</p>' +
-        '<a href="">Recharger la page</a>',
+      className: 'myol-button-upgrade',
+      subMenuHTML: '\
+	    <p>New version</p>\
+        <p>LAST_CHANGE_TIME</p>\
+        <a href="">Reload</a>',
+      subMenuHTML_fr: '\
+	    <p>Une nouvelle version</p>\
+        <p>ou de nouvelles traces</p>\
+        <p>sont disponibles.</p>\
+        <p>LAST_CHANGE_TIME</p>\
+        <a href="">Recharger la page</a>',
     }));
 }, {
   once: true,

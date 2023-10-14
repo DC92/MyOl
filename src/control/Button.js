@@ -52,7 +52,6 @@ export class Button extends ol.control.Control {
     this.subMenuEl.innerHTML ||=
       options['subMenuHTML_' + navigator.language.match(/[a-z]+/)] ||
       options.subMenuHTML;
-    //BEST submenu width on small terminal
 
     // Populate the control
     this.element.className = 'ol-control myol-button ' + options.className;

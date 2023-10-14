@@ -16,3 +16,7 @@ body,
 @viewport {
   viewport-fit: cover;
 }
+
+.myol-button-upgrade button::after {
+  content: "\1F195";
+}

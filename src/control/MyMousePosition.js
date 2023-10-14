@@ -14,7 +14,7 @@ export class MyMousePosition extends ol.control.MousePosition {
 
       coordinateFormat: mouse => {
         //BEST find better than window.gpsValues to share info
-        //BEST BUG : show distance even if GPS off
+        //TODO BUG : show distance even if GPS off
         if (window.gpsValues && window.gpsValues.position) {
           const ll4326 = ol.proj.transform(window.gpsValues.position, 'EPSG:3857', 'EPSG:4326'),
             distance = ol.sphere.getDistance(mouse, ll4326);

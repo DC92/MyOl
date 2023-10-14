@@ -6,7 +6,7 @@
 import ol from '../ol';
 import Button from '../control/Button';
 import './Editor.css';
-//BEST changer le curseur par un crayon quand créee
+//BEST changer le curseur par un crayon quand crée
 //TODO BUG dont destroy polygon segment
 
 // Editor

@@ -5,7 +5,7 @@
  */
 
 import ol from '../ol';
-//BEST BUG don't keep label open while hovering the label
+//TODO BUG don't keep label open while hovering the label
 
 export class Hover extends ol.layer.Vector {
   constructor() {

@@ -21,9 +21,9 @@ class MyVectorSource extends ol.source.Vector {
     // Display loading satus
     this.on(['featuresloadstart', 'featuresloadend', 'error', 'featuresloaderror'], evt => {
       if (this.statusEl) this.statusEl.innerHTML =
-        evt.type == 'featuresloadstart' ? '&#8987;' : //BEST hex ?
+        evt.type == 'featuresloadstart' ? '&#8987;' :
         evt.type == 'featuresloadend' ? '' :
-        '&#9888;'; // Error symbol //BEST hex ?
+        '&#9888;'; // Error symbol
     });
 
     // Compute properties when the layer is loaded & before the cluster layer is computed
