@@ -6,6 +6,8 @@
 import ol from '../ol';
 import Button from '../control/Button';
 import './Editor.css';
+//BEST changer le curseur par un crayon quand créee
+//TODO BUG dont destroy polygon segment
 
 // Editor
 export class Editor extends ol.layer.Vector {

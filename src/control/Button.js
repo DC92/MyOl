@@ -50,7 +50,7 @@ export class Button extends ol.control.Control {
       document.getElementById(options.subMenuId) ||
       document.createElement('div');
     this.subMenuEl.innerHTML ||=
-      options['subMenuHTML_' + navigator.language.replaceAll('-', '')] ||
+      options['subMenuHTML_' + navigator.language.match(/[a-z]+/)] ||
       options.subMenuHTML;
     //BEST submenu width on small terminal
 
