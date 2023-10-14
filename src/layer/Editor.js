@@ -177,7 +177,7 @@ export class Editor extends ol.layer.Vector {
       className: 'myol-button-edit-modify',
       subMenuId: 'myol-edit-help-modify',
       subMenuHTML: '<p>Modification</p>',
-      subMenuHTML_frFR: helpModif_frFR,
+      subMenuHTML_fr: helpModif_fr,
       buttonAction: evt => this.changeInteraction(0, evt.type),
     }));
 
@@ -186,7 +186,7 @@ export class Editor extends ol.layer.Vector {
         className: 'myol-button-edit-line',
         subMenuId: 'myol-edit-help-line',
         subMenuHTML: '<p>New line</p>',
-        subMenuHTML_frFR: helpLine_frFR,
+        subMenuHTML_fr: helpLine_fr,
         buttonAction: evt => this.changeInteraction(1, evt.type),
       }));
 
@@ -195,7 +195,7 @@ export class Editor extends ol.layer.Vector {
         className: 'myol-button-edit-poly',
         subMenuId: 'myol-edit-help-poly',
         subMenuHTML: '<p>New polygon</p>',
-        subMenuHTML_frFR: helpPoly_frFR,
+        subMenuHTML_fr: helpPoly_fr,
         buttonAction: evt => this.changeInteraction(2, evt.type),
       }));
 
@@ -391,7 +391,7 @@ export class Editor extends ol.layer.Vector {
   }
 }
 
-var helpModif_frFR = '\
+var helpModif_fr = '\
   <p><u>Déplacer un sommet:</u> cliquer sur le sommet et le déplacer</p>\
   <p><u>Ajouter un sommet au milieu d\'un segment:</u> cliquer le long du segment puis déplacer</p>\
   <p><u>Supprimer un sommet:</u> Alt+cliquer sur le sommet</p>\
@@ -405,7 +405,7 @@ var helpModif_frFR = '\
      de chaque polygone puis Alt+cliquer dessus</p>\
   <p><u>Supprimer une ligne ou un polygone:</u> Ctrl+Alt+cliquer sur un segment</p>';
 
-var helpLine_frFR = '\
+var helpLine_fr = '\
   <p><u>Pour créer une ligne:</u></p>\
   <p><a>Cliquer sur le bouton &#128397;</a></p>\
   <p>Cliquer sur l\'emplacement du début</p>\
@@ -414,7 +414,7 @@ var helpLine_frFR = '\
   <hr>\
   <p>Cliquer sur une extrémité d\'une ligne existante pour l\'étendre</p>';
 
-var helpPoly_frFR = '\
+var helpPoly_fr = '\
   <p><u>Pour créer un polygone:</u></p>\
   <p><a>Cliquer sur le bouton &#9186;</a></p>\
   <p>Cliquer sur l\'emplacement du premier sommet</p>\

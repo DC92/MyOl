@@ -12,7 +12,7 @@ export class Load extends Button {
       className: 'myol-button-load',
       subMenuId: 'myol-button-load',
       subMenuHTML: subMenuHTML,
-      subMenuHTML_frFR: subMenuHTML_frFR,
+      subMenuHTML_fr: subMenuHTML_fr,
       ...options,
     });
 
@@ -96,6 +96,6 @@ export class Load extends Button {
 }
 
 var subMenuHTML = '<input type="file" accept=".gpx,.kml,.geojson">',
-  subMenuHTML_frFR = '<p>Importer un fichier de points ou de traces</p>' + subMenuHTML;
+  subMenuHTML_fr = '<p>Importer un fichier de points ou de traces</p>' + subMenuHTML;
 
 export default Load;

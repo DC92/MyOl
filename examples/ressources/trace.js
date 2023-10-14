@@ -4,6 +4,9 @@
 (async function() {
   let data = [];
 
+  // Language
+  data.push('language: ' + navigator.language);
+
   // myol storages in the subdomain
   ['localStorage', 'sessionStorage'].forEach(s => {
     if (window[s].length)

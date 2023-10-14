@@ -12,7 +12,7 @@ export class Print extends Button {
       className: 'myol-button-print',
       subMenuId: 'myol-button-print',
       subMenuHTML: subMenuHTML,
-      subMenuHTML_frFR: subMenuHTML_frFR,
+      subMenuHTML_fr: subMenuHTML_fr,
       ...options,
     });
 
@@ -70,7 +70,7 @@ var subMenuHTML = '\
   <label><a id="print">Print</a></label>\
   <label><a onclick="location.reload()">Cancel</a></label>';
 
-var subMenuHTML_frFR = '\
+var subMenuHTML_fr = '\
   <p>Pour imprimer la carte:</p>\
   <p>-Choisir portrait ou paysage,</p>\
   <p>-zoomer et déplacer la carte dans le format,</p>\

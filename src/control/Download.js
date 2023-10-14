@@ -13,7 +13,7 @@ export class Download extends Button {
       className: 'myol-button-download',
       subMenuId: 'myol-button-download',
       subMenuHTML: subMenuHTML,
-      subMenuHTML_frFR: subMenuHTML_frFR,
+      subMenuHTML_fr: subMenuHTML_fr,
       fileName: document.title || 'openlayers', // Name of the file to be downloaded //BEST name from feature
 
       ...options,
@@ -101,7 +101,7 @@ var subMenuHTML = '\
   <label><a mime="vnd.google-earth.kml+xml">KML</a></label>\
   <label><a mime="application/json">GeoJSON</a></label>';
 
-var subMenuHTML_frFR = '\
+var subMenuHTML_fr = '\
   <p>Cliquer sur un format ci-dessous pour obtenir\
   un fichier contenant les éléments visibles dans la fenêtre:</p>' +
   subMenuHTML;

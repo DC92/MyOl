@@ -19,7 +19,7 @@ export class MyGeolocation extends Button {
       className: 'myol-button-geolocation',
       subMenuId: 'myol-button-geolocation',
       subMenuHTML: subMenuHTML,
-      subMenuHTML_frFR: subMenuHTML_frFR,
+      subMenuHTML_fr: subMenuHTML_fr,
 
       // ol.Geolocation options
       // https://www.w3.org/TR/geolocation/#position_options_interface
@@ -215,7 +215,7 @@ var subMenuHTML = '<p>\
   <input type="radio" name="myol-gps-display" value="2">Center & orient &nbsp;\
   </p>';
 
-var subMenuHTML_frFR = '\
+var subMenuHTML_fr = '\
   <p>Localisation GPS:</p>\
   <label>\
     <input type="radio" name="myol-gps-source" value="0" checked="checked">\
