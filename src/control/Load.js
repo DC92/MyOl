@@ -11,8 +11,8 @@ export class Load extends Button {
       // Button options
       className: 'myol-button-load',
       subMenuId: 'myol-button-load',
-      subMenuHTML: '<input type="file" accept=".gpx,.kml,.geojson">',
-
+      subMenuHTML: subMenuHTML,
+      subMenuHTML_frFR: subMenuHTML_frFR,
       ...options,
     });
 
@@ -94,5 +94,8 @@ export class Load extends Button {
     this.element.classList.remove('myol-display-submenu');
   }
 }
+
+var subMenuHTML = '<input type="file" accept=".gpx,.kml,.geojson">',
+  subMenuHTML_frFR = '<p>Importer un fichier de points ou de traces</p>' + subMenuHTML;
 
 export default Load;

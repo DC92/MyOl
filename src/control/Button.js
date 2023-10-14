@@ -15,8 +15,12 @@ export class Button extends ol.control.Control {
     options = {
       label: ' ', // An ascii or unicode character to decorate the button (OR : css button::after)
       className: '', // To be added to the control.element
-      // subMenuId : 'id', // Id of an existing html containing the scrolling menu
+
+      // Sub menu, by priority :
+      // subMenuId : 'id', // Html id-frFR or Id containing the scrolling menu
+      // subMenuHTML_frFR: '', // html code of the scrolling menu in locale lang
       subMenuHTML: '', // html code of the scrolling menu
+
       // subMenuAction() {}, // (evt) To run when the button is clicked / hovered, ...
       // buttonAction() {}, // (evt) To run when an <input> ot <a> of the subMenu is clicked / hovered, ...
 
@@ -41,11 +45,14 @@ export class Button extends ol.control.Control {
     this.buttonEl.innerHTML = options.label;
 
     // Add submenu below the button
-    const subMenuVarName = (options.subMenuId + '_' + navigator.language).replaceAll('-', '');
-    this.subMenuEl = document.getElementById(options.subMenuId);
-    this.subMenuEl ||= document.createElement('div');
-    this.subMenuEl.innerHTML ||= window[subMenuVarName] || options.subMenuHTML;
-    //TODO largeur submenu sur petit terminal
+    this.subMenuEl =
+      document.getElementById(options.subMenuId + '-' + navigator.language.replaceAll('-', '')) ||
+      document.getElementById(options.subMenuId) ||
+      document.createElement('div');
+    this.subMenuEl.innerHTML ||=
+      options['subMenuHTML_' + navigator.language.replaceAll('-', '')] ||
+      options.subMenuHTML;
+    //BEST submenu width on small terminal
 
     // Populate the control
     this.element.className = 'ol-control myol-button ' + options.className;

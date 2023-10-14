@@ -177,6 +177,7 @@ export class Editor extends ol.layer.Vector {
       className: 'myol-button-edit-modify',
       subMenuId: 'myol-edit-help-modify',
       subMenuHTML: '<p>Modification</p>',
+      subMenuHTML_frFR: helpModif_frFR,
       buttonAction: evt => this.changeInteraction(0, evt.type),
     }));
 
@@ -185,6 +186,7 @@ export class Editor extends ol.layer.Vector {
         className: 'myol-button-edit-line',
         subMenuId: 'myol-edit-help-line',
         subMenuHTML: '<p>New line</p>',
+        subMenuHTML_frFR: helpLine_frFR,
         buttonAction: evt => this.changeInteraction(1, evt.type),
       }));
 
@@ -192,7 +194,8 @@ export class Editor extends ol.layer.Vector {
       this.map.addControl(new Button({
         className: 'myol-button-edit-poly',
         subMenuId: 'myol-edit-help-poly',
-        subMenuHTML: '<p>New poly</p>',
+        subMenuHTML: '<p>New polygon</p>',
+        subMenuHTML_frFR: helpPoly_frFR,
         buttonAction: evt => this.changeInteraction(2, evt.type),
       }));
 
@@ -387,5 +390,37 @@ export class Editor extends ol.layer.Vector {
     return a[0] == b[0] && a[1] == b[1]; // 2 coordinates
   }
 }
+
+var helpModif_frFR = '\
+  <p><u>Déplacer un sommet:</u> cliquer sur le sommet et le déplacer</p>\
+  <p><u>Ajouter un sommet au milieu d\'un segment:</u> cliquer le long du segment puis déplacer</p>\
+  <p><u>Supprimer un sommet:</u> Alt+cliquer sur le sommet</p>\
+  <p><u>Couper une ligne en deux:</u> Alt+cliquer sur le segment à supprimer</p>\
+  <p><u>Inverser la direction d\'une ligne:</u> Shift+cliquer sur le segment à inverser</p>\
+  <p><u>Transformer un polygone en ligne:</u> Alt+cliquer sur un côté</p>\
+  <p><u>Fusionner deux lignes:</u> déplacer l\'extrémité d\'une ligne pour rejoindre l\'autre</p>\
+  <p><u>Transformer une ligne en polygone:</u> déplacer une extrémité pour rejoindre l\'autre</p>\
+  <p><u>Scinder un polygone:</u> joindre 2 sommets du polygone puis Alt+cliquer sur le sommet commun</p>\
+  <p><u>Fusionner 2 polygones:</u> superposer un côté (entre 2 sommets consécutifs)\
+     de chaque polygone puis Alt+cliquer dessus</p>\
+  <p><u>Supprimer une ligne ou un polygone:</u> Ctrl+Alt+cliquer sur un segment</p>';
+
+var helpLine_frFR = '\
+  <p><u>Pour créer une ligne:</u></p>\
+  <p><a>Cliquer sur le bouton &#128397;</a></p>\
+  <p>Cliquer sur l\'emplacement du début</p>\
+  <p>Puis sur chaque sommet</p>\
+  <p>Double cliquer sur le dernier sommet pour terminer</p>\
+  <hr>\
+  <p>Cliquer sur une extrémité d\'une ligne existante pour l\'étendre</p>';
+
+var helpPoly_frFR = '\
+  <p><u>Pour créer un polygone:</u></p>\
+  <p><a>Cliquer sur le bouton &#9186;</a></p>\
+  <p>Cliquer sur l\'emplacement du premier sommet</p>\
+  <p>Puis sur chaque sommet</p>\
+  <p>Double cliquer sur le dernier sommet pour terminer</p>\
+  <hr>\
+  <p>Un polygone entièrement compris dans un autre crée un "trou"</p>';
 
 export default Editor;

@@ -11,11 +11,8 @@ export class Print extends Button {
       // Button options
       className: 'myol-button-print',
       subMenuId: 'myol-button-print',
-      subMenuHTML: '<label><input type="radio" value="0">portrait</label>' +
-        '<label><input type="radio" value="1">landscape</label>' +
-        '<label><a id="print">Print</a></label>' +
-        '<label><a onclick="location.reload()">Cancel</a></label>',
-
+      subMenuHTML: subMenuHTML,
+      subMenuHTML_frFR: subMenuHTML_frFR,
       ...options,
     });
 
@@ -66,5 +63,21 @@ export class Print extends Button {
       });
   }
 }
+
+var subMenuHTML = '\
+  <label><input type="radio" value="0">Portrait</label>\
+  <label><input type="radio" value="1">Landscape</label>\
+  <label><a id="print">Print</a></label>\
+  <label><a onclick="location.reload()">Cancel</a></label>';
+
+var subMenuHTML_frFR = '\
+  <p>Pour imprimer la carte:</p>\
+  <p>-Choisir portrait ou paysage,</p>\
+  <p>-zoomer et déplacer la carte dans le format,</p>\
+  <p>-imprimer.</p>' +
+  subMenuHTML
+  .replace('Landscape', 'Paysage')
+  .replace('Print', 'Imprimer')
+  .replace('Cancel', 'Annuler');
 
 export default Print;
