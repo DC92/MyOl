@@ -3,8 +3,8 @@ error_reporting(E_ALL);
 ini_set("display_errors", "on");
 
 // Search for myol libraries
-$dist_glob = glob("{,../}*/myol.js", GLOB_BRACE);
-$dist_rep = dirname($dist_glob[0]) . "/";
+$dist_files = glob("{,../}*/myol.*s", GLOB_BRACE);
+$dist_rep = dirname($dist_files[0]) . "/";
 
 // calculate the files last changed date
 $dependencies = glob("{*,*/*,../*/myol.*s}", GLOB_BRACE);
@@ -30,4 +30,5 @@ $js_vars = json_encode([
   "lastChangeDate" => $last_change_date,
   "mapKeys" => $map_keys,
   "gpxFiles" => $gpx_files,
+  "distFiles" => $dist_files,
 ]);
