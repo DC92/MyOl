@@ -8,7 +8,8 @@ body,
   overflow: hidden;
 }
 
-#myol-gps-help {
+#myol-gps-help,
+#myol-gps-help-fr {
   left: 0;
   width: 100%;
 }

@@ -1,7 +1,7 @@
 // Create/install cache
 self.addEventListener('install', evt => {
   // Last file date will trigger the cache reload
-  console.log('PWA install LAST_CHANGE_TIME');
+  console.log('PWA install ' + jsVars.lastChangeDate);
 
   self.skipWaiting(); // Immediately activate the SW & trigger controllerchange
 
@@ -16,10 +16,14 @@ self.addEventListener('install', evt => {
     .then(cache => {
       console.log('PWA open cache ' + cacheName);
       cache.addAll([
-          'index.html',
+          'index.php',
           'manifest.json',
-          'js.php?init',
-          /*GPXFILES*/
+          'service-worker.php',
+          'gps.css',
+          'gps.js',
+          'favicon.png',
+          'icon-512.png',
+          ...jsVars.gpxFiles,
         ])
         .then(console.log('PWA files added to cache'))
         .catch(err => console.error(err));
