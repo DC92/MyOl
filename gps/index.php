@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<?php include("gps.php")?>
+<?php include("ressources/gps.php")?>
 <!--
 © Dominique Cavailhez 2019
 https://github.com/Dominique92/MyOl
@@ -14,28 +14,28 @@ Based on https://openlayers.org
   <meta name="description" content="Offline GPS based on openlayers & Progressive Web Application">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
   <!-- Good old favicon -->
-  <link href="favicon.png" type="image/png" rel="icon">
+  <link href="ressources/favicon.png" type="image/png" rel="icon">
   <!-- Android / Chrome -->
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="theme-color" content="white">
   <!-- IOS app icon + mobile Safari -->
-  <link href="icon-512.png" rel="apple-touch-icon">
+  <link href="ressources/icon-512.png" rel="apple-touch-icon">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
   <meta name="apple-mobile-web-app-title" content="Hello World">
   <!-- Windows -->
-  <meta name="msapplication-TileImage" content="icon-512.png">
+  <meta name="msapplication-TileImage" content="ressources/icon-512.png">
   <meta name="msapplication-TileColor" content="#ffffff">
   <!-- PWA -->
   <link href="manifest.json" rel="manifest">
   <link href="<?=$dist_rep?>myol.css" rel="stylesheet">
   <script src="<?=$dist_rep?>myol.js"></script>
   </script>
-  <link href="gps.css" rel="stylesheet">
+  <link href="ressources/gps.css" rel="stylesheet">
   <script>
     var jsVars = <?=$js_vars?>
   </script>
-  <script src="gps.js" defer></script>
+  <script src="ressources/gps.js" defer></script>
 </head>
 
 <body>

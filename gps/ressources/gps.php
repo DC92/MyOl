@@ -19,7 +19,7 @@ foreach ($dependencies as $f) {
 $last_change_date = date("Y-m-d H:i:s", $last_change_time);
 
 // Search for layer keys efinition
-$key_glob = glob("{../,../*/}keys.php", GLOB_BRACE);
+$key_glob = glob("../*/{,*/}keys.php", GLOB_BRACE);
 if ($key_glob) {
   include $key_glob[0];
 } else {

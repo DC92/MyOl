@@ -16,10 +16,10 @@ self.addEventListener('install', evt => {
     .then(cache => {
       console.log('PWA open cache ' + cacheName);
       cache.addAll([
-          'favicon.png',
-          'gps.css',
-          'gps.js',
-          'icon-512.png',
+          'ressources/favicon.png',
+          'ressources/gps.css',
+          'ressources/gps.js',
+          'ressources/icon-512.png',
           'index.php',
           'manifest.json',
           'service-worker.php',

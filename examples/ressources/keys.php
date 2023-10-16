@@ -1,4 +1,4 @@
-<?php
+< ? php
 $map_keys = [
   'ign' => ['key' => 'iejxbx4obzhco6c8klxrfbto'],
   'thunderforest' => ['key' => 'ee751f43b3af4614b01d1bce72785369'],
