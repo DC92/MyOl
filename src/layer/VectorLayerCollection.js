@@ -350,3 +350,15 @@ export class Overpass extends MyVectorLayer {
 
   bbox() {}
 }
+
+// Vectors layers examples
+export function collection(options = {}) {
+  return [
+    new WRI(options.wri),
+    new PRC(options.prc),
+    new C2C(options.c2c),
+    new Overpass(options.osm),
+    new Chemineur(options.chemineur),
+    new Alpages(options.alpages),
+  ];
+}
