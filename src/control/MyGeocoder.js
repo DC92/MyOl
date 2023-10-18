@@ -6,7 +6,6 @@
  */
 
 // Geocoder
-//TODO todo : click on button keep input open
 import Geocoder from '@myol/geocoder/src/base';
 import '@myol/geocoder/dist/ol-geocoder.css';
 import './myGeocoder.css'; // After ol-geocoder.css
@@ -25,12 +24,8 @@ export class MyGeocoder extends Geocoder {
         evt.stopImmediatePropagation()
       );
 
+    // Close other opened buttons when hover with a mouse
     this.element.addEventListener('pointerover', () => {
-      // Open the control
-      this.element.querySelector('.gcd-gl-control')
-        .classList.add('gcd-gl-expanded');
-
-      // Close other opened buttons when hover with a mouse
       for (let el of document.getElementsByClassName('myol-button-selected'))
         el.classList.remove('myol-button-selected');
     });
