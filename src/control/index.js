@@ -4,11 +4,11 @@
 
 import ol from '../ol';
 import './Control.css';
+import * as button from './Button';
 import Download from './Download';
 import LayerSwitcher from './LayerSwitcher';
 import LengthLine from './LengthLine';
 import Load from './Load';
-import * as button from './Button';
 import MyGeocoder from './MyGeocoder';
 import MyGeolocation from './MyGeolocation';
 import MyMousePosition from './MyMousePosition';
@@ -31,7 +31,7 @@ export function collection(options = {}) {
 
     // Bottom left
     new LengthLine(options.lengthLine),
-    new MyMousePosition(options.myMouseposition),
+    new MyMousePosition(options.myMousePosition),
     new ol.control.ScaleLine(options.scaleLine),
 
     // Bottom right

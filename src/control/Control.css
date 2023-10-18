@@ -23,12 +23,12 @@
 /* Buttonless controls */
 .myol-permalink,
 .ol-attribution,
-.myol-coordinate,
+.myol-mouse-position,
 .myol-length-line {
   font-size: 12px;
 }
 
-.myol-coordinate {
+.myol-mouse-position {
   position: absolute;
   bottom: 30px;
   left: 8px;
@@ -48,7 +48,7 @@
   color: white;
 }
 
-.myol-coordinate:empty,
+.myol-mouse-position:empty,
 .myol-length-line:empty {
   display: none;
 }

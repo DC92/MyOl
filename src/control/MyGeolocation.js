@@ -36,11 +36,9 @@ export class MyGeolocation extends Button {
 
     this.addGraticule();
 
-    window.gpsValues = {}; // Store the measures for internal use & other controls
-
     // Browser heading from the inertial & magnetic sensors
     window.addEventListener('deviceorientationabsolute', evt => {
-      window.gpsValues.heading = evt.alpha || evt.webkitCompassHeading; // Android || iOS
+      this.heading = evt.alpha || evt.webkitCompassHeading; // Android || iOS
       this.subMenuAction(evt);
     });
   } // End constructor
@@ -111,7 +109,6 @@ export class MyGeolocation extends Button {
     if (evt.target.name == 'myol-gps-source') {
       this.geolocation.setTracking(sourceLevel > 0);
       this.graticuleLayer.setVisible(false);
-      window.gpsValues = {}; // Reset the values
       if (!sourceLevel)
         displayEls[0].checked = true;
       if (sourceLevel && displayLevel == 0)
@@ -122,17 +119,24 @@ export class MyGeolocation extends Button {
     ['Position', 'AccuracyGeometry', 'Speed', 'Altitude'].forEach(valueName => {
       const value = this.geolocation['get' + valueName]();
       if (value)
-        window.gpsValues[valueName.toLowerCase()] = value;
+        this[valueName.toLowerCase()] = value;
     });
 
     // State 1 only takes positions from the GPS which have an altitude
-    if (sourceLevel == 1 && !window.gpsValues.altitude)
-      window.gpsValues.position = null;
+    if (sourceLevel == 0 ||
+      (sourceLevel == 1 && !this.altitude))
+      this.position = null;
+
+    // Aware all who needs
+    map.dispatchEvent({
+      type: 'myol:gpspositionchanged',
+      position: this.position,
+    });
 
     // Render position & graticule
-    if (map && view && sourceLevel && window.gpsValues.position) {
+    if (map && view && sourceLevel && this.position) {
       // Estimate the viewport size to draw a visible graticule
-      const p = window.gpsValues.position,
+      const p = this.position,
         hg = map.getCoordinateFromPixel([0, 0]),
         bd = map.getCoordinateFromPixel(map.getSize()),
         far = Math.hypot(hg[0] - bd[0], hg[1] - bd[1]) * 10,
@@ -158,8 +162,8 @@ export class MyGeolocation extends Button {
         ];
 
       // The accuracy circle
-      if (window.gpsValues.accuracygeometry)
-        geometry.push(window.gpsValues.accuracygeometry);
+      if (this.accuracygeometry)
+        geometry.push(this.accuracygeometry);
 
       this.graticuleFeature.setGeometry(new ol.geom.GeometryCollection(geometry));
       this.northGraticuleFeature.setGeometry(new ol.geom.GeometryCollection(northGeometry));
@@ -171,14 +175,14 @@ export class MyGeolocation extends Button {
       // Orientation
       if (!sourceLevel || displayLevel == 1)
         view.setRotation(0);
-      else if (window.gpsValues.heading && displayLevel == 2)
+      else if (this.heading && displayLevel == 2)
         view.setRotation(
-          Math.PI / 180 * (window.gpsValues.heading - screen.orientation.angle) // Delivered ° reverse clockwize
+          Math.PI / 180 * (this.heading - screen.orientation.angle) // Delivered ° reverse clockwize
         );
 
       // Zoom on the area
-      if (!window.gpsValues.isZoomed) { // Only the first time after activation
-        window.gpsValues.isZoomed = true;
+      if (!this.isZoomed) { // Only the first time after activation
+        this.isZoomed = true;
         view.setZoom(17);
 
         // Close submenu when GPS locates
@@ -190,11 +194,11 @@ export class MyGeolocation extends Button {
       view.setRotation(0); // Return to inactive state
 
     // Display data under the button
-    let status = window.gpsValues.position ? '' : 'Sync...';
-    if (window.gpsValues.altitude) {
-      status = Math.round(window.gpsValues.altitude) + ' m';
-      if (window.gpsValues.speed)
-        status += ' ' + (Math.round(window.gpsValues.speed * 36) / 10) + ' km/h';
+    let status = this.position ? '' : 'Sync...';
+    if (this.altitude) {
+      status = Math.round(this.altitude) + ' m';
+      if (this.speed)
+        status += ' ' + (Math.round(this.speed * 36) / 10) + ' km/h';
     }
     if (this.statusEl)
       this.statusEl.innerHTML = sourceLevel ? status : '';
