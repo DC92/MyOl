@@ -5,7 +5,6 @@
  */
 
 import ol from '../ol';
-//TODO BUG don't keep label open while hovering the label
 
 export class Hover extends ol.layer.Vector {
   constructor() {
@@ -46,8 +45,9 @@ export class Hover extends ol.layer.Vector {
     let hoveredLayer = null,
       hoveredFeature = map.forEachFeatureAtPixel(
         map.getEventPixel(evt.originalEvent),
-        function(f, l) {
-          if (l && l.options && l.options.hoverStylesOptions) {
+        (f, l) => {
+          if ((l && l.options && l.options.hoverStylesOptions) ||
+            l == this) {
             hoveredLayer = l;
             return f; // Return feature & stop the search
           }
@@ -65,6 +65,7 @@ export class Hover extends ol.layer.Vector {
 
       // Find sub-feature from a spread cluster
       if (hoveredProperties.cluster &&
+        hoveredLayer.options &&
         resolution < hoveredLayer.options.spreadClusterMaxResolution) {
         hoveredProperties.features.every(f => {
           const p = f.getProperties();

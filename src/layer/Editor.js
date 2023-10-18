@@ -6,8 +6,6 @@
 import ol from '../ol';
 import Button from '../control/Button';
 import './Editor.css';
-//BEST changer le curseur par un crayon quand crée
-//TODO BUG dont destroy polygon segment
 
 // Editor
 export class Editor extends ol.layer.Vector {
@@ -87,7 +85,7 @@ export class Editor extends ol.layer.Vector {
       new ol.interaction.Modify({ // 0 Modify
         source: this.source,
         pixelTolerance: 16, // Default is 10
-        style: this.style,
+        style: this.style, //BEST change cursor to move
       }),
       new ol.interaction.Draw({ // 1 Draw line
         source: this.source,
@@ -217,6 +215,10 @@ export class Editor extends ol.layer.Vector {
           .forEach(f =>
             this.interactions[3].addFeature(f));
       });
+
+      const mapEl = this.map.getTargetElement();
+      if (mapEl)
+        mapEl.style.cursor = interaction ? 'copy' : 'auto';
     }
   }
 
