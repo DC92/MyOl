@@ -26,8 +26,9 @@ Based on https://openlayers.org
   </script>
 
   <!-- The main script must be defer or module to be run after the myol import -->
-  <script type="module" src="ressources/trace.js"></script>
   <script type="module">
+    myol.trace();
+
     new ol.Map({
       target: 'map',
       view: new ol.View({

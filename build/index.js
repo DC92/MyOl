@@ -8,6 +8,3 @@ import myol from '../src';
 window.ol ||= ol; // Export Openlayers native functions as global if none already defined
 myol.ol = ol; // Packing Openlayers native functions in the bundle
 export default myol;
-
-// Trace in the console
-console.log('Ol v' + ol.util.VERSION);

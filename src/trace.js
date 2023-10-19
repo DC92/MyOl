@@ -1,13 +1,17 @@
 /**
  * Display misc values
  */
-(async function() {
-  let data = [];
 
-  // Language
-  data.push('language: ' + navigator.language);
+import ol from './ol';
 
-  // myol storages in the subdomain
+export async function trace() {
+  const data = [
+    //BEST myol & geocoder version
+    'Ol v' + ol.util.VERSION,
+    'language: ' + navigator.language,
+  ];
+
+  // Storages in the subdomain
   ['localStorage', 'sessionStorage'].forEach(s => {
     if (window[s].length)
       data.push(s + ':');
@@ -20,7 +24,7 @@
   if ('serviceWorker' in navigator)
     await navigator.serviceWorker.getRegistrations().then(registrations => {
       if (registrations.length) {
-        data.push('service-workers:'); //BEST BUG displayed even when we have nothing
+        data.push('service-workers:');
 
         for (let registration of registrations)
           if (registration.active)
@@ -28,6 +32,7 @@
       }
     });
 
+  // Registered caches in the scope
   if (typeof caches == 'object')
     await caches.keys().then(function(names) {
       if (names.length) {
@@ -38,6 +43,7 @@
       }
     });
 
-  // Final display
   console.info(data.join('\n'));
-})();
+}
+
+export default trace;
