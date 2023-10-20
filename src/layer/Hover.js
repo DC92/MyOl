@@ -83,7 +83,8 @@ export class Hover extends ol.layer.Vector {
       const hoveredSubProperties = hoveredSubFeature.getProperties();
 
       // Click
-      if (evt.type == 'click') {
+      if (evt.type == 'click' &&
+        !(hoveredLayer.options && hoveredLayer.options.noClick)) {
         // Click cluster
         if (hoveredSubProperties.cluster)
           map.getView().animate({
@@ -105,7 +106,8 @@ export class Hover extends ol.layer.Vector {
         }
       }
       // Hover
-      else if (hoveredSubFeature != map.lastHoveredSubFeature) {
+      else if (hoveredSubFeature != map.lastHoveredSubFeature &&
+        !(hoveredLayer.options && hoveredLayer.options.noHover)) {
         const f = hoveredSubFeature.clone();
 
         if (hoveredLayer.options && hoveredLayer.options.hoverStylesOptions)
@@ -117,7 +119,8 @@ export class Hover extends ol.layer.Vector {
         source.addFeature(f);
 
         map.getViewport().style.cursor =
-          hoveredProperties.link || hoveredProperties.cluster ?
+          (hoveredProperties.link || hoveredProperties.cluster) &&
+          !(hoveredLayer.options && hoveredLayer.options.noClick) ?
           'pointer' :
           '';
       }

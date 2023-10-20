@@ -33,7 +33,7 @@ export class Editor extends ol.layer.Vector {
     };
 
     const geoJsonEl = document.getElementById(options.geoJsonId), // Read data in an html element
-      geoJson = geoJsonEl ? geoJsonEl.value : {},
+      geoJson = (geoJsonEl ? geoJsonEl.value : '') || '{"type":"FeatureCollection","features":[]}',
       source = new ol.source.Vector({
         features: options.format.readFeatures(geoJson, options),
         wrapX: false,

@@ -20,7 +20,7 @@ function chemIconUrl(type, host) {
 }
 
 // chemineur.fr
-export class Chemineur extends MyVectorLayer {
+export class GeoBB extends MyVectorLayer {
   constructor(options) {
     super({
       host: 'https://chemineur.fr/',
@@ -358,7 +358,7 @@ export function collection(options = {}) {
     new PRC(options.prc),
     new C2C(options.c2c),
     new Overpass(options.osm),
-    new Chemineur(options.chemineur),
+    new GeoBB(options.chemineur),
     new Alpages(options.alpages),
   ];
 }

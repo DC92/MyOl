@@ -216,7 +216,7 @@ function fondsCarte(page, layersKeys) {
 // Les couches vectorielles importées des autres sites
 function couchesVectoriellesExternes() {
   return [
-    new myol.layer.vector.Chemineur({
+    new myol.layer.vector.GeoBB({
       selectName: 'select-chemineur',
     }),
     new myol.layer.vector.Alpages({
