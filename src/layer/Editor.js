@@ -177,7 +177,7 @@ export class Editor extends ol.layer.Vector {
       className: 'myol-button-edit-modify',
       subMenuId: 'myol-edit-help-modify',
       subMenuHTML: '<p>Modification</p>',
-      subMenuHTML_fr: helpModif_fr,
+      subMenuHTML_fr: helpModif_fr[this.options.editOnly || 'both'],
       buttonAction: evt => this.changeInteraction(0, evt.type),
     }));
 
@@ -210,7 +210,7 @@ export class Editor extends ol.layer.Vector {
 
       // Register again the full list of features as addFeature manages already registered
       this.map.getLayers().forEach(l => {
-        if (l.getSource().getFeatures) // Vector layers only
+        if (l.getSource() && l.getSource().getFeatures) // Vector layers only
           l.getSource().getFeatures()
           .forEach(f =>
             this.interactions[3].addFeature(f));
@@ -395,19 +395,37 @@ export class Editor extends ol.layer.Vector {
   }
 }
 
-var helpModif_fr = '\
-  <p><u>Déplacer un sommet:</u> cliquer sur le sommet et le déplacer</p>\
-  <p><u>Ajouter un sommet au milieu d\'un segment:</u> cliquer le long du segment puis déplacer</p>\
-  <p><u>Supprimer un sommet:</u> Alt+cliquer sur le sommet</p>\
-  <p><u>Couper une ligne en deux:</u> Alt+cliquer sur le segment à supprimer</p>\
-  <p><u>Inverser la direction d\'une ligne:</u> Shift+cliquer sur le segment à inverser</p>\
-  <p><u>Transformer un polygone en ligne:</u> Alt+cliquer sur un côté</p>\
-  <p><u>Fusionner deux lignes:</u> déplacer l\'extrémité d\'une ligne pour rejoindre l\'autre</p>\
-  <p><u>Transformer une ligne en polygone:</u> déplacer une extrémité pour rejoindre l\'autre</p>\
-  <p><u>Scinder un polygone:</u> joindre 2 sommets du polygone puis Alt+cliquer sur le sommet commun</p>\
-  <p><u>Fusionner 2 polygones:</u> superposer un côté (entre 2 sommets consécutifs)\
-     de chaque polygone puis Alt+cliquer dessus</p>\
-  <p><u>Supprimer une ligne ou un polygone:</u> Ctrl+Alt+cliquer sur un segment</p>';
+var helpModif_fr = {
+  line: '\
+<p><u>Déplacer un sommet:</u> cliquer sur le sommet et le déplacer</p>\
+<p><u>Ajouter un sommet au milieu d\'un segment:</u> cliquer le long du segment puis déplacer</p>\
+<p><u>Supprimer un sommet:</u> Alt+cliquer sur le sommet</p>\
+<p><u>Couper une ligne en deux:</u> Alt+cliquer sur le segment à supprimer</p>\
+<p><u>Inverser la direction d\'une ligne:</u> Shift+cliquer sur le segment à inverser</p>\
+<p><u>Fusionner deux lignes:</u> déplacer l\'extrémité d\'une ligne pour rejoindre l\'autre</p>\
+<p><u>Supprimer une ligne:</u> Ctrl+Alt+cliquer sur un segment</p>',
+  poly: '\
+<p><u>Déplacer un sommet:</u> cliquer sur le sommet et le déplacer</p>\
+<p><u>Ajouter un sommet au milieu d\'un segment:</u> cliquer le long du segment puis déplacer</p>\
+<p><u>Supprimer un sommet:</u> Alt+cliquer sur le sommet</p>\
+<p><u>Scinder un polygone:</u> joindre 2 sommets du polygone puis Alt+cliquer sur le sommet commun</p>\
+<p><u>Fusionner 2 polygones:</u> superposer un côté (entre 2 sommets consécutifs)\
+ de chaque polygone puis Alt+cliquer dessus</p>\
+<p><u>Supprimer un polygone:</u> Ctrl+Alt+cliquer sur un segment</p>',
+  both: '\
+<p><u>Déplacer un sommet:</u> cliquer sur le sommet et le déplacer</p>\
+<p><u>Ajouter un sommet au milieu d\'un segment:</u> cliquer le long du segment puis déplacer</p>\
+<p><u>Supprimer un sommet:</u> Alt+cliquer sur le sommet</p>\
+<p><u>Couper une ligne en deux:</u> Alt+cliquer sur le segment à supprimer</p>\
+<p><u>Inverser la direction d\'une ligne:</u> Shift+cliquer sur le segment à inverser</p>\
+<p><u>Transformer un polygone en ligne:</u> Alt+cliquer sur un côté</p>\
+<p><u>Fusionner deux lignes:</u> déplacer l\'extrémité d\'une ligne pour rejoindre l\'autre</p>\
+<p><u>Transformer une ligne en polygone:</u> déplacer une extrémité pour rejoindre l\'autre</p>\
+<p><u>Scinder un polygone:</u> joindre 2 sommets du polygone puis Alt+cliquer sur le sommet commun</p>\
+<p><u>Fusionner 2 polygones:</u> superposer un côté (entre 2 sommets consécutifs)\
+ de chaque polygone puis Alt+cliquer dessus</p>\
+<p><u>Supprimer une ligne ou un polygone:</u> Ctrl+Alt+cliquer sur un segment</p>',
+};
 
 var helpLine_fr = '\
   <p><u>Pour créer une ligne:</u></p>\
