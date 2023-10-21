@@ -36,68 +36,8 @@ Based on https://openlayers.org
   </script>
 
   <!-- WRI -->
-  <script src="_cartes.js"></script>
-  <!-- The main script must be defer or module to be run after the myol import -->
-  <script type="module">
-    var layersKeys = { // <?=json_encode($config_wri['mapKeys'])?>,
-        ign: 'iejxbx4obzhco6c8klxrfbto',
-        thunderforest: 'ee751f43b3af4614b01d1bce72785369',
-        os: 'P8MjahLAlyDAHXEH2engwXJG6KDYsVzF',
-        bing: 'AldBMbaKNyat-j6CBRKxxH05uaxP7dvQu1RnMWCQEGGC3z0gjBu-bLniE_8WZvcC',
-        kompass: '2ba8c124-38b6-11e7-ade1-e0cb4e28e847',
-      },
-
-      // Les couches vectorielles
-      contourMassif = coucheContourMassif({
-        host: 'https://www.refuges.info/', // '<?=$config_wri["sous_dossier_installation"]?>',
-        selectName: 'select-massif',
-      }),
-      pointsWRI = couchePointsWRI({
-        host: 'https://www.refuges.info/', // '<?=$config_wri["sous_dossier_installation"]?>',
-        selectName: 'select-wri',
-        selectMassif: contourMassif.options.selector,
-      }),
-
-      map = new ol.Map({
-        target: 'carte-nav',
-        view: new ol.View({
-          enableRotation: false,
-        }),
-        controls: [
-          ...controlesCartes('nav'),
-          new myol.control.Permalink({ // Permet de garder le même réglage de carte
-            display: true, // Affiche le lien
-            init: true, // <?=$vue->polygone->id_polygone?'false':'true'?>, // On cadre le massif, s'il y a massif
-          }),
-          new myol.control.LayerSwitcher({
-            layers: fondsCarte('nav', layersKeys),
-          }),
-        ],
-        layers: [
-          coucheMassifsColores({
-            host: 'https://www.refuges.info/', // '<?=$config_wri["sous_dossier_installation"]?>',
-            selectName: 'select-massifs',
-          }),
-          ...couchesVectoriellesExternes(),
-          contourMassif,
-          pointsWRI,
-          new myol.layer.Hover(),
-        ],
-      });
-
-    // Centrer sur la zone du polygone
-    //<?if ($vue->polygone->id_polygone) { ?>
-    //  map.getView().fit(ol.proj.transformExtent([5, 44.68, 5.72, 45.33], 'EPSG:4326', 'EPSG:3857'));
-    /*
-        map.getView().fit(ol.proj.transformExtent([
-          <?=$vue->polygone->ouest?>,
-          <?=$vue->polygone->sud?>,
-          <?=$vue->polygone->est?>,
-          <?=$vue->polygone->nord?>,
-        ], 'EPSG:4326', 'EPSG:3857'));
-      <? } ?>
-    */
-  </script>
+  <script src="vues/_cartes.js"></script>
+  <script src="vues/nav.js" defer></script>
 </head>
 
 <body>

@@ -46,8 +46,8 @@ Based on https://openlayers.org
         }),
 
         // Vector layers
-        new myol.layer.vector.GeoBB({
-          selectName: 'select-chemineur',
+        new myol.layer.vector.Chemineur({
+          selectName: 'select-chem',
         }),
         new myol.layer.vector.Alpages({
           selectName: 'select-alpages',
@@ -89,8 +89,8 @@ Based on https://openlayers.org
       <span id="select-prc-status"></span>
     </label><br><label>
       Chemineur
-      <input type="checkbox" name="select-chemineur" value="3,8,64">
-      <span id="select-chemineur-status"></span>
+      <input type="checkbox" name="select-chem" value="3,8,64">
+      <span id="select-chem-status"></span>
     </label><br><label>
       Camptocamp.org
       <label><input type="checkbox" name="select-c2c" value="hut,shelter,gite,cave,bivouac,camp_site">logement</label>

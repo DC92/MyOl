@@ -19,13 +19,9 @@ function chemIconUrl(type, host) {
   }
 }
 
-// chemineur.fr
 export class GeoBB extends MyVectorLayer {
   constructor(options) {
     super({
-      host: 'https://chemineur.fr/',
-      attribution: '&copy;chemineur.fr',
-
       browserClusterMinDistance: 50,
       browserClusterFeaturelMaxPerimeter: 300,
       serverClusterMinResolution: 100,
@@ -47,6 +43,18 @@ export class GeoBB extends MyVectorLayer {
       cat: this.options.selector.getSelection(),
       layer: resolution < this.options.serverClusterMinResolution ? null : 'cluster', // For server cluster layer
     };
+  }
+}
+
+// chemineur.fr
+export class Chemineur extends GeoBB {
+  constructor(options) {
+    super({
+      host: 'https://chemineur.fr/',
+      attribution: '&copy;chemineur.fr',
+
+      ...options,
+    });
   }
 }
 
@@ -358,7 +366,7 @@ export function collection(options = {}) {
     new PRC(options.prc),
     new C2C(options.c2c),
     new Overpass(options.osm),
-    new GeoBB(options.chemineur),
+    new Chemineur(options.chemineur),
     new Alpages(options.alpages),
   ];
 }

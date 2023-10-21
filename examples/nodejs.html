@@ -32,8 +32,8 @@ Based on https://openlayers.org
         zoom: 6,
       }),
       layers: [
-        new myol.layer.vector.GeoBB({
-          selectName: 'select-chemineur',
+        new myol.layer.vector.Chemineur({
+          selectName: 'select-chem',
         }),
       ],
       controls: [
@@ -81,7 +81,7 @@ Based on https://openlayers.org
   <a href="marker.html" title="Marker">M</a>
   <a href="editor.html" title="Editor">E</a>
   <a href="../gps/index.html" title="Off line GPS">G</a> &nbsp;
-  <a href="wri/index.html" title="Refuges.info">W</a>
+  <a href="wri/index.html" title="Refuges.info">I</a>
   <a href="wri/nav.html" title="Nav">N</a>
   <a href="wri/edit.html" title="Edit massif">E</a>
   <a href="wri/point.html" title="Point WRI">P</a>
@@ -92,10 +92,10 @@ Based on https://openlayers.org
   <div id="map"></div>
 
   <p id="select-ext">
-    <label>chemineur.fr <input type="checkbox" name="select-chemineur" value="all"></label>
-    <label><input type="checkbox" name="select-chemineur" value="3">Refuge</label>
-    <label><input type="checkbox" name="select-chemineur" value="8">Abri</label>
-    <label><input type="checkbox" name="select-chemineur" value="23">Montagne</label>
+    <label>chemineur.fr <input type="checkbox" name="select-chem" value="all"></label>
+    <label><input type="checkbox" name="select-chem" value="3">Refuge</label>
+    <label><input type="checkbox" name="select-chem" value="8">Abri</label>
+    <label><input type="checkbox" name="select-chem" value="23">Montagne</label>
   </p>
   <input id="marker-json" size="50" value='{"type":"Point","coordinates":[2.34,48.86]}'>
 
