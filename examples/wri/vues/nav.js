@@ -28,6 +28,7 @@ var mapKeys = {
     selectName: 'select-massif',
   }),
 
+  //TODO BUG massif et tout WRI devrait être coché aprés passage par l'accueil
   map = new ol.Map({
     target: 'carte-nav',
     view: new ol.View({

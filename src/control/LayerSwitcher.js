@@ -8,6 +8,7 @@ import './layerSwitcher.css';
 
 //BEST how do we do on touch terminal ? alt key to switch layers / transparency
 //BEST slider transparency doesn't work out of range (no BackgroundLayer)
+//BEST BUG Attribution doit être défini avant LayerSwitcher
 export class LayerSwitcher extends Button {
   constructor(options) {
     super({

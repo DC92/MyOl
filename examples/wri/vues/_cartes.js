@@ -71,6 +71,7 @@ function etiquetteComplette(properties) {
 }
 
 // La couche des massifs colorés (accueil et couche carte nav)
+//TODO BUG edit don't apply immediately
 function coucheMassifsColores(options) {
   return new myol.layer.MyVectorLayer({
     // Construction de l'url
