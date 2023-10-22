@@ -4,8 +4,8 @@ DC92.MyOl
 * It is deployed on [refuges.info](https://www.refuges.info), [chemineur.fr](https://chemineur.fr) & [alpages.info](https://alpages.info)
 
 
-INSTALLATION & BUILD
-====================
+INSTALL & BUILD
+===============
 Requires [node.js](https://nodejs.org/) to be installed
 * Go to the myol repository :
 ```

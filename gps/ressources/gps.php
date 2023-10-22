@@ -6,7 +6,7 @@ error_reporting(E_ALL);
 ini_set("display_errors", "on");
 
 // Search for myol libraries
-$dist_files = glob("{,../}*/myol.*s", GLOB_BRACE);
+$dist_files = glob("{,../,../*/}*/myol.*s", GLOB_BRACE);
 $dist_rep = dirname($dist_files[0]) . "/";
 
 // calculate the files last changed date
