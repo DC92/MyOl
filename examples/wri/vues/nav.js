@@ -20,10 +20,9 @@ var mapKeys = {
     kompass: '2ba8c124-38b6-11e7-ade1-e0cb4e28e847',
   },
   host = 'https://www.refuges.info/',
-  /*
-var mapKeys = <?=json_encode($config_wri['mapKeys'])?>,
-  host = '<?=$config_wri["sous_dossier_installation"]?>', // Appeler la couche de CE serveur
-*/
+  /*var mapKeys = <?=json_encode($config_wri['mapKeys'])?>,
+    host = '<?=$config_wri["sous_dossier_installation"]?>', // Appeler la couche de CE serveur
+  */
   contourMassif = coucheContourMassif({
     host: host,
     selectName: 'select-massif',
@@ -57,7 +56,7 @@ var mapKeys = <?=json_encode($config_wri['mapKeys'])?>,
         selectName: 'select-wri',
         selectMassif: contourMassif.options.selector,
       }),
-      new myol.layer.Hover(),
+      new myol.layer.Hover(), // Gère le survol du curseur
     ],
   });
 

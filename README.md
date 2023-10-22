@@ -3,6 +3,23 @@ DC92.MyOl
 * This package adds many features to [openlayer maps](https://openlayers.org/)
 * It is deployed on [refuges.info](https://www.refuges.info), [chemineur.fr](https://chemineur.fr) & [alpages.info](https://alpages.info)
 
+
+INSTALLATION & BUILD
+====================
+Requires [node.js](https://nodejs.org/) to be installed
+* Go to the myol repository :
+```
+cd ./myol
+```
+* Install the required node_modules :
+```
+npm install
+```
+* Build the package & generate ./dist/* files :
+```
+npm run build
+```
+
 Simple example
 ==============
 This [Example demo](https://DC92.github.io/MyOl/) implements a single map with the most current maps layers providers.

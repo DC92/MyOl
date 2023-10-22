@@ -26,6 +26,7 @@ Based on https://openlayers.org
   </script>
 
   <!-- The main script must be defer or module to be run after the myol import -->
+  <script src="ressources/keys.js"></script>
   <script type="module">
     myol.trace();
 
@@ -39,7 +40,7 @@ Based on https://openlayers.org
       controls: [
         ...myol.control.collection(),
         new myol.control.LayerSwitcher({
-          layers: myol.layer.tile.collection(),
+          layers: myol.layer.tile.collection(mapKeys),
         }),
         new myol.control.Permalink({
           display: true,

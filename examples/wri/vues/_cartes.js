@@ -176,7 +176,7 @@ function controlesCartes(page) {
 }
 
 // Les couches de fond des cartes de refuges.info
-function fondsCarte(page, layersKeys) {
+function fondsCarte(page, mapKeys) {
   return {
     'Refuges.info': new myol.layer.tile.MRI(),
     'OSM fr': new myol.layer.tile.OpenStreetMap({
@@ -185,12 +185,12 @@ function fondsCarte(page, layersKeys) {
     'OpenTopo': new myol.layer.tile.OpenTopo(),
     'Outdoors': new myol.layer.tile.Thunderforest({
       subLayer: 'outdoors',
-      key: layersKeys.thunderforest,
+      key: mapKeys.thunderforest,
     }),
     'IGN TOP25': 'nav,point'.includes(page) ?
       new myol.layer.tile.IGN({
         layer: 'GEOGRAPHICALGRIDSYSTEMS.MAPS',
-        key: layersKeys.ign,
+        key: mapKeys.ign,
       }) : null,
     'IGN V2': new myol.layer.tile.IGN({
       layer: 'GEOGRAPHICALGRIDSYSTEMS.PLANIGNV2',
