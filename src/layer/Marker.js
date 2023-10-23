@@ -144,6 +144,8 @@ export class Marker extends ol.layer.Vector {
 
   // Display values
   changeLL(pos, projection, focus) {
+    sessionStorage.myol_lastchange = Date.now(); // Mem the last change date
+
     // If no position is given, use the marker's (dragged)
     if (!pos || pos.length < 2) {
       pos = this.point.getCoordinates();

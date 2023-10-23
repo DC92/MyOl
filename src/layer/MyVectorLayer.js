@@ -248,13 +248,17 @@ export class MyVectorLayer extends MyServerClusterVectorLayer {
     if (this.strategy == ol.loadingstrategy.bbox)
       args.bbox = this.bbox(...arguments);
 
+    // Add a pseudo parameter if any marker or edit has been done
+    const version = sessionStorage.myol_lastchange ?
+      '&' + Math.round(sessionStorage.myol_lastchange / 2500 % 46600).toString(36) : '';
+
     // Clean null & not relative parameters
     Object.keys(args).forEach(k => {
       if (k == '_path' || args[k] == 'on' || !args[k] || !args[k].toString())
         delete args[k];
     });
 
-    return url + '?' + new URLSearchParams(args).toString();
+    return url + '?' + new URLSearchParams(args).toString() + version;
   }
 
   bbox(extent, resolution, mapProjection) {

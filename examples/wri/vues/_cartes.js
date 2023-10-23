@@ -1,7 +1,5 @@
 // Contient les fonctions communes à plusieurs cartes
 
-myol.trace();
-
 function couchePointsWRI(options) {
   const layer = new myol.layer.MyVectorLayer({
     selectMassif: new myol.Selector('no-selector'), // Defaut = pas de sélecteur de massif
@@ -75,7 +73,6 @@ function etiquetteComplette(properties) {
 }
 
 // La couche des massifs colorés (accueil et couche carte nav)
-//TODO BUG edit don't apply immediately
 function coucheMassifsColores(options) {
   return new myol.layer.MyVectorLayer({
     // Construction de l'url

@@ -164,6 +164,8 @@ export class Editor extends ol.layer.Vector {
 
     // End of feature creation
     this.source.on('change', () => { // Call all sliding long
+      sessionStorage.myol_lastchange = Date.now(); // Mem the last change date
+
       if (this.source.modified) { // Awaiting adding complete to save it
         this.source.modified = false; // To avoid loops
 
