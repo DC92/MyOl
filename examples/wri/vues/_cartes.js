@@ -1,5 +1,6 @@
 // Contient les fonctions communes à plusieurs cartes
-//TODO mise à jour mapKeys
+
+myol.trace();
 
 function couchePointsWRI(options) {
   const layer = new myol.layer.MyVectorLayer({
@@ -168,7 +169,7 @@ function fondsCarte(page, mapKeys) {
       subLayer: 'outdoors',
       key: mapKeys.thunderforest,
     }),
-    'IGN TOP25': 'nav,point'.includes(page) ?
+    'IGN TOP25': 'nav,point'.includes(page) ? // Not available on edit pages
       new myol.layer.tile.IGN({
         layer: 'GEOGRAPHICALGRIDSYSTEMS.MAPS',
         key: mapKeys.ign,
@@ -178,18 +179,24 @@ function fondsCarte(page, mapKeys) {
       key: 'essentiels', // La clé pour les couches publiques
       format: 'image/png',
     }),
-    'SwissTopo': 'nav,point'.includes(page) ?
+    'SwissTopo': 'nav,point'.includes(page) ? // Not available on edit pages
       new myol.layer.tile.SwissTopo({
         subLayer: 'ch.swisstopo.pixelkarte-farbe',
       }) : null,
-    'Autriche': new myol.layer.tile.Kompass(), // No key
+    'Autriche': new myol.layer.tile.Kompass({
+      subLayer: 'osm', // No key
+    }),
     'Espagne': new myol.layer.tile.IgnES(),
     'Photo IGN': new myol.layer.tile.IGN({
       layer: 'ORTHOIMAGERY.ORTHOPHOTOS',
       key: 'essentiels',
     }),
     'Photo ArcGIS': new myol.layer.tile.ArcGIS(),
-    'Photo Google': 'nav,point'.includes(page) ?
+    'Photo Google': 'nav,point'.includes(page) ? // Not available on edit pages
       new myol.layer.tile.Google('s') : null,
+    'Photo Maxar': new myol.layer.tile.Maxbox({
+      tileset: 'mapbox.satellite',
+      key: mapKeys.mapbox,
+    }),
   };
 }

@@ -1,6 +1,5 @@
 var mapKeys = {},
   //WRI var mapKeys = <?=json_encode($config_wri['mapKeys'])?>,
-
   coucheContours = coucheContourMassif({
     host: 'https://www.refuges.info/',
     //WRI host: '<?=$config_wri["sous_dossier_installation"]?>', // Appeler la couche de CE serveur
