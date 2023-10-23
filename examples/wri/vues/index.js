@@ -13,7 +13,7 @@ var map = new ol.Map({
     new myol.layer.tile.MRI(), // Fond de carte
     coucheMassifsColores({ // Les massifs
       host: 'https://www.refuges.info/',
-      //host: '<?=$config_wri["sous_dossier_installation"]?>', // Appeler la couche de CE serveur
+      //WRI host: '<?=$config_wri["sous_dossier_installation"]?>', // Appeler la couche de CE serveur
     }),
     new myol.layer.Hover(), // Gère le survol du curseur
   ],
@@ -21,4 +21,4 @@ var map = new ol.Map({
 
 // Centre la carte sur la zone souhaitée
 map.getView().fit(ol.proj.transformExtent([4, 43.5, 8.5, 47], 'EPSG:4326', 'EPSG:3857'));
-//map.getView().fit(ol.proj.transformExtent([<?=$vue->bbox?>], 'EPSG:4326', 'EPSG:3857'));
+//WRI map.getView().fit(ol.proj.transformExtent([<?=$vue->bbox?>], 'EPSG:4326', 'EPSG:3857'));

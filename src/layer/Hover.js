@@ -86,12 +86,13 @@ export class Hover extends ol.layer.Vector {
       if (evt.type == 'click' &&
         !(hoveredLayer.options && hoveredLayer.options.noClick)) {
         // Click cluster
-        //TODO BUG cluster label remain open after animation
-        if (hoveredSubProperties.cluster)
+        if (hoveredSubProperties.cluster) {
           map.getView().animate({
             zoom: map.getView().getZoom() + 2,
             center: hoveredSubProperties.geometry.getCoordinates(),
           });
+          source.clear();
+        }
         // Click link
         else if (hoveredSubProperties.link) {
           // Open a new tag

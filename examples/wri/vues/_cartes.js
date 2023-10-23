@@ -1,3 +1,6 @@
+// Contient les fonctions communes à plusieurs cartes
+//TODO mise à jour mapKeys
+
 function couchePointsWRI(options) {
   const layer = new myol.layer.MyVectorLayer({
     selectMassif: new myol.Selector('no-selector'), // Defaut = pas de sélecteur de massif
@@ -153,29 +156,6 @@ function coucheContourMassif(options) {
   });
 }
 
-// Les controles des cartes de refuges.info
-function controlesCartes(page) {
-  return [
-    // Haut gauche
-    new ol.control.Zoom(),
-    new ol.control.FullScreen(),
-    new myol.control.MyGeocoder(),
-    'nav,point,modif'.includes(page) ? new myol.control.MyGeolocation() : new myol.control.NoButton(),
-    'nav,edit,modif'.includes(page) ? new myol.control.Load() : new myol.control.NoButton(),
-    'nav,point'.includes(page) ? new myol.control.Download() : new myol.control.NoButton(),
-    'nav,point'.includes(page) ? new myol.control.Print() : new myol.control.NoButton(),
-
-    // Bas gauche
-    new myol.control.MyMousePosition(),
-    new ol.control.ScaleLine(),
-
-    // Bas droit
-    new ol.control.Attribution({ // Attribution doit être défini avant LayerSwitcher
-      collapsed: false,
-    }),
-  ];
-}
-
 // Les couches de fond des cartes de refuges.info
 function fondsCarte(page, mapKeys) {
   return {
@@ -212,25 +192,4 @@ function fondsCarte(page, mapKeys) {
     'Photo Google': 'nav,point'.includes(page) ?
       new myol.layer.tile.Google('s') : null,
   };
-}
-
-// Les couches vectorielles importées des autres sites
-function couchesVectoriellesExternes() {
-  return [
-    new myol.layer.vector.Chemineur({
-      selectName: 'select-chem',
-    }),
-    new myol.layer.vector.Alpages({
-      selectName: 'select-alpages',
-    }),
-    new myol.layer.vector.PRC({
-      selectName: 'select-prc',
-    }),
-    new myol.layer.vector.C2C({
-      selectName: 'select-c2c',
-    }),
-    new myol.layer.vector.Overpass({
-      selectName: 'select-osm',
-    }),
-  ];
 }

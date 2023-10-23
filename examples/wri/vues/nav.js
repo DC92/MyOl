@@ -1,5 +1,5 @@
 // Forçage de l'init des coches
-/*
+/*WRI
 <?php if ( $vue->polygone->id_polygone ) { ?>
   // Supprime toutes les sélections commençant par myol_selecteur
   Object.keys(localStorage)
@@ -7,10 +7,18 @@
     .forEach(k => localStorage.removeItem(k));
 
   // Force tous les points et le contour
-  localStorage.myol_selecteurwri = 'all';
-  localStorage.myol_selecteurmassif = <?=$vue->polygone->id_polygone?>;
+  localStorage.myol_selectmassif = <?=$vue->polygone->id_polygone?>;
+  localStorage.myol_selectwri = 'all';
+  localStorage.myol_selectmassifs =
+  localStorage.myol_selectosm =
+  localStorage.myol_selectprc =
+  localStorage.myol_selectcc =
+  localStorage.myol_selectchem =
+  localStorage.myol_selectalpages = '';
 <?php } ?>
-*/
+WRI*/
+
+myol.trace();
 
 var mapKeys = {
     ign: 'iejxbx4obzhco6c8klxrfbto',
@@ -20,27 +28,44 @@ var mapKeys = {
     kompass: '2ba8c124-38b6-11e7-ade1-e0cb4e28e847',
   },
   host = 'https://www.refuges.info/',
-  /*var mapKeys = <?=json_encode($config_wri['mapKeys'])?>,
-    host = '<?=$config_wri["sous_dossier_installation"]?>', // Appeler la couche de CE serveur
-  */
+  /*WRI var mapKeys = <?=json_encode($config_wri['mapKeys'])?>,
+  host = '<?=$config_wri["sous_dossier_installation"]?>', // Appeler la couche de CE serveur
+  WRI*/
   contourMassif = coucheContourMassif({
     host: host,
     selectName: 'select-massif',
   }),
 
-  //TODO BUG massif et tout WRI devrait être coché aprés passage par l'accueil
   map = new ol.Map({
     target: 'carte-nav',
     view: new ol.View({
       enableRotation: false,
     }),
     controls: [
-      ...controlesCartes('nav'),
+      // Haut gauche
+      new ol.control.Zoom(),
+      new ol.control.FullScreen(),
+      new myol.control.MyGeocoder(),
+      new myol.control.MyGeolocation(),
+      new myol.control.Load(),
+      new myol.control.Download(),
+      new myol.control.Print(),
+
+      // Bas gauche
+      new myol.control.MyMousePosition(),
+      new ol.control.ScaleLine(),
+
+      // Bas droit
+      new ol.control.Attribution({ // Attribution doit être défini avant LayerSwitcher
+        collapsed: false,
+      }),
       new myol.control.Permalink({ // Permet de garder le même réglage de carte
         display: true, // Affiche le lien
         init: true,
-        //init: <?=$vue->polygone->id_polygone?'false':'true'?>, // On cadre le massif, s'il y a massif
+        //WRI init: <?=$vue->polygone->id_polygone?'false':'true'?>, // On cadre le massif, s'il y a massif
       }),
+
+      // Haut droit
       new myol.control.LayerSwitcher({
         layers: fondsCarte('nav', mapKeys),
       }),
@@ -50,7 +75,21 @@ var mapKeys = {
         host: host,
         selectName: 'select-massifs',
       }),
-      ...couchesVectoriellesExternes(),
+      new myol.layer.vector.Chemineur({
+        selectName: 'select-chem',
+      }),
+      new myol.layer.vector.Alpages({
+        selectName: 'select-alpages',
+      }),
+      new myol.layer.vector.PRC({
+        selectName: 'select-prc',
+      }),
+      new myol.layer.vector.C2C({
+        selectName: 'select-c2c',
+      }),
+      new myol.layer.vector.Overpass({
+        selectName: 'select-osm',
+      }),
       contourMassif,
       couchePointsWRI({
         host: host,
@@ -63,7 +102,7 @@ var mapKeys = {
 
 // Centrer sur la zone du polygone
 map.getView().fit(ol.proj.transformExtent([5, 44.68, 5.72, 45.33], 'EPSG:4326', 'EPSG:3857'));
-/*
+/*WRI
 <?if ($vue->polygone->id_polygone) { ?>
   map.getView().fit(ol.proj.transformExtent([
     <?=$vue->polygone->ouest?>,
@@ -72,4 +111,4 @@ map.getView().fit(ol.proj.transformExtent([5, 44.68, 5.72, 45.33], 'EPSG:4326', 
     <?=$vue->polygone->nord?>,
   ], 'EPSG:4326', 'EPSG:3857'));
 <? } ?>
-*/
+WRI*/
