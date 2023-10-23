@@ -4,7 +4,6 @@
  * Corrected https://github.com/kirtan-desai/ol-geocoder
  * Corrected https://github.com/Dominique92/ol-geocoder
  */
-//TODO BUG Search button too left on mobile
 
 // Geocoder
 import Geocoder from '@myol/geocoder/src/base';
