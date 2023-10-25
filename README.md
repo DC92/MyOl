@@ -39,14 +39,15 @@ Tile layers
 See a [Tile layers demo](https://Dominique92.github.io/myol/examples/tileLayer.html)
 * OSM, OSM-FR, OpenTopo, CyclOsm, Maps.Refuges.Info
 * ThunderForest Outdoors, OpenTopoMap, Cycles, Landscape, Transport, ...
-* IGN France, cadastre, satellite, ...
+* IGN France, TOP25, cadastre, satellite, ...
 * SwissTopo, satellite
+* Österreich Kompass
+* Great Britain Ordnance Survey
 * IDEE España, satellite
 * IGM Italie
-* Ordnance Survey (Great Britain)
-* Kompass Austria
 * Bing Microsoft, satellite
 * Google maps, satellite
+* Maxar, ArcGIS
 
 Vector layers
 =============
@@ -114,17 +115,19 @@ The coding rules are volontary simple & don't follow all openlayers's
 
 Files
 =====
-* myol.css : full CSS distribution
-* myol.js : full JS distribution
 * src/... : Source files
-* ol/... : Openlayer (you can use any of openlayers V5.* or V6.*) from [Openlayers](https://openlayers.org/download/)
-* geocoder/... : Geocoder from [Openlayers geocoder](https://github.com/Dominique92/ol-geocoder/releases/latest)
-* proj4/... : Coordinate transformation software proj4js from [Proj4](https://github.com/proj4js/proj4js/releases/latest)
+* dist/myol.* : Distribution files, for your website
 * examples/... : Demos & visual tests
 * gps/... : Off line demo with GPS capabilities
 
+Included packages
+=================
+* openlayers : Map display [Openlayers](https://openlayers.org/download/)
+* ol-geocoder : Find a location by name [Geocoder](https://github.com/Dominique92/ol-geocoder/releases/latest)
+* proj4 : Coordinate transformation software [Proj4](https://github.com/proj4js/proj4js/releases/latest)
+
 Tested on
 =========
-* windows 10 : Edge, FireFox, Chrome, Opera, Brave
+* Windows 10 : Edge, FireFox, Chrome, Opera, Brave
 * Android (Samsung) : Samsung Internet, FireFox, Chrome, Brave, DuckDuckGo
 * Linux : FireFox
