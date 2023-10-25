@@ -3,15 +3,15 @@
   "version": "1.1.2.dev",
   "description": "This package adds many features to Openlayer https://openlayers.org/",
   "author": "Dominique Cavailhez",
-  "homepage": "https://github.com/Dominique92/MyOl#readme",
+  "homepage": "https://github.com/Dominique92/myol#readme",
   "license": "MIT",
   "main": "dist/myol.js",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Dominique92/MyOl.git"
+    "url": "git+https://github.com/Dominique92/myol.git"
   },
   "bugs": {
-    "url": "https://github.com/Dominique92/MyOl/issues"
+    "url": "https://github.com/Dominique92/myol/issues"
   },
   "keywords": [
     "Openlayers"
@@ -26,7 +26,7 @@
   "scripts": {
     "build": "rollup -c build/config.js",
     "lint": "npx eslint src/*.js src/*/*.js",
-    "beautify": "js-beautify -s=2 build/*.js gps/*/*.*s* examples/*.html examples/ressources/* examples/wri/*.h* examples/wri/vues/*.js src/*.*s src/control/* src/layer/* package.json"
+    "beautify": "js-beautify -s=2 build/*.js gps/*/*.*s examples/*.html examples/ressources/* examples/wri/*.h* examples/wri/vues/*.js src/*.*s src/control/* src/layer/* package.json"
   },
   "dependencies": {
     "ol": "8.1.0",
