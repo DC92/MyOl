@@ -18,9 +18,8 @@ class MyVectorSource extends ol.source.Vector {
 
     this.statusEl = document.getElementById(options.selectName + '-status');
 
-    // Display loading satus
     this.on(['featuresloadstart', 'featuresloadend', 'error', 'featuresloaderror'], evt => {
-      // Display status
+      // Display loading satus
       if (this.statusEl) this.statusEl.innerHTML =
         evt.type == 'featuresloadstart' ? '&#8987;' :
         evt.type == 'featuresloadend' ? '' :
@@ -211,8 +210,7 @@ export class MyVectorLayer extends MyServerClusterVectorLayer {
       // browserClusterMinDistance:50, // (pixels) distance above which the browser clusterises
       // browserClusterFeaturelMaxPerimeter: 300, // (pixels) perimeter of a line or poly above which we do not cluster
       // browserGigue: 0, // (meters) Randomly shift a point around his position
-      //TODO spreadClusterMaxResolution
-      // spreadClusterMaxResolution: 10, // (meters per pixel) Map resolution below which contiguous icons are displayed in line rather than a cluster circle
+      //TODO REMOVE spreadClusterMaxResolution: 10, // (meters per pixel) Map resolution below which contiguous icons are displayed in line rather than a cluster circle
 
       basicStylesOptions: stylesOptions.basic, // (feature, layer)
       hoverStylesOptions: stylesOptions.hover,
@@ -235,7 +233,7 @@ export class MyVectorLayer extends MyServerClusterVectorLayer {
     super({
       url: (e, r, p) => this.url(e, r, p),
       addProperties: p => this.addProperties(p),
-      style: (f, r) => this.style(f, r),
+      style: (f, r) => this.style(f, r, this),
       ...options,
     });
 
@@ -285,13 +283,13 @@ export class MyVectorLayer extends MyServerClusterVectorLayer {
 
   addProperties() {}
 
+  // Function returning an array of styles options
   style(feature, resolution) {
-    // Function returning an array of styles options
     const sof = !feature.getProperties().cluster ? this.options.basicStylesOptions :
       resolution < this.options.spreadClusterMaxResolution ? stylesOptions.spreadCluster :
       stylesOptions.cluster;
 
-    return sof(feature, this) // Call the styleOptions function
+    return sof(...arguments) // Call the styleOptions function
       .map(so => new ol.style.Style(so)); // Transform into an array of Style objects
   }
 

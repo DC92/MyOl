@@ -9,7 +9,7 @@
 import ol from '../ol';
 
 // Basic style to display a geo vector layer based on standard properties
-export function basic(feature, layer) {
+export function basic(feature) {
   const properties = feature.getProperties();
 
   return [{
@@ -30,7 +30,7 @@ export function basic(feature, layer) {
     }),
 
     // properties.label if any
-    ...label(feature, layer),
+    ...label(...arguments),
   }];
 }
 
@@ -87,7 +87,7 @@ export function cluster(feature) {
 }
 
 // Display a line of features contained into a cluster
-export function spreadCluster(feature, layer) {
+export function spreadCluster(feature, resolution, layer) {
   let properties = feature.getProperties(),
     x = 0.95 + 0.45 * properties.cluster,
     labelList = [],
@@ -96,7 +96,7 @@ export function spreadCluster(feature, layer) {
   properties.features.forEach(f => {
     const p = f.getProperties();
 
-    layer.options.basicStylesOptions(f, layer)
+    layer.options.basicStylesOptions(f, resolution, layer)
       .forEach(so => {
         if (so.image) {
           so.image.setAnchor([x -= 0.9, 0.5]);
@@ -118,14 +118,14 @@ export function spreadCluster(feature, layer) {
       label: labelList.join('\n'),
     }, true);
 
-    stylesOptions.push(label(feature, layer));
+    stylesOptions.push(label(...arguments));
   }
 
   return stylesOptions;
 }
 
 // Display the detailed information of a cluster based on standard properties
-export function details(feature, layer) {
+export function details(feature, resolution, layer) {
   const properties = feature.getProperties();
 
   feature.setProperties({
@@ -145,9 +145,9 @@ export function details(feature, layer) {
 }
 
 // Display the basic hovered features
-export function hover(feature, layer) {
+export function hover() {
   return {
-    ...details(feature, layer),
+    ...details(...arguments),
 
     stroke: new ol.style.Stroke({
       color: 'red',

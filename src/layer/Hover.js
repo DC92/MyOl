@@ -114,7 +114,7 @@ export class Hover extends ol.layer.Vector {
 
         if (hoveredLayer.options && hoveredLayer.options.hoverStylesOptions)
           f.setStyle(
-            new ol.style.Style(hoveredLayer.options.hoverStylesOptions(f, hoveredLayer))
+            new ol.style.Style(hoveredLayer.options.hoverStylesOptions(f, resolution, hoveredLayer))
           );
 
         source.clear();
