@@ -20,16 +20,26 @@ class MyVectorSource extends ol.source.Vector {
 
     // Display loading satus
     this.on(['featuresloadstart', 'featuresloadend', 'error', 'featuresloaderror'], evt => {
+      // Display status
       if (this.statusEl) this.statusEl.innerHTML =
         evt.type == 'featuresloadstart' ? '&#8987;' :
         evt.type == 'featuresloadend' ? '' :
         '&#9888;'; // Error symbol
+
+      // Randomly shift a point around his position
+      if (options.browserGigue &&
+        evt.type == 'featuresloadend')
+        evt.features.forEach(f => {
+          f.getGeometry().translate(
+            Math.cos(f.getId()) * options.browserGigue,
+            Math.sin(f.getId()) * options.browserGigue,
+          );
+        });
     });
 
     // Compute properties when the layer is loaded & before the cluster layer is computed
     this.on('change', () =>
-      this.getFeatures()
-      .forEach(f => {
+      this.getFeatures().forEach(f => {
         if (!f._yetAdded) {
           f._yetAdded = true;
           f.setProperties(
@@ -153,7 +163,7 @@ class MyBrowserClusterVectorLayer extends ol.layer.Vector {
 
 class MyServerClusterVectorLayer extends MyBrowserClusterVectorLayer {
   constructor(options) {
-    // serverClusterMinResolution: 100, // (map units per pixel) resolution above which we ask clusters to the server
+    // serverClusterMinResolution: 100, // (meters per pixel) resolution above which we ask clusters to the server
 
     // Low resolutions layer to display the normal data
     super({
@@ -196,9 +206,13 @@ export class MyVectorLayer extends MyServerClusterVectorLayer {
       // host: '',
       strategy: ol.loadingstrategy.bbox,
       dataProjection: 'EPSG:4326',
+
+      // serverClusterMinResolution: 100, // (meters per pixel) resolution above which we ask clusters to the server
       // browserClusterMinDistance:50, // (pixels) distance above which the browser clusterises
       // browserClusterFeaturelMaxPerimeter: 300, // (pixels) perimeter of a line or poly above which we do not cluster
-      // serverClusterMinResolution: 100, // (map units per pixel) resolution above which we ask clusters to the server
+      // browserGigue: 0, // (meters) Randomly shift a point around his position
+      //TODO spreadClusterMaxResolution
+      // spreadClusterMaxResolution: 10, // (meters per pixel) Map resolution below which contiguous icons are displayed in line rather than a cluster circle
 
       basicStylesOptions: stylesOptions.basic, // (feature, layer)
       hoverStylesOptions: stylesOptions.hover,

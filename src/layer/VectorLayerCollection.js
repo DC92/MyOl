@@ -22,9 +22,11 @@ function chemIconUrl(type, host) {
 export class GeoBB extends MyVectorLayer {
   constructor(options) {
     super({
-      browserClusterMinDistance: 50,
+      serverClusterMinResolution: 100, // (meters per pixel) resolution above which we ask clusters to the server
+      browserClusterMinDistance: 50, // (pixels) distance above which the browser clusterises
       browserClusterFeaturelMaxPerimeter: 300,
-      serverClusterMinResolution: 100,
+      browserGigue: 10, // (meters) Randomly shift a point around his position
+
       // addProperties: properties => {}, // Add properties to each received feature
       // basicStylesOptions: stylesOptions.basic, // (feature, layer)
       // hoverStylesOptions: stylesOptions.hover,
@@ -65,9 +67,11 @@ export class Alpages extends MyVectorLayer {
       host: 'https://alpages.info/',
       attribution: '&copy;alpages.info',
 
-      browserClusterMinDistance: 50,
+      // serverClusterMinResolution: 100, // (meters per pixel) resolution above which we ask clusters to the server
+      browserClusterMinDistance: 50, // (pixels) distance above which the browser clusterises
       browserClusterFeaturelMaxPerimeter: 300,
-      // serverClusterMinResolution: 100, // (map units per pixel) resolution above which we ask clusters to the server
+      // browserGigue: 0, // (meters) Randomly shift a point around his position
+
       // basicStylesOptions: stylesOptions.basic, // (feature, layer)
       // hoverStylesOptions: stylesOptions.hover,
       // selector: new Selector(options.selectName),
@@ -101,9 +105,10 @@ export class WRI extends MyVectorLayer {
       host: 'https://www.refuges.info/',
       attribution: '&copy;refuges.info',
 
-      browserClusterMinDistance: 50,
-      serverClusterMinResolution: 100,
-      // browserClusterFeaturelMaxPerimeter: 300, // (pixels) perimeter of a line or poly above which we do not cluster
+      serverClusterMinResolution: 100, // (meters per pixel) resolution above which we ask clusters to the server
+      browserClusterMinDistance: 16, // (pixels) distance above which the browser clusterises
+      browserGigue: 10, // (meters) Randomly shift a point around his position
+
       // addProperties: properties => {}, // Add properties to each received feature
       // basicStylesOptions: stylesOptions.basic, // (feature, layer)
       // hoverStylesOptions: stylesOptions.hover,
@@ -146,9 +151,10 @@ export class PRC extends MyVectorLayer {
       strategy: ol.loadingstrategy.all,
       attribution: '&copy;Pyrenees-Refuges',
 
-      browserClusterMinDistance: 50,
-      // browserClusterFeaturelMaxPerimeter: 300, // (pixels) perimeter of a line or poly above which we do not cluster
-      // serverClusterMinResolution: 100, // (map units per pixel) resolution above which we ask clusters to the server
+      // serverClusterMinResolution: 100, // (meters per pixel) resolution above which we ask clusters to the server
+      browserClusterMinDistance: 50, // (pixels) distance above which the browser clusterises
+      // browserGigue: 0, // (meters) Randomly shift a point around his position
+
       // basicStylesOptions: stylesOptions.basic, // (feature, layer)
       // hoverStylesOptions: stylesOptions.hover,
       // selector: new Selector(options.selectName),
@@ -179,9 +185,10 @@ export class C2C extends MyVectorLayer {
       dataProjection: 'EPSG:3857',
       attribution: '&copy;Camp2camp',
 
-      browserClusterMinDistance: 50,
-      // browserClusterFeaturelMaxPerimeter: 300, // (pixels) perimeter of a line or poly above which we do not cluster
-      // serverClusterMinResolution: 100, // (map units per pixel) resolution above which we ask clusters to the server
+      // serverClusterMinResolution: 100, // (meters per pixel) resolution above which we ask clusters to the server
+      browserClusterMinDistance: 50, // (pixels) distance above which the browser clusterises
+      // browserGigue: 0, // (meters) Randomly shift a point around his position
+
       // basicStylesOptions: stylesOptions.basic, // (feature, layer)
       // hoverStylesOptions: stylesOptions.hover,
       // selector: new Selector(options.selectName),
@@ -246,11 +253,11 @@ export class Overpass extends MyVectorLayer {
       format: new ol.format.OSMXML(),
       attribution: '&copy;OpenStreetMap',
 
-      browserClusterMinDistance: 50,
       maxResolution: 50,
-      // browserClusterMinDistance:50, // (pixels) distance above which the browser clusterises
-      // browserClusterFeaturelMaxPerimeter: 300, // (pixels) perimeter of a line or poly above which we do not cluster
-      // serverClusterMinResolution: 100, // (map units per pixel) resolution above which we ask clusters to the server
+      // serverClusterMinResolution: 100, // (meters per pixel) resolution above which we ask clusters to the server
+      browserClusterMinDistance: 50, // (pixels) distance above which the browser clusterises
+      // browserGigue: 0, // (meters) Randomly shift a point around his position
+
       // addProperties: properties => {}, // Add properties to each received feature
       // basicStylesOptions: stylesOptions.basic, // (feature, layer)
       // hoverStylesOptions: stylesOptions.hover,
