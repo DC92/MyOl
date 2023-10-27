@@ -53,6 +53,8 @@ Based on https://openlayers.org
           selectName: 'select-alpages',
         }),
         new myol.layer.vector.WRI({
+          spreadClusterMaxResolution: 10,
+          browserGigue: 0, // (meters) Randomly shift a point around his position
           selectName: 'select-wri',
         }),
         new myol.layer.vector.PRC({

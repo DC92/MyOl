@@ -8,6 +8,8 @@ function couchePointsWRI(options) {
     browserClusterMinDistance: 10, // Distance (en pixels) entre 2 icones en dessous de laquelle on affiche un cluster local
     browserGigue: 10, // (meters) Randomly shift a point around his position
     // spreadClusterMaxResolution: 10, // Résolution de la carte (en mètres par pixels) en dessous de laquelle on affiche des icônes contigues plutôt qu'un rond
+    spreadClusterMaxResolution: 10,
+    browserGigue: 0, // (meters) Randomly shift a point around his position
 
     ...options,
 
