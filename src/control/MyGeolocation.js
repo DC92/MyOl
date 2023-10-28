@@ -8,27 +8,26 @@ import Button from './Button';
 
 export class MyGeolocation extends Button {
   constructor(options) {
-    // Redirect if http
-    if (!location.href.match(/(https|localhost)/)) {
-      super();
-      return;
-    }
+    super(
+      location.href.match(/(https|localhost)/) ? {
+        // Button options
+        className: 'myol-button-geolocation',
+        subMenuId: 'myol-button-geolocation',
+        subMenuHTML: subMenuHTML,
+        subMenuHTML_fr: subMenuHTML_fr,
 
-    super({
-      // Button options
-      className: 'myol-button-geolocation',
-      subMenuId: 'myol-button-geolocation',
-      subMenuHTML: subMenuHTML,
-      subMenuHTML_fr: subMenuHTML_fr,
+        // ol.Geolocation options
+        // https://www.w3.org/TR/geolocation/#position_options_interface
+        enableHighAccuracy: true,
+        maximumAge: 1000,
+        timeout: 1000,
 
-      // ol.Geolocation options
-      // https://www.w3.org/TR/geolocation/#position_options_interface
-      enableHighAccuracy: true,
-      maximumAge: 1000,
-      timeout: 1000,
-
-      ...options,
-    });
+        ...options,
+      } :
+      // Hide if http
+      {
+        className: 'myol-button-hide',
+      });
 
     // Add status display element
     this.statusEl = document.createElement('p');

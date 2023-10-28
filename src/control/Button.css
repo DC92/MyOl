@@ -30,6 +30,27 @@
   z-index: 30;
 }
 
+/* Button labels */
+.myol-button-download button::after {
+  content: "\21e9";
+}
+
+.myol-button-geolocation button::after {
+  content: "\2295";
+}
+
+.myol-button-load button::after {
+  content: "\1F4C2";
+}
+
+.myol-button-print button::after {
+  content: "\1F5A8";
+}
+
+.myol-button-hide {
+  display: none;
+}
+
 @media screen and (max-width: 400px) {
   .myol-button:not(.myol-button-switcher)>div {
     width: 100%;

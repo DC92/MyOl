@@ -4,7 +4,8 @@
 
 import ol from '../ol';
 import './Control.css';
-import * as button from './Button';
+
+import Button from './Button';
 import Download from './Download';
 import LayerSwitcher from './LayerSwitcher';
 import LengthLine from './LengthLine';
@@ -40,7 +41,7 @@ export function collection(options = {}) {
 }
 
 export default {
-  Button: button.Button,
+  Button: Button,
   Download: Download,
   LengthLine: LengthLine,
   LayerSwitcher: LayerSwitcher,
@@ -48,7 +49,6 @@ export default {
   MyGeocoder: MyGeocoder,
   MyGeolocation: MyGeolocation,
   MyMousePosition: MyMousePosition,
-  NoButton: button.NoButton,
   Permalink: Permalink,
   Print: Print,
   collection,

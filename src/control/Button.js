@@ -104,16 +104,4 @@ export class Button extends ol.control.Control {
   subMenuAction() {}
 }
 
-/**
- * No button
- * To be used to replace an unused button
- */
-export class NoButton extends ol.control.Control {
-  constructor() {
-    super({
-      element: document.createElement('div'),
-    });
-  }
-}
-
 export default Button;
