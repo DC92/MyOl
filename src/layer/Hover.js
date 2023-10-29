@@ -7,10 +7,14 @@
 import ol from '../ol';
 
 export class Hover extends ol.layer.Vector {
-  constructor() {
+  constructor(options) {
     super({
       source: new ol.source.Vector(),
-      zIndex: 200, // Above the vector layers
+      zIndex: 500, // Above the vector layers
+      zIndex: 500, // Above the vector layers
+      //TODO BUG n'utilise pas le hover mais l'ordre d'affichage (aprés)
+      // declutter:true, // To reset z-index //TODO don't work
+      ...options,
     });
   }
 
@@ -58,27 +62,28 @@ export class Hover extends ol.layer.Vector {
       hoveredSubFeature = hoveredFeature;
 
     if (hoveredFeature) {
-      const hoveredProperties = hoveredFeature.getProperties(),
-        featurePosition = map.getPixelFromCoordinate(
-          ol.extent.getCenter(hoveredFeature.getGeometry().getExtent())
-        );
+      const hoveredProperties = hoveredFeature.getProperties();
+      /*//TODO        featurePosition = map.getPixelFromCoordinate(
+                ol.extent.getCenter(hoveredFeature.getGeometry().getExtent())
+              );
 
-      // Find sub-feature from a spread cluster
-      if (hoveredProperties.cluster &&
-        hoveredLayer.options &&
-        resolution < hoveredLayer.options.spreadClusterMaxResolution) {
-        hoveredProperties.features.every(f => {
-          const p = f.getProperties();
+            // Find sub-feature from a spread cluster
+            if (hoveredProperties.cluster &&
+              hoveredLayer.options &&
+              resolution < hoveredLayer.options.spreadClusterMaxResolution) {
+              hoveredProperties.features.every(f => {
+                const p = f.getProperties();
 
-          // Only for spread clusters
-          if (p.xLeft)
-            hoveredSubFeature = f;
+                // Only for spread clusters
+                if (p.xLeft)
+                  hoveredSubFeature = f;
 
-          // Stop when found
-          return evt.originalEvent.layerX >
-            featurePosition[0] + p.xLeft;
-        });
-      }
+                // Stop when found
+                return evt.originalEvent.layerX >
+                  featurePosition[0] + p.xLeft;
+              });
+            }
+      	  */
 
       const hoveredSubProperties = hoveredSubFeature.getProperties();
 

@@ -4,10 +4,13 @@ function couchePointsWRI(options) {
   const layer = new myol.layer.MyVectorLayer({
     selectMassif: new myol.Selector('no-selector'), // Defaut = pas de sélecteur de massif
 
-    serverClusterMinResolution: 100, // Résolution de la carte (en mètres par pixels) au delà de laquelle on demande des clusters au serveur
-    browserClusterMinDistance: 10, // Distance (en pixels) entre 2 icones en dessous de laquelle on affiche un cluster local
-    browserGigue: 10, // (en mèters) Déplace aléatoirement les points autour de leur position
-    // spreadClusterMaxResolution: 10, // Résolution de la carte (en mètres par pixels) en dessous de laquelle on affiche des icônes contigues plutôt qu'un rond
+    // Clusters:
+    serverClusterMinResolution: 100, // (meters per pixel) resolution above which we ask clusters to the server
+    distance: 10, // (pixels) distance above which the browser clusterises
+    // minDistance: 16, // (pixels) minimum distance in pixels between clusters
+    browserClusterMinResolution: 1, // (meters per pixel) Map resolution above which the browser clusterises
+    browserGigue: 20, // (meters) Randomly shift a point around his position
+    declutter: true, // Optimizes label display
 
     ...options,
 
