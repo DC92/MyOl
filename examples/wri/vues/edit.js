@@ -1,10 +1,9 @@
-var mapKeys = {},
-  //WRI var mapKeys = <?=json_encode($config_wri['mapKeys'])?>,
-  coucheContours = coucheContourMassif({
-    host: 'https://www.refuges.info/',
-    //WRI host: '<?=$config_wri["sous_dossier_installation"]?>', // Appeler la couche de CE serveur
-  }),
-  editorlayer = new myol.layer.Editor({
+var host = 'https://www.refuges.info/',
+  initPermalink = true,
+  mapKeys = {};
+
+// PARTIE A REPRENDRE
+const editorlayer = new myol.layer.Editor({
     geoJsonId: 'edit-json',
     editOnly: 'poly',
 
@@ -44,8 +43,7 @@ var mapKeys = {},
       }),
       new myol.control.Permalink({ // Permet de garder le même réglage de carte
         display: false, // Cache le lien
-        init: false,
-        //WRI init: <?=$vue->polygone->id_polygone?'false':'true'?>, // On cadre le massif, s'il y a massif
+        init: initPermalink, // On cadre le massif, s'il y a massif
       }),
 
       // Haut droit
@@ -54,20 +52,12 @@ var mapKeys = {},
       }),
     ],
     layers: [
-      coucheContours,
+      coucheContourMassif({
+        host: host,
+      }),
       editorlayer,
     ],
   });
+// FIN PARTIE A REPRENDRE
 
-// Centrer sur la zone du polygone
 map.getView().fit(ol.proj.transformExtent([5, 44.68, 5.72, 45.33], 'EPSG:4326', 'EPSG:3857'));
-/*WRI
-<?if ($vue->polygone->id_polygone) { ?>
-  map.getView().fit(ol.proj.transformExtent([
-    <?=$vue->polygone->ouest?>,
-    <?=$vue->polygone->sud?>,
-    <?=$vue->polygone->est?>,
-    <?=$vue->polygone->nord?>,
-  ], 'EPSG:4326', 'EPSG:3857'));
-<? } ?>
-WRI*/

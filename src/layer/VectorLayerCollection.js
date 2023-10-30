@@ -87,10 +87,9 @@ export class WRI extends MyVectorLayer {
       host: 'https://www.refuges.info/',
       attribution: '&copy;refuges.info',
       serverClusterMinResolution: 100, // (meters per pixel) resolution above which we ask clusters to the server
-      distance: 16, // (pixels) distance above which the browser clusterises
+      distance: 30, // (pixels) distance above which the browser clusterises
       browserClusterMinResolution: 1, // (meters per pixel) Map resolution above which the browser clusterises
-      browserGigue: 20, // (meters) Randomly shift a point around his position
-      declutter: true, // Optimizes label display
+      browserGigue: 10, // (meters) Randomly shift a point around his position
       // Any myol.layer.MyVectorLayer, ol.source.Vector options, ol.source.layer.Vector
       ...options,
     });

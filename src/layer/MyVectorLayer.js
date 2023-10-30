@@ -155,23 +155,25 @@ class MyBrowserClusterVectorLayer extends ol.layer.Vector {
     // Any ol.source.layer.Vector
 
     super({
-      minResolution: options.browserClusterMinResolution,
       source: options.distance ?
         new MyClusterSource(options) : // Use a cluster source and a vector source to manages clusters
         new MyVectorSource(options), // or a vector source to get the data
 
       ...options,
+      minResolution: options.browserClusterMinResolution,
     });
 
     this.options = options; // Mem for further use
 
     // Low resolutions layer without clustering
-    if (options.browserClusterMinResolution)
+    if (options.browserClusterMinResolution) {
       this.lowResolutionLayer = new ol.layer.Vector({
         source: new MyVectorSource(options),
         ...options,
         maxResolution: options.browserClusterMinResolution,
       });
+      this.lowResolutionLayer.options = options;
+    }
   }
 
   setMapInternal(map) {
@@ -246,7 +248,7 @@ export class MyVectorLayer extends MyServerClusterVectorLayer {
       // browserClusterMinResolution: 10, // (meters per pixel) Map resolution above which the browser clusterises
       // browserClusterFeaturelMaxPerimeter: 300, // (pixels) perimeter of a line or poly above which we do not cluster
       // browserGigue: 0, // (meters) Randomly shift a point around his position
-      // declutter:true, // Optimizes label display
+      //TODO REMOVE  declutter:true, // Optimizes label display
       //TODO REMOVE spreadClusterMaxResolution: 10, // (meters per pixel) Map resolution below which contiguous icons are displayed in line rather than a cluster circle
 
       // addProperties: properties => {}, // Add properties to each received feature

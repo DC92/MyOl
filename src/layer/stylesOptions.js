@@ -13,27 +13,24 @@ export function basic(feature) {
   const properties = feature.getProperties();
 
   return [{
-      // Point
-      image: properties.icon ? new ol.style.Icon({
-        src: properties.icon,
-      }) : null,
+    // Point
+    image: properties.icon ? new ol.style.Icon({
+      src: properties.icon,
+    }) : null,
 
-      // Lines
-      stroke: new ol.style.Stroke({
-        color: 'blue',
-        width: 2,
-      }),
+    // Lines
+    stroke: new ol.style.Stroke({
+      color: 'blue',
+      width: 2,
+    }),
 
-      // Polygons
-      fill: new ol.style.Fill({
-        color: 'rgba(0,0,256,0.3)',
-      }),
-    }, // Different style to allow declutering
-    {
-      // properties.label if any
-      ...label(...arguments),
-    },
-  ];
+    // Polygons
+    fill: new ol.style.Fill({
+      color: 'rgba(0,0,256,0.3)',
+    }),
+    // properties.label if any
+    ...label(...arguments),
+  }];
 }
 
 // Display a label with properties.label
@@ -88,6 +85,7 @@ export function cluster(feature) {
   }];
 }
 
+/*//TODO DELETE
 // Display a line of features contained into a cluster
 export function spreadCluster(feature, resolution, layer) {
   let properties = feature.getProperties(),
@@ -124,7 +122,7 @@ export function spreadCluster(feature, resolution, layer) {
   }
 
   return stylesOptions;
-}
+}*/
 
 // Display the detailed information of a cluster based on standard properties
 export function details(feature, resolution, layer) {

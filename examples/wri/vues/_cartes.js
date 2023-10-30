@@ -6,11 +6,9 @@ function couchePointsWRI(options) {
 
     // Clusters:
     serverClusterMinResolution: 100, // (meters per pixel) resolution above which we ask clusters to the server
-    distance: 10, // (pixels) distance above which the browser clusterises
-    // minDistance: 16, // (pixels) minimum distance in pixels between clusters
-    browserClusterMinResolution: 1, // (meters per pixel) Map resolution above which the browser clusterises
-    browserGigue: 20, // (meters) Randomly shift a point around his position
-    declutter: true, // Optimizes label display
+    distance: 30, // (pixels) distance above which the browser clusterises
+    browserClusterMinResolution: 10, // (meters per pixel) Map resolution above which the browser clusterises
+    browserGigue: 5, // (meters) Randomly shift a point around his position
 
     ...options,
 

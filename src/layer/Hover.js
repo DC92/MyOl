@@ -10,10 +10,7 @@ export class Hover extends ol.layer.Vector {
   constructor(options) {
     super({
       source: new ol.source.Vector(),
-      zIndex: 500, // Above the vector layers
-      zIndex: 500, // Above the vector layers
-      //TODO BUG n'utilise pas le hover mais l'ordre d'affichage (aprés)
-      // declutter:true, // To reset z-index //TODO don't work
+      zIndex: 500, // Above all layers
       ...options,
     });
   }
@@ -63,7 +60,7 @@ export class Hover extends ol.layer.Vector {
 
     if (hoveredFeature) {
       const hoveredProperties = hoveredFeature.getProperties();
-      /*//TODO        featurePosition = map.getPixelFromCoordinate(
+      /*//TODO DELETE       featurePosition = map.getPixelFromCoordinate(
                 ol.extent.getCenter(hoveredFeature.getGeometry().getExtent())
               );
 

@@ -1,37 +1,17 @@
-// Forçage de l'init des coches
-/*WRI
-<?php if ( $vue->polygone->id_polygone ) { ?>
-  // Supprime toutes les sélections commençant par myol_selecteur
-  Object.keys(localStorage)
-    .filter(k => k.substring(0, 14) == 'myol_selecteur')
-    .forEach(k => localStorage.removeItem(k));
-
-  // Force tous les points et le contour
-  localStorage.myol_selectmassif = <?=$vue->polygone->id_polygone?>;
-  localStorage.myol_selectwri = 'all';
-  localStorage.myol_selectmassifs =
-  localStorage.myol_selectosm =
-  localStorage.myol_selectprc =
-  localStorage.myol_selectcc =
-  localStorage.myol_selectchem =
-  localStorage.myol_selectalpages = '';
-<?php } ?>
-WRI*/
-
-myol.trace();
-
-var mapKeys = {
+var host = 'https://www.refuges.info/',
+  initPermalink = true,
+  mapKeys = {
     ign: 'iejxbx4obzhco6c8klxrfbto',
     thunderforest: 'ee751f43b3af4614b01d1bce72785369',
     os: 'P8MjahLAlyDAHXEH2engwXJG6KDYsVzF',
     bing: 'AldBMbaKNyat-j6CBRKxxH05uaxP7dvQu1RnMWCQEGGC3z0gjBu-bLniE_8WZvcC',
     kompass: '2ba8c124-38b6-11e7-ade1-e0cb4e28e847',
-  },
-  host = 'https://www.refuges.info/',
-  /*WRI var mapKeys = <?=json_encode($config_wri['mapKeys'])?>,
-  host = '<?=$config_wri["sous_dossier_installation"]?>', // Appeler la couche de CE serveur
-  WRI*/
-  contourMassif = coucheContourMassif({
+  };
+
+myol.trace();
+
+// PARTIE A REPRENDRE
+const contourMassif = coucheContourMassif({
     host: host,
     selectName: 'select-massif',
   }),
@@ -62,8 +42,7 @@ var mapKeys = {
       }),
       new myol.control.Permalink({ // Permet de garder le même réglage de carte
         display: true, // Affiche le lien
-        init: true,
-        //WRI init: <?=$vue->polygone->id_polygone?'false':'true'?>, // On cadre le massif, s'il y a massif
+        init: initPermalink, // On cadre le massif, s'il y a massif
       }),
 
       // Haut droit
@@ -100,16 +79,6 @@ var mapKeys = {
       new myol.layer.Hover(), // Gère le survol du curseur
     ],
   });
+// FIN PARTIE A REPRENDRE
 
-// Centrer sur la zone du polygone
-map.getView().fit(ol.proj.transformExtent([5, 44.68, 5.72, 45.33], 'EPSG:4326', 'EPSG:3857'));
-/*WRI
-<?if ($vue->polygone->id_polygone) { ?>
-  map.getView().fit(ol.proj.transformExtent([
-    <?=$vue->polygone->ouest?>,
-    <?=$vue->polygone->sud?>,
-    <?=$vue->polygone->est?>,
-    <?=$vue->polygone->nord?>,
-  ], 'EPSG:4326', 'EPSG:3857'));
-<? } ?>
-WRI*/
+map.getView().fit(ol.proj.transformExtent(extent, 'EPSG:4326', 'EPSG:3857'));
