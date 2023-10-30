@@ -85,45 +85,6 @@ export function cluster(feature) {
   }];
 }
 
-/*//TODO DELETE
-// Display a line of features contained into a cluster
-export function spreadCluster(feature, resolution, layer) {
-  let properties = feature.getProperties(),
-    x = 0.95 + 0.45 * properties.cluster,
-    labelList = [],
-    stylesOptions = [];
-
-  properties.features.forEach(f => {
-    const p = f.getProperties();
-
-    layer.options.basicStylesOptions(f, resolution, layer)
-      .forEach(so => {
-        if (so.image) {
-          so.image.setAnchor([x -= 0.9, 0.5]);
-          f.setProperties({ // Mem the shift for hover detection
-            xLeft: (1 - x) * so.image.getImage().width,
-          }, true);
-          stylesOptions.push({
-            image: so.image,
-          });
-        }
-      });
-
-    if (p.label)
-      labelList.push(p.label);
-  });
-
-  if (labelList.length) {
-    feature.setProperties({ // Mem the shift for hover detection
-      label: labelList.join('\n'),
-    }, true);
-
-    stylesOptions.push(label(...arguments));
-  }
-
-  return stylesOptions;
-}*/
-
 // Display the detailed information of a cluster based on standard properties
 export function details(feature, resolution, layer) {
   const properties = feature.getProperties();

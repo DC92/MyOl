@@ -160,7 +160,10 @@ class MyBrowserClusterVectorLayer extends ol.layer.Vector {
         new MyVectorSource(options), // or a vector source to get the data
 
       ...options,
-      minResolution: options.browserClusterMinResolution,
+      minResolution: Math.max(
+        options.minResolution,
+        options.browserClusterMinResolution,
+      ),
     });
 
     this.options = options; // Mem for further use
@@ -169,8 +172,12 @@ class MyBrowserClusterVectorLayer extends ol.layer.Vector {
     if (options.browserClusterMinResolution) {
       this.lowResolutionLayer = new ol.layer.Vector({
         source: new MyVectorSource(options),
+
         ...options,
-        maxResolution: options.browserClusterMinResolution,
+        maxResolution: Math.min(
+          options.maxResolution,
+          options.browserClusterMinResolution,
+        ),
       });
       this.lowResolutionLayer.options = options;
     }
@@ -190,8 +197,12 @@ class MyBrowserClusterVectorLayer extends ol.layer.Vector {
     if (visible && this.state_) //BEST find better than this.state_
       this.getSource().reload();
 
-    if (this.lowResolutionLayer)
+    if (this.lowResolutionLayer) {
       this.lowResolutionLayer.setVisible(visible);
+
+      if (visible && this.lowResolutionLayer.state_)
+        this.lowResolutionLayer.getSource().reload();
+    }
   }
 }
 
@@ -208,8 +219,8 @@ class MyServerClusterVectorLayer extends MyBrowserClusterVectorLayer {
     // High resolutions layer to get and display the clusters delivered by the server at hight resolutions
     if (options.serverClusterMinResolution)
       this.serverClusterLayer = new MyBrowserClusterVectorLayer({
-        minResolution: options.serverClusterMinResolution,
         ...options,
+        minResolution: options.serverClusterMinResolution,
       });
   }
 
@@ -248,8 +259,6 @@ export class MyVectorLayer extends MyServerClusterVectorLayer {
       // browserClusterMinResolution: 10, // (meters per pixel) Map resolution above which the browser clusterises
       // browserClusterFeaturelMaxPerimeter: 300, // (pixels) perimeter of a line or poly above which we do not cluster
       // browserGigue: 0, // (meters) Randomly shift a point around his position
-      //TODO REMOVE  declutter:true, // Optimizes label display
-      //TODO REMOVE spreadClusterMaxResolution: 10, // (meters per pixel) Map resolution below which contiguous icons are displayed in line rather than a cluster circle
 
       // addProperties: properties => {}, // Add properties to each received feature
       basicStylesOptions: stylesOptions.basic, // (feature, layer)
@@ -328,7 +337,6 @@ export class MyVectorLayer extends MyServerClusterVectorLayer {
   // Function returning an array of styles options
   style(feature) {
     const sof = !feature.getProperties().cluster ? this.options.basicStylesOptions :
-      //TODO DELETE resolution < this.options.spreadClusterMaxResolution ? stylesOptions.spreadCluster :
       stylesOptions.cluster;
 
     return sof(...arguments) // Call the styleOptions function

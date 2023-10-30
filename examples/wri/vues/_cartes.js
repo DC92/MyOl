@@ -194,7 +194,9 @@ function fondsCarte(page, mapKeys) {
     }),
     'Photo ArcGIS': new myol.layer.tile.ArcGIS(),
     'Photo Google': 'nav,point'.includes(page) ? // Not available on edit pages
-      new myol.layer.tile.Google('s') : null,
+      new myol.layer.tile.Google({
+        subLayers: 's',
+      }) : null,
     'Photo Maxar': new myol.layer.tile.Maxbox({
       tileset: 'mapbox.satellite',
       key: mapKeys.mapbox,

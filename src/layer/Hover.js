@@ -60,27 +60,6 @@ export class Hover extends ol.layer.Vector {
 
     if (hoveredFeature) {
       const hoveredProperties = hoveredFeature.getProperties();
-      /*//TODO DELETE       featurePosition = map.getPixelFromCoordinate(
-                ol.extent.getCenter(hoveredFeature.getGeometry().getExtent())
-              );
-
-            // Find sub-feature from a spread cluster
-            if (hoveredProperties.cluster &&
-              hoveredLayer.options &&
-              resolution < hoveredLayer.options.spreadClusterMaxResolution) {
-              hoveredProperties.features.every(f => {
-                const p = f.getProperties();
-
-                // Only for spread clusters
-                if (p.xLeft)
-                  hoveredSubFeature = f;
-
-                // Stop when found
-                return evt.originalEvent.layerX >
-                  featurePosition[0] + p.xLeft;
-              });
-            }
-      	  */
 
       const hoveredSubProperties = hoveredSubFeature.getProperties();
 
