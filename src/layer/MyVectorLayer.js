@@ -68,7 +68,7 @@ class MyClusterSource extends ol.source.Cluster {
   constructor(options) {
     options = {
       // browserClusterFeaturelMaxPerimeter: 300, // (pixels) perimeter of a line or poly above which we do not cluster
-      // distance: 50, // (pixels) distance above which the browser clusterises
+      // distance: 50, // (pixels) distance above which the browser clusters
       // minDistance: 16, // (pixels) minimum distance in pixels between clusters
 
       // Any MyVectorSource options
@@ -149,8 +149,8 @@ class MyClusterSource extends ol.source.Cluster {
  */
 class MyBrowserClusterVectorLayer extends ol.layer.Vector {
   constructor(options) {
-    // browserClusterMinResolution: 10, // (meters per pixel) Map resolution above which the browser clusterises
-    // distance: 50, // (pixels) distance above which the browser clusterises
+    // browserClusterMinResolution: 10, // (meters per pixel) resolution below which the browser no longer clusters
+    // distance: 50, // (pixels) distance above which the browser clusters
     // minDistance: 16, // (pixels) minimum distance in pixels between clusters
     // Any ol.source.layer.Vector
 
@@ -254,9 +254,9 @@ export class MyVectorLayer extends MyServerClusterVectorLayer {
 
       // Clusters:
       // serverClusterMinResolution: 100, // (meters per pixel) resolution above which we ask clusters to the server
-      // distance: 50, // (pixels) distance above which the browser clusterises
+      // distance: 50, // (pixels) distance above which the browser clusters
       // minDistance: 16, // (pixels) minimum distance in pixels between clusters
-      // browserClusterMinResolution: 10, // (meters per pixel) Map resolution above which the browser clusterises
+      // browserClusterMinResolution: 10, // (meters per pixel) resolution below which the browser no longer clusters
       // browserClusterFeaturelMaxPerimeter: 300, // (pixels) perimeter of a line or poly above which we do not cluster
       // browserGigue: 0, // (meters) Randomly shift a point around his position
 
