@@ -212,22 +212,21 @@ export class IGM extends ol.layer.Tile {
   setMapInternal(map) {
     super.setMapInternal(map);
 
-    const view = map.getView(),
-      source = this.getSource();
+    const view = map.getView();
 
-    view.on('change:resolution', updateResolution);
-    updateResolution();
+    view.on('change:resolution', () => this.updateResolution(view));
+    this.updateResolution(view);
+  }
 
-    function updateResolution() {
-      const mapResolution = view.getResolutionForZoom(view.getZoom()),
-        layerResolution = mapResolution < 10 ? 25000 : mapResolution < 30 ? 100000 : 250000;
+  updateResolution(view) {
+    const mapResolution = view.getResolutionForZoom(view.getZoom()),
+      layerResolution = mapResolution < 10 ? 25000 : mapResolution < 30 ? 100000 : 250000;
 
-      source.updateParams({
-        type: 'png',
-        map: '/ms_ogc/WMS_v1.3/raster/IGM_' + layerResolution + '.map',
-        layers: (layerResolution == 100000 ? 'MB.IGM' : 'CB.IGM') + layerResolution,
-      });
-    }
+    this.getSource().updateParams({
+      type: 'png',
+      map: '/ms_ogc/WMS_v1.3/raster/IGM_' + layerResolution + '.map',
+      layers: (layerResolution == 100000 ? 'MB.IGM' : 'CB.IGM') + layerResolution,
+    });
   }
 }
 

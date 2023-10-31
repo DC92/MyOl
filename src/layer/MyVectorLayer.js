@@ -284,7 +284,6 @@ export class MyVectorLayer extends MyServerClusterVectorLayer {
       url: (e, r, p) => this.url(e, r, p),
       addProperties: p => this.addProperties(p),
       style: (f, r) => this.style(f, r, this),
-      //TODO genéraliser style: (f, r) => this.style(f, r, this),
       ...options,
     });
 
