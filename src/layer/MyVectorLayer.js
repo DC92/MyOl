@@ -154,6 +154,7 @@ class MyBrowserClusterVectorLayer extends ol.layer.Vector {
     // minDistance: 16, // (pixels) minimum distance in pixels between clusters
     // Any ol.source.layer.Vector
 
+    // High resolutions layer, can call for server clustering
     super({
       source: options.distance ?
         new MyClusterSource(options) : // Use a cluster source and a vector source to manages clusters
@@ -161,8 +162,8 @@ class MyBrowserClusterVectorLayer extends ol.layer.Vector {
 
       ...options,
       minResolution: Math.max(
-        options.minResolution,
-        options.browserClusterMinResolution,
+        options.minResolution || 0,
+        options.browserClusterMinResolution || 0,
       ),
     });
 
@@ -175,10 +176,11 @@ class MyBrowserClusterVectorLayer extends ol.layer.Vector {
 
         ...options,
         maxResolution: Math.min(
-          options.maxResolution,
-          options.browserClusterMinResolution,
+          options.maxResolution || Infinity,
+          options.browserClusterMinResolution || Infinity,
         ),
       });
+
       this.lowResolutionLayer.options = options;
     }
   }
