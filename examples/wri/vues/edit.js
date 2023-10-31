@@ -41,10 +41,6 @@ const editorlayer = new myol.layer.Editor({
       new ol.control.Attribution({ // Attribution doit être défini avant LayerSwitcher
         collapsed: false,
       }),
-      new myol.control.Permalink({ // Permet de garder le même réglage de carte
-        display: false, // Cache le lien
-        init: initPermalink, // On cadre le massif, s'il y a massif
-      }),
 
       // Haut droit
       new myol.control.LayerSwitcher({

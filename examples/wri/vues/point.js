@@ -1,5 +1,6 @@
 var centre = [5.885, 44.791],
   mapKeys = {},
+  layerOptions = false,
   host = 'https://www.refuges.info/',
   cadre = '../images/cadre.svg';
 

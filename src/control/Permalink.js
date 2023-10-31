@@ -9,9 +9,9 @@ import ol from '../ol';
 export class Permalink extends ol.control.Control {
   constructor(options) {
     options = {
-      init: true, // {true | false} use url hash or localStorage to position the map.
-      setUrl: false, // {true | false} Change url hash when moving the map.
       display: false, // {true | false} Display permalink link the map.
+      init: true, // {true | false | [<zoom>, <lon>, <lat>]} use url hash or localStorage to position the map.
+      setUrl: false, // {true | false} Change url hash when moving the map.
       hash: '?', // {?, #} the permalink delimiter after the url
       //BEST init with bbox option
 
@@ -51,6 +51,8 @@ export class Permalink extends ol.control.Control {
 
 
     // Set center & zoom at the init
+    //TODO force to
+    // init: true, // {true | false | [<zoom>, <lon>, <lat>]} use url hash or localStorage to position the map.
     if (this.init) {
       this.init = false; // Only once
 

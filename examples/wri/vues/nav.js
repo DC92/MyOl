@@ -1,5 +1,6 @@
 var host = 'https://www.refuges.info/',
   initPermalink = true,
+  layerOptions = false,
   mapKeys = {
     ign: 'iejxbx4obzhco6c8klxrfbto',
     thunderforest: 'ee751f43b3af4614b01d1bce72785369',
@@ -81,4 +82,4 @@ var contourMassif = coucheContourMassif({
 myol.trace(map);
 // FIN PARTIE A REPRENDRE
 
-map.getView().fit(ol.proj.transformExtent(extent, 'EPSG:4326', 'EPSG:3857'));
+map.getView().fit(ol.proj.transformExtent([5, 44.68, 5.72, 45.33], 'EPSG:4326', 'EPSG:3857'));
