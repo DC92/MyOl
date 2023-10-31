@@ -4,7 +4,7 @@ var centre = [5.885, 44.791],
   cadre = '../images/cadre.svg';
 
 // PARTIE A REPRENDRE
-new ol.Map({
+var map = new ol.Map({
   target: 'carte-point',
   view: new ol.View({
     center: ol.proj.transform(centre, 'EPSG:4326', 'EPSG:3857'),
@@ -53,3 +53,5 @@ new ol.Map({
     new myol.layer.Hover(), // Gère le survol du curseur
   ],
 });
+
+myol.trace(map);

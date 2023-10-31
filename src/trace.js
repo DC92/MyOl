@@ -4,7 +4,7 @@
 
 import ol from './ol';
 
-export async function trace() {
+export async function trace(map) {
   const data = [
     //BEST myol & geocoder version
     'Ol v' + ol.util.VERSION,
@@ -44,6 +44,14 @@ export async function trace() {
     });
 
   console.info(data.join('\n'));
+
+  // Zoom & resolution
+  if (map)
+    map.getView().on('change:resolution', () =>
+      console.log('zoom ' + map.getView().getZoom().toFixed(1) +
+        ', res ' + map.getView().getResolution().toFixed(0) + ' m/pix'
+      )
+    );
 }
 
 export default trace;

@@ -28,9 +28,7 @@ Based on https://openlayers.org
   <!-- The main script must be defer or module to be run after the myol import -->
   <script src="ressources/keys.js"></script>
   <script type="module">
-    myol.trace();
-
-    new ol.Map({
+    var map = new ol.Map({
       target: 'map',
       view: new ol.View({
         enableRotation: false,
@@ -52,6 +50,8 @@ Based on https://openlayers.org
         }),
       ],
     });
+
+    myol.trace(map);
   </script>
 
   <style>

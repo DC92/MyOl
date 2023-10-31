@@ -22,7 +22,6 @@ Based on https://openlayers.org
   <script src="ressources/keys.js"></script>
   <script type="module">
     //BEST : use same file than index.html
-    myol.trace();
 
     var map = new ol.Map({
       target: 'map',
@@ -47,9 +46,7 @@ Based on https://openlayers.org
       ],
     });
 
-    map.getView().on('change:resolution', () =>
-      console.log('Resolution : ' + map.getView().getResolution() + ', zoom : ' + map.getView().getZoom())
-    );
+    myol.trace(map);
   </script>
 
   <style>

@@ -8,10 +8,8 @@ var host = 'https://www.refuges.info/',
     kompass: '2ba8c124-38b6-11e7-ade1-e0cb4e28e847',
   };
 
-myol.trace();
-
 // PARTIE A REPRENDRE
-const contourMassif = coucheContourMassif({
+var contourMassif = coucheContourMassif({
     host: host,
     selectName: 'select-massif',
   }),
@@ -79,6 +77,8 @@ const contourMassif = coucheContourMassif({
       new myol.layer.Hover(), // Gère le survol du curseur
     ],
   });
+
+myol.trace(map);
 // FIN PARTIE A REPRENDRE
 
 map.getView().fit(ol.proj.transformExtent(extent, 'EPSG:4326', 'EPSG:3857'));

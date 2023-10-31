@@ -31,7 +31,7 @@ Based on https://openlayers.org
   <!-- The main script must be defer or module to be run after the myol import -->
   <script src="ressources/keys.js"></script>
   <script type="module">
-    var map = new ol.Map({
+    new ol.Map({
       target: 'map',
       view: new ol.View({
         center: ol.proj.transform([2, 47], 'EPSG:4326', 'EPSG:3857'), // France
@@ -48,10 +48,6 @@ Based on https://openlayers.org
         }),
       ],
     });
-
-    map.getView().on('change:resolution', () =>
-      console.log('Resolution : ' + map.getView().getResolution() + ', zoom : ' + map.getView().getZoom())
-    );
   </script>
 </head>
 
