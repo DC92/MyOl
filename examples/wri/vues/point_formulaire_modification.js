@@ -4,6 +4,12 @@ var centre = [5.5067, 44.9844],
   host = 'https://www.refuges.info/',
   viseur = '../images/viseur.svg';
 
+
+
+
+
+
+
 // PARTIE A REPRENDRE
 // Gestion des cartes
 new ol.Map({

@@ -3,7 +3,7 @@ var host = 'https://www.refuges.info/',
   mapKeys = {};
 
 // PARTIE A REPRENDRE
-const editorlayer = new myol.layer.Editor({
+var editorlayer = new myol.layer.Editor({
     geoJsonId: 'edit-json',
     editOnly: 'poly',
 

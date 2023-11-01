@@ -83,3 +83,10 @@ myol.trace(map);
 // FIN PARTIE A REPRENDRE
 
 map.getView().fit(ol.proj.transformExtent([5, 44.68, 5.72, 45.33], 'EPSG:4326', 'EPSG:3857'));
+
+
+
+
+
+
+
