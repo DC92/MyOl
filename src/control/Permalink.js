@@ -28,7 +28,7 @@ export class Permalink extends ol.control.Control {
     this.hash = options.hash;
 
     if (options.display) {
-      this.element.className = 'myol-permalink';
+      this.element.className = 'ol-control myol-permalink';
       this.linkEl = document.createElement('a');
       this.linkEl.innerHTML = 'Permalink';
       this.linkEl.title = 'Generate a link with map zoom & position';

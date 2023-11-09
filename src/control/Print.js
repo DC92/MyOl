@@ -37,17 +37,21 @@ export class Print extends Button {
     mapEl.style.height = orientation == 0 ? '295mm' : '208mm';
     map.setSize([mapEl.clientWidth, mapEl.clientHeight]);
 
-    // Set style portrait / landscape
+    // Parent the map to the top of the page
+    document.body.appendChild(mapEl);
+
+    // Set style
     const styleSheet = document.createElement('style');
     styleSheet.type = 'text/css';
-    styleSheet.innerText = '@page {size: ' + (orientation == 0 ? 'portrait' : 'landscape') + '}';
+    styleSheet.innerText = '\
+body>*:not(#' + mapEl.id + '),\
+.ol-control:not(.ol-zoom):not(.ol-attribution):not(.myol-button-print) {\
+  display: none;\
+}\
+@page {\
+  size: ' + (orientation == 0 ? 'portrait' : 'landscape') + ';\
+}';
     document.head.appendChild(styleSheet);
-
-    // Hide all but the map
-    document.body.appendChild(mapEl);
-    for (let child = document.body.firstElementChild; child !== null; child = child.nextSibling)
-      if (child.style && child !== mapEl)
-        child.style.display = 'none';
 
     // Finer zoom not dependent on the baselayer's levels
     map.getView().setConstrainResolution(false);

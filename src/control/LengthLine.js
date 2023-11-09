@@ -11,7 +11,7 @@ export class LengthLine extends ol.control.Control {
       element: document.createElement('div'), //HACK button not visible
     });
 
-    this.element.className = 'myol-length-line';
+    this.element.className = 'ol-control myol-length-line';
   }
 
   setMap(map) {

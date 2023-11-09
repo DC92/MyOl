@@ -18,6 +18,8 @@ export class MyGeocoder extends Geocoder {
       ...options,
     });
 
+    this.element.classList.add('ol-control');
+
     // Avoid submit of a form including the map
     this.element.getElementsByTagName('input')[0]
       .addEventListener('keypress', evt =>
