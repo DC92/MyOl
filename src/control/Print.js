@@ -44,12 +44,20 @@ export class Print extends Button {
     const styleSheet = document.createElement('style');
     styleSheet.type = 'text/css';
     styleSheet.innerText = '\
+@page {\
+  size: ' + (orientation == 0 ? 'portrait' : 'landscape') + ';\
+}\
 body>*:not(#' + mapEl.id + '),\
 .ol-control:not(.ol-zoom):not(.ol-attribution):not(.myol-button-print) {\
   display: none;\
 }\
-@page {\
-  size: ' + (orientation == 0 ? 'portrait' : 'landscape') + ';\
+.myol-button-switcher {\
+  display: block !important;\
+  float: left !important;\
+}\
+.myol-button-switcher>div {\
+  left: 65px;\
+  right: initial;\
 }';
     document.head.appendChild(styleSheet);
 

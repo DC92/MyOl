@@ -4,7 +4,7 @@
  * This package adds many features to Openlayer https://openlayers.org/
  * https://github.com/Dominique92/myol#readme
  * Based on https://openlayers.org
- * Built 09/11/2023 16:41:02 using npm run build from the src/... sources
+ * Built 10/11/2023 17:02:30 using npm run build from the src/... sources
  * Please don't modify it : modify src/... & npm run build !
  */
 
@@ -89809,12 +89809,20 @@ var myol = (function () {
       const styleSheet = document.createElement('style');
       styleSheet.type = 'text/css';
       styleSheet.innerText = '\
+@page {\
+  size: ' + (orientation == 0 ? 'portrait' : 'landscape') + ';\
+}\
 body>*:not(#' + mapEl.id + '),\
 .ol-control:not(.ol-zoom):not(.ol-attribution):not(.myol-button-print) {\
   display: none;\
 }\
-@page {\
-  size: ' + (orientation == 0 ? 'portrait' : 'landscape') + ';\
+.myol-button-switcher {\
+  display: block !important;\
+  float: left !important;\
+}\
+.myol-button-switcher>div {\
+  left: 65px;\
+  right: initial;\
 }';
       document.head.appendChild(styleSheet);
 
