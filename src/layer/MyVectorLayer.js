@@ -32,12 +32,12 @@ class MyVectorSource extends ol.source.Vector {
         '&#9888;'; // Error symbol
 
       // Randomly shift a point around his position
-      if (options.browserGigue &&
-        evt.type == 'featuresloadend')
+      if (evt.type == 'featuresloadend' &&
+        options.browserGigue)
         evt.features.forEach(f => {
           f.getGeometry().translate(
-            Math.cos(f.getId()) * options.browserGigue,
-            Math.sin(f.getId()) * options.browserGigue,
+            (f.getId() / 5 % 2 - 1) * options.browserGigue,
+            (f.getId() / 7 % 2 - 1) * options.browserGigue,
           );
         });
     });

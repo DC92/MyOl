@@ -39,6 +39,11 @@ Based on https://openlayers.org
         // Autre cabane double 6.51, 45.13
         zoom: 14,
       }),
+      controls: [
+        new ol.control.Zoom(),
+        new ol.control.FullScreen(),
+        new ol.control.ScaleLine(),
+      ],
       layers: [
         // Background layer
         new ol.layer.Tile({

@@ -4,7 +4,7 @@
  * This package adds many features to Openlayer https://openlayers.org/
  * https://github.com/Dominique92/myol#readme
  * Based on https://openlayers.org
- * Built 17/11/2023 11:21:29 using npm run build from the src/... sources
+ * Built 17/11/2023 17:45:17 using npm run build from the src/... sources
  * Please don't modify it : modify src/... & npm run build !
  */
 
@@ -89918,7 +89918,7 @@ body>*:not(#' + mapEl.id + '),\
         dataProjection: 'EPSG:4326',
         featureProjection: 'EPSG:3857',
         // defaultExtent: [-534114, 5211062, 916444, 6637050], // France
-        //BEST to be challenged
+        //TODO to be challenged
 
         // styleOptions: {}, // Style options to apply to the edited features
         withHoles: true, // Authorize holes in polygons
@@ -98271,12 +98271,12 @@ body>*:not(#' + mapEl.id + '),\
           '&#9888;'; // Error symbol
 
         // Randomly shift a point around his position
-        if (options.browserGigue &&
-          evt.type == 'featuresloadend')
+        if (evt.type == 'featuresloadend' &&
+          options.browserGigue)
           evt.features.forEach(f => {
             f.getGeometry().translate(
-              Math.cos(f.getId()) * options.browserGigue,
-              Math.sin(f.getId()) * options.browserGigue,
+              (f.getId() / 5 % 2 - 1) * options.browserGigue,
+              (f.getId() / 7 % 2 - 1) * options.browserGigue,
             );
           });
       });
