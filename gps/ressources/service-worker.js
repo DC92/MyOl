@@ -27,7 +27,7 @@ self.addEventListener('install', evt => {
           ...jsVars.gpxFiles,
         ])
         .then(console.log('PWA files added to cache'))
-        .catch(err => console.error(err));
+        .catch(err => console.error(err)); //BEST error when initialising cache
     })
     .catch(err => console.error(err))
   );

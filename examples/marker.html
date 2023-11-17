@@ -32,10 +32,6 @@ Based on https://openlayers.org
   <script type="module">
     new ol.Map({
       target: 'map',
-      view: new ol.View({
-        center: ol.proj.transform([2, 47], 'EPSG:4326', 'EPSG:3857'), // France
-        zoom: 5,
-      }),
       layers: [
         new ol.layer.Tile({
           source: new ol.source.OSM(),
@@ -46,8 +42,8 @@ Based on https://openlayers.org
         }),
         new myol.layer.Marker({
           src: 'images/viseur.png',
-          focus: 15, // Overload position & zoom to marker
           dragable: true,
+          focus: 15, // Overload position & zoom to marker
         }),
       ],
     });

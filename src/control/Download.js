@@ -14,7 +14,9 @@ export class Download extends Button {
       subMenuId: 'myol-button-download',
       subMenuHTML: subMenuHTML,
       subMenuHTML_fr: subMenuHTML_fr,
+
       fileName: document.title || 'openlayers', // Name of the file to be downloaded //BEST name from feature
+      // savedLayer: layer, // Layer to download
 
       ...options,
     };
@@ -36,8 +38,8 @@ export class Download extends Button {
       mapExtent = map.getView().calculateExtent();
     let featuresToSave = [];
 
-    if (this.savedLayer)
-      featuresToSave = this.savedLayer.getSource().getFeatures();
+    if (this.options.savedLayer)
+      featuresToSave = this.options.savedLayer.getSource().getFeatures();
     else
       // Get all visible features
       map.getLayers().forEach(l => {

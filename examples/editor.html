@@ -52,18 +52,15 @@ Based on https://openlayers.org
 
     new ol.Map({
       target: 'map',
-      view: new ol.View({
-        enableRotation: false,
-        center: [600000, 5800000],
-        zoom: 6,
-      }),
       controls: [
         new ol.control.Zoom(),
         new myol.control.MyGeocoder(),
         new myol.control.MyGeolocation(),
-        new myol.control.Load(),
+        new myol.control.Load({
+          receivingLayer: editorlayer,
+        }),
         new myol.control.Download({
-          savedLayer: editorlayer.layer,
+          savedLayer: editorlayer,
         }),
         new myol.control.Print(),
       ],

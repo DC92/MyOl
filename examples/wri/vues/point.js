@@ -1,15 +1,11 @@
-var centre = [5.885, 44.791],
+var host = 'https://www.refuges.info/',
   mapKeys = {},
   layerOptions = false,
-  host = 'https://www.refuges.info/',
   cadre = '../images/cadre.svg';
-
 // PARTIE A REPRENDRE
 var map = new ol.Map({
   target: 'carte-point',
   view: new ol.View({
-    center: ol.proj.transform(centre, 'EPSG:4326', 'EPSG:3857'),
-    zoom: 13,
     enableRotation: false,
     constrainResolution: true, // Force le zoom sur la définition des dalles disponibles
   }),
@@ -43,15 +39,18 @@ var map = new ol.Map({
   layers: [
     // Les autres points refuges.info
     couchePointsWRI({
-      host: host,
+      host: host, // Appeler la couche de CE serveur
     }),
+
     // Le cadre rouge autour du point de la fiche
     new myol.layer.Marker({
       src: cadre,
       prefix: 'cadre', // S'interface avec les <TAG id="cadre-xxx"...>
       focus: 17, // Centrer
     }),
-    new myol.layer.Hover(), // Gère le survol du curseur
+
+    // Gère le survol du curseur
+    new myol.layer.Hover(),
   ],
 });
 

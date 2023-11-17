@@ -13,6 +13,9 @@ export class Load extends Button {
       subMenuId: 'myol-button-load',
       subMenuHTML: subMenuHTML,
       subMenuHTML_fr: subMenuHTML_fr,
+
+      // receivingLayer: layer, // Layer to addFeatures when loaded
+
       ...options,
     });
 
@@ -50,6 +53,7 @@ export class Load extends Button {
       gpxSource = new ol.source.Vector({
         format: loadFormat,
         features: features,
+        wrapX: false,
       }),
       gpxLayer = new ol.layer.Vector({
         source: gpxSource,
@@ -72,14 +76,9 @@ export class Load extends Button {
     if (ol.extent.isEmpty(fileExtent))
       alert(url + ' ne comporte pas de point ni de trace.');
     else {
-      // Warn everyone that features have been loaded
-      const used = map.dispatchEvent({
-        type: 'myol:onfeatureload',
-        features: features,
-      });
-
-      // If no one used the feature, display them as a new layer
-      if (used !== false)
+      if (this.options.receivingLayer)
+        this.options.receivingLayer.getSource().addFeatures(features);
+      else
         map.addLayer(gpxLayer);
 
       // Zoom the map on the added features
@@ -95,7 +94,7 @@ export class Load extends Button {
   }
 }
 
-var subMenuHTML = '<input type="file" accept=".gpx,.kml,.geojson">',
+var subMenuHTML = '<input type="file" accept=".gpx,.kml,.json,.geojson">',
   subMenuHTML_fr = '<p>Importer un fichier de points ou de traces</p>' + subMenuHTML;
 
 export default Load;

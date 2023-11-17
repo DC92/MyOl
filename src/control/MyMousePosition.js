@@ -18,9 +18,9 @@ export class MyMousePosition extends ol.control.MousePosition {
   }
 
   setMap(map) {
-    super.setMap(map);
-
     map.on('myol:gpspositionchanged', evt => this.position = evt.position);
+
+    return super.setMap(map);
   }
 
   display(coordinates) {

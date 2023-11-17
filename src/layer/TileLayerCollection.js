@@ -210,12 +210,12 @@ export class IGM extends ol.layer.Tile {
   }
 
   setMapInternal(map) {
-    super.setMapInternal(map);
-
     const view = map.getView();
 
     view.on('change:resolution', () => this.updateResolution(view));
     this.updateResolution(view);
+
+    return super.setMapInternal(map);
   }
 
   updateResolution(view) {

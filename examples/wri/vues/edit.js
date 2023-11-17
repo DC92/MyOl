@@ -1,7 +1,5 @@
 var host = 'https://www.refuges.info/',
-  initPermalink = true,
   mapKeys = {};
-
 // PARTIE A REPRENDRE
 var editorlayer = new myol.layer.Editor({
     geoJsonId: 'edit-json',
@@ -41,6 +39,10 @@ var editorlayer = new myol.layer.Editor({
       new ol.control.Attribution({ // Attribution doit être défini avant LayerSwitcher
         collapsed: false,
       }),
+      new myol.control.Permalink({ // Permet de garder le même réglage de carte en création de massif
+        init: !editorlayer.geoJsonEl.value, // On cadre le massif, s'il y a massif
+        //TODO à challenger
+      }),
 
       // Haut droit
       new myol.control.LayerSwitcher({
@@ -54,6 +56,3 @@ var editorlayer = new myol.layer.Editor({
       editorlayer,
     ],
   });
-// FIN PARTIE A REPRENDRE
-
-map.getView().fit(ol.proj.transformExtent([5, 44.68, 5.72, 45.33], 'EPSG:4326', 'EPSG:3857'));

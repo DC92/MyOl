@@ -25,10 +25,10 @@ export class BackgroundLayer extends layerTile.Positron {
   }
 
   setMapInternal(map) {
-    super.setMapInternal(map);
-
     map.addLayer(this.lowResLayer); // Substitution for low resoltions
     map.on('precompose', () => this.tuneDisplay(map));
+
+    return super.setMapInternal(map);
   }
 
   tuneDisplay(map) {

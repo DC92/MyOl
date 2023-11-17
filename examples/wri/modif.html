@@ -36,19 +36,22 @@ Based on https://openlayers.org
   </script>
 
   <!-- WRI -->
-  <script src="vues/_cartes.js"></script>
   <script src="vues/point_formulaire_modification.js" defer></script>
+  <script src="vues/_cartes.js"></script>
 </head>
 
 <body>
-  <a style="float:right" href="../../gps">Next &#9654;</a>
+  <a style="float:right" href="creepoint.html">Next &#9654;</a>
   <a style="float:right;margin-right:15px" href="../">Home</a>
   <h1 style="margin:0">Modification point refuges.info</h1>
   <a style="float:right" href="https://github.com/Dominique92/myol/">Github &#9654;</a>
 
   <h4>/vues/point_formulaire_modification.html</h4>
   <div id="carte-modif"></div>
+  <input type="hidden" id="marker-json" name="geojson" value='{"type":"Point","coordinates":[5.07147,44.79518]}' />
   <p id="marker-string"></p>
+  <input type="text" id="marker-lon" name="lon" size="12">
+  <input type="text" id="marker-lat" name="lat" size="12">
 </body>
 
 </html>

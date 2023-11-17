@@ -24,7 +24,7 @@ export class GeoBB extends MyVectorLayer {
     super({
       serverClusterMinResolution: 100, // (meters per pixel) resolution above which we ask clusters to the server
       distance: 50, // (pixels) distance above which the browser clusters
-      browserClusterFeaturelMaxPerimeter: 300,
+      browserClusterFeaturelMaxPerimeter: 300, // (pixels) perimeter of a line or poly above which we do not cluster
       browserGigue: 10, // (meters) Randomly shift a point around his position
 
       // Any myol.layer.MyVectorLayer, ol.source.Vector options, ol.source.layer.Vector
@@ -60,7 +60,7 @@ export class Alpages extends MyVectorLayer {
       host: 'https://alpages.info/',
       attribution: '&copy;alpages.info',
       distance: 50, // (pixels) distance above which the browser clusters
-      browserClusterFeaturelMaxPerimeter: 300,
+      browserClusterFeaturelMaxPerimeter: 300, // (pixels) perimeter of a line or poly above which we do not cluster
       // Any myol.layer.MyVectorLayer, ol.source.Vector options, ol.source.layer.Vector
       ...options,
     });

@@ -66,13 +66,12 @@ export class MyGeolocation extends Button {
       source: new ol.source.Vector({
         features: [this.graticuleFeature, this.northGraticuleFeature],
       }),
+      wrapX: false,
       zIndex: 300, // Above the features
     });
   }
 
   setMap(map) {
-    super.setMap(map);
-
     map.addLayer(this.graticuleLayer);
     map.on('moveend', evt => this.subMenuAction(evt)); // Refresh graticule after map zoom
 
@@ -85,6 +84,8 @@ export class MyGeolocation extends Button {
     this.geolocation.on('error', error => {
       console.log('Geolocation error: ' + error.message);
     });
+
+    return super.setMap(map);
   }
 
   buttonAction(evt) {

@@ -46,7 +46,9 @@ var loadControl = new myol.control.Load(),
       new ol.control.ScaleLine(),
 
       // Bottom right
-      new myol.control.Permalink(),
+      new myol.control.Permalink({
+        init: true, // Permet de garder le même réglage de carte
+      }),
       new ol.control.Attribution(),
     ],
   });

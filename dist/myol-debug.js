@@ -4,7 +4,7 @@
  * This package adds many features to Openlayer https://openlayers.org/
  * https://github.com/Dominique92/myol#readme
  * Based on https://openlayers.org
- * Built 10/11/2023 17:02:30 using npm run build from the src/... sources
+ * Built 17/11/2023 11:21:29 using npm run build from the src/... sources
  * Please don't modify it : modify src/... & npm run build !
  */
 
@@ -60303,8 +60303,6 @@ var myol = (function () {
     }
 
     setMap(map) {
-      super.setMap(map);
-
       // Register action listeners when html is fully loaded
       this.buttonEl.addEventListener('click', evt => this.buttonListener(evt));
       this.element.addEventListener('mouseover', evt => this.buttonListener(evt));
@@ -60323,6 +60321,8 @@ var myol = (function () {
           el.addEventListener(tag, evt =>
             this.subMenuAction(evt)
           )));
+
+      return super.setMap(map);
     }
 
     buttonListener(evt) {
@@ -60361,7 +60361,9 @@ var myol = (function () {
         subMenuId: 'myol-button-download',
         subMenuHTML: subMenuHTML$3,
         subMenuHTML_fr: subMenuHTML_fr$3,
+
         fileName: document.title || 'openlayers', // Name of the file to be downloaded //BEST name from feature
+        // savedLayer: layer, // Layer to download
 
         ...options,
       };
@@ -60383,8 +60385,8 @@ var myol = (function () {
         mapExtent = map.getView().calculateExtent();
       let featuresToSave = [];
 
-      if (this.savedLayer)
-        featuresToSave = this.savedLayer.getSource().getFeatures();
+      if (this.options.savedLayer)
+        featuresToSave = this.options.savedLayer.getSource().getFeatures();
       else
         // Get all visible features
         map.getLayers().forEach(l => {
@@ -60664,12 +60666,12 @@ var myol = (function () {
     }
 
     setMapInternal(map) {
-      super.setMapInternal(map);
-
       const view = map.getView();
 
       view.on('change:resolution', () => this.updateResolution(view));
       this.updateResolution(view);
+
+      return super.setMapInternal(map);
     }
 
     updateResolution(view) {
@@ -61016,10 +61018,10 @@ var myol = (function () {
     }
 
     setMapInternal(map) {
-      super.setMapInternal(map);
-
       map.addLayer(this.lowResLayer); // Substitution for low resoltions
       map.on('precompose', () => this.tuneDisplay(map));
+
+      return super.setMapInternal(map);
     }
 
     tuneDisplay(map) {
@@ -61077,8 +61079,6 @@ var myol = (function () {
     }
 
     setMap(map) {
-      super.setMap(map);
-
       map.addLayer(new BackgroundLayer());
 
       for (let name in this.layers) {
@@ -61117,6 +61117,8 @@ var myol = (function () {
         if (evt.pixel[0] < max_x || evt.pixel[1] > max_y)
           this.element.classList.remove('myol-button-switcher-open');
       });
+
+      return super.setMap(map);
     }
 
     action(evt) {
@@ -61173,8 +61175,6 @@ var myol = (function () {
     }
 
     setMap(map) {
-      super.setMap(map);
-
       map.on('pointermove', evt => {
         this.element.innerHTML = ''; // Clear the measure if hover no feature
 
@@ -61185,6 +61185,8 @@ var myol = (function () {
             hitTolerance: 6, // Default is 0
           });
       });
+
+      return super.setMap(map);
     }
 
     //BEST calculate distance to the ends
@@ -61250,6 +61252,9 @@ var myol = (function () {
         subMenuId: 'myol-button-load',
         subMenuHTML: subMenuHTML$2,
         subMenuHTML_fr: subMenuHTML_fr$2,
+
+        // receivingLayer: layer, // Layer to addFeatures when loaded
+
         ...options,
       });
 
@@ -61287,6 +61292,7 @@ var myol = (function () {
         gpxSource = new ol.source.Vector({
           format: loadFormat,
           features: features,
+          wrapX: false,
         }),
         gpxLayer = new ol.layer.Vector({
           source: gpxSource,
@@ -61309,14 +61315,9 @@ var myol = (function () {
       if (ol.extent.isEmpty(fileExtent))
         alert(url + ' ne comporte pas de point ni de trace.');
       else {
-        // Warn everyone that features have been loaded
-        const used = map.dispatchEvent({
-          type: 'myol:onfeatureload',
-          features: features,
-        });
-
-        // If no one used the feature, display them as a new layer
-        if (used !== false)
+        if (this.options.receivingLayer)
+          this.options.receivingLayer.getSource().addFeatures(features);
+        else
           map.addLayer(gpxLayer);
 
         // Zoom the map on the added features
@@ -61332,7 +61333,7 @@ var myol = (function () {
     }
   }
 
-  var subMenuHTML$2 = '<input type="file" accept=".gpx,.kml,.geojson">',
+  var subMenuHTML$2 = '<input type="file" accept=".gpx,.kml,.json,.geojson">',
     subMenuHTML_fr$2 = '<p>Importer un fichier de points ou de traces</p>' + subMenuHTML$2;
 
   /**
@@ -89469,13 +89470,12 @@ var myol = (function () {
         source: new ol.source.Vector({
           features: [this.graticuleFeature, this.northGraticuleFeature],
         }),
+        wrapX: false,
         zIndex: 300, // Above the features
       });
     }
 
     setMap(map) {
-      super.setMap(map);
-
       map.addLayer(this.graticuleLayer);
       map.on('moveend', evt => this.subMenuAction(evt)); // Refresh graticule after map zoom
 
@@ -89488,6 +89488,8 @@ var myol = (function () {
       this.geolocation.on('error', error => {
         console.log('Geolocation error: ' + error.message);
       });
+
+      return super.setMap(map);
     }
 
     buttonAction(evt) {
@@ -89664,9 +89666,9 @@ var myol = (function () {
     }
 
     setMap(map) {
-      super.setMap(map);
-
       map.on('myol:gpspositionchanged', evt => this.position = evt.position);
+
+      return super.setMap(map);
     }
 
     display(coordinates) {
@@ -89692,11 +89694,11 @@ var myol = (function () {
   class Permalink extends ol.control.Control {
     constructor(options) {
       options = {
-        display: false, // {true | false} Display permalink link the map.
-        init: true, // {true | false | [<zoom>, <lon>, <lat>]} use url hash or localStorage to position the map.
-        setUrl: false, // {true | false} Change url hash when moving the map.
+        // display: false, // {false | true} Display permalink link the map.
+        // init: false, // {false | true | [<zoom>, <lon>, <lat>]} use url hash or localStorage to position the map.
+        default: [6, 2, 47], // France
+        // setUrl: false, // {false | true} Change url hash when moving the map.
         hash: '?', // {?, #} the permalink delimiter after the url
-        //BEST init with bbox option
 
         ...options,
       };
@@ -89706,9 +89708,7 @@ var myol = (function () {
         ...options,
       });
 
-      this.init = options.init;
-      this.setUrl = options.setUrl;
-      this.hash = options.hash;
+      this.options = options;
 
       if (options.display) {
         this.element.className = 'ol-control myol-permalink';
@@ -89721,23 +89721,24 @@ var myol = (function () {
 
     render(evt) {
       const view = evt.map.getView(),
-        urlMod = location.href.replace( // Get value from params with priority url / ? / #
+        urlMod =
+        //BEST init with res=<resolution>
+        //BEST init with extent (not zoom, lon, lat)
+        'zoom=' + this.options.init[0] + '&lon=' + this.options.init[1] + '&lat=' + this.options.init[2] + ',' + // init: [<zoom>, <lon>, <lat>]
+        location.href.replace( // Get value from params with priority url / ? / #
           /map=([0-9.]+)\/(-?[0-9.]+)\/(-?[0-9.]+)/, // map=<zoom>/<lon>/<lat>
           'zoom=$1&lon=$2&lat=$3' // zoom=<zoom>&lon=<lon>&lat=<lat>
-        ) +
+        ) + ',' +
         // Last values
-        'zoom=' + localStorage.myol_zoom +
-        'lon=' + localStorage.myol_lon +
-        'lat=' + localStorage.myol_lat +
+        'zoom=' + localStorage.myol_zoom + ',' +
+        'lon=' + localStorage.myol_lon + ',' +
+        'lat=' + localStorage.myol_lat + ',' +
         // Default
-        'zoom=6&lon=2&lat=47';
-
+        'zoom=' + this.options.default[0] + '&lon=' + this.options.default[1] + '&lat=' + this.options.default[2];
 
       // Set center & zoom at the init
-      //TODO force to
-      // init: true, // {true | false | [<zoom>, <lon>, <lat>]} use url hash or localStorage to position the map.
-      if (this.init) {
-        this.init = false; // Only once
+      if (this.options.init) {
+        this.options.init = false; // Only once
 
         view.setZoom(urlMod.match(/zoom=([0-9.]+)/)[1]);
 
@@ -89756,12 +89757,14 @@ var myol = (function () {
           (localStorage.myol_lat = Math.round(ll4326[1] * 10000) / 10000);
 
         if (this.linkEl) {
-          this.linkEl.href = this.hash + newParams;
+          this.linkEl.href = this.options.hash + newParams;
 
-          if (this.setUrl)
+          if (this.options.setUrl)
             location.href = '#' + newParams;
         }
       }
+
+      return super.render(evt);
     }
   }
 
@@ -89914,6 +89917,8 @@ body>*:not(#' + mapEl.id + '),\
         format: new ol.format.GeoJSON(),
         dataProjection: 'EPSG:4326',
         featureProjection: 'EPSG:3857',
+        // defaultExtent: [-534114, 5211062, 916444, 6637050], // France
+        //BEST to be challenged
 
         // styleOptions: {}, // Style options to apply to the edited features
         withHoles: true, // Authorize holes in polygons
@@ -89937,28 +89942,27 @@ body>*:not(#' + mapEl.id + '),\
           features: options.format.readFeatures(geoJson, options),
           wrapX: false,
           ...options,
-        });
-
-      const style = new ol.style.Style({
-        // Marker
-        image: new ol.style.Circle({
-          radius: 4,
+        }),
+        style = new ol.style.Style({
+          // Marker
+          image: new ol.style.Circle({
+            radius: 4,
+            stroke: new ol.style.Stroke({
+              color: 'red',
+              width: 2,
+            }),
+          }),
+          // Lines or polygons border
           stroke: new ol.style.Stroke({
             color: 'red',
             width: 2,
           }),
-        }),
-        // Lines or polygons border
-        stroke: new ol.style.Stroke({
-          color: 'red',
-          width: 2,
-        }),
-        // Polygons
-        fill: new ol.style.Fill({
-          color: 'rgba(0,0,255,0.2)',
-        }),
-        ...options.styleOptions,
-      });
+          // Polygons
+          fill: new ol.style.Fill({
+            color: 'rgba(0,0,255,0.2)',
+          }),
+          ...options.styleOptions,
+        });
 
       super({
         source: source,
@@ -89977,8 +89981,21 @@ body>*:not(#' + mapEl.id + '),\
     } // End constructor
 
     setMapInternal(map) {
-      super.setMapInternal(map);
       this.map = map;
+
+      // Fit to the source at the init
+      map.once('postrender', () => { //HACK the only event to trigger if the map is not centered
+        const extent = this.source.getExtent();
+
+        if (!ol.extent.isEmpty(extent))
+          map.getView().fit(
+            extent, {
+              minResolution: 10,
+              padding: [5, 5, 5, 5],
+            });
+      });
+
+      this.optimiseEdited(); // Optimise at init
 
       this.interactions = [
         new ol.interaction.Modify({ // 0 Modify
@@ -90003,15 +90020,6 @@ body>*:not(#' + mapEl.id + '),\
           pixelTolerance: 7.5, // 6 + line width / 2 : default is 10
         }),
       ];
-
-      // Add features loaded from GPX file
-      map.on('myol:onfeatureload', evt => {
-        this.getSource().addFeatures(evt.features);
-        this.optimiseEdited();
-        return false; // Warn control.load that the editor got the included feature
-      });
-
-      this.optimiseEdited(); // Optimise at init
 
       // End of modify
       this.interactions[0].on('modifyend', evt => {
@@ -90101,6 +90109,8 @@ body>*:not(#' + mapEl.id + '),\
         }));
 
       this.changeInteraction(0); // Init to modify
+
+      return super.setMapInternal(map);
     } // End setMapInternal
 
     changeInteraction(interaction, type = 'click') {
@@ -90358,14 +90368,13 @@ body>*:not(#' + mapEl.id + '),\
       super({
         source: new ol.source.Vector(),
         zIndex: 500, // Above all layers
+        wrapX: false,
         ...options,
       });
     }
 
     // Attach an hover & click listener to the map
     setMapInternal(map) {
-      super.setMapInternal(map);
-
       const mapEl = map.getTargetElement();
 
       // Basic listeners
@@ -90382,6 +90391,8 @@ body>*:not(#' + mapEl.id + '),\
             this.getSource().clear();
         }
       });
+
+      return super.setMapInternal(map);
     }
 
     mouseListener(evt) {
@@ -97820,10 +97831,10 @@ body>*:not(#' + mapEl.id + '),\
     constructor(options) {
       options = {
         // src: 'imageUrl', // url of marker image
-        // position: [0, 0], // Initial position of the marker (default : center of the map)
+        // position: [<lon>, <lat>], // Initial position of the marker
         // dragable: false, // Can draw the marker to edit position
         // focus: number // Center & value of zoom on the marker
-        zIndex: 400, // Above points
+        zIndex: 600, // Above points & hover
 
         prefix: 'marker', // Will take the values on
         // marker-json, // <input> json form
@@ -97834,21 +97845,27 @@ body>*:not(#' + mapEl.id + '),\
         ...options,
       };
 
+      const point = new ol.geom.Point(options.position || [0, 0]);
+
       super({
-        source: new ol.source.Vector(options),
+        source: new ol.source.Vector({
+          features: [new ol.Feature({
+            geometry: point,
+          })],
+          wrapX: false,
+          ...options,
+        }),
         style: new ol.style.Style({
-          image: new ol.style.Icon({
-            src: options.src,
-          }),
+          image: new ol.style.Icon(options),
         }),
         properties: {
-          marker: true,
+          marker: true, // To recognise that this is a marker
         },
-
         ...options
       });
 
       this.options = options;
+      this.point = point;
 
       // Initialise specific projection
       if (typeof proj4 == 'function') {
@@ -97875,60 +97892,52 @@ body>*:not(#' + mapEl.id + '),\
     }
 
     setMapInternal(map) {
-      super.setMapInternal(map);
-
-      map.once('loadstart', () => { // Hack to be noticed at map init
+      map.once('postrender', () => { //HACK the only event to trigger if the map is not centered
         this.view = map.getView();
 
-        // Create the point at option position or map center
-        this.point = new ol.geom.Point(this.options.position || this.view.getCenter());
-        this.getSource().addFeature(new ol.Feature({
-          geometry: this.point,
-        }));
-
-        this.action(this.els.lon);
-        this.action(this.els.json);
-        this.changeLL(); // Display anyway (if no lon | json)
-
+        this.action(this.els.lon); // Il value is provided in lon / lat inputs fields
+        this.action(this.els.json); // Il value is provided in json inputs fields
         if (this.options.focus)
           this.view.setZoom(this.options.focus);
+      });
 
-        // Change the cursor over a dragable feature
-        map.on('pointermove', evt => {
-          const hoverDragable = map.getFeaturesAtPixel(evt.pixel, {
-            layerFilter: l => {
-              if (this.options.dragable)
-                return l.ol_uid == this.ol_uid;
-            }
-          });
-
-          map.getTargetElement().style.cursor = hoverDragable.length ? 'move' : 'auto';
-          //BEST change cursor to grab / grabbing
+      // Change the cursor over a dragable feature
+      map.on('pointermove', evt => {
+        const hoverDragable = map.getFeaturesAtPixel(evt.pixel, {
+          layerFilter: l => {
+            if (this.options.dragable)
+              return l.ol_uid == this.ol_uid;
+          }
         });
 
-        // Edit the marker position
-        if (this.options.dragable) {
-          map.addInteraction(new ol.interaction.Pointer({
-            handleDownEvent: evt => {
-              return map.getFeaturesAtPixel(evt.pixel, {
-                layerFilter: l => {
-                  return l.ol_uid == this.ol_uid;
-                }
-              }).length;
-            },
-            handleDragEvent: evt => {
-              this.changeLL(evt.coordinate, 'EPSG:3857');
-            },
-          }));
-
-          // Get the marker at the dblclick position
-          map.on('dblclick', evt => {
-            this.changeLL(evt.coordinate, 'EPSG:3857');
-            return false;
-          });
-        }
+        map.getTargetElement().style.cursor = hoverDragable.length ? 'move' : 'auto';
+        //BEST change cursor to grab / grabbing
       });
-    }
+
+      // Drag the marker
+      if (this.options.dragable) {
+        map.addInteraction(new ol.interaction.Pointer({
+          handleDownEvent: evt => {
+            return map.getFeaturesAtPixel(evt.pixel, {
+              layerFilter: l => {
+                return l.ol_uid == this.ol_uid;
+              }
+            }).length;
+          },
+          handleDragEvent: evt => {
+            this.changeLL(evt.coordinate, 'EPSG:3857');
+          },
+        }));
+
+        // Get the marker at the dblclick position
+        map.on('dblclick', evt => {
+          this.changeLL(evt.coordinate, 'EPSG:3857');
+          return false;
+        });
+      }
+
+      return super.setMapInternal(map);
+    } // End setMapInternal
 
     // Read new values
     action(el) {
@@ -98247,6 +98256,7 @@ body>*:not(#' + mapEl.id + '),\
       // selectName: '', // Name of checkbox inputs to tune the url parameters
       // browserGigue: 0, // (meters) Randomly shift a point around his position
       // addProperties: properties => {}, // Add properties to each received feature
+      //TODO voir si cluster appliqué out of map size extent / strategie bboxDom
 
       super(options);
 
@@ -98299,6 +98309,7 @@ body>*:not(#' + mapEl.id + '),\
       options = {
         // browserClusterFeaturelMaxPerimeter: 300, // (pixels) perimeter of a line or poly above which we do not cluster
         // distance: 50, // (pixels) distance above which the browser clusters
+        //TODO distance function of map size
         // minDistance: 16, // (pixels) minimum distance in pixels between clusters
 
         // Any MyVectorSource options
@@ -98416,10 +98427,10 @@ body>*:not(#' + mapEl.id + '),\
     }
 
     setMapInternal(map) {
-      super.setMapInternal(map);
-
       if (this.lowResolutionLayer)
         map.addLayer(this.lowResolutionLayer);
+
+      return super.setMapInternal(map);
     }
 
     // Propagate reload
@@ -98457,18 +98468,17 @@ body>*:not(#' + mapEl.id + '),\
     }
 
     setMapInternal(map) {
-      super.setMapInternal(map);
-
       if (this.serverClusterLayer)
         map.addLayer(this.serverClusterLayer);
+
+      return super.setMapInternal(map);
     }
 
     // Propagate the reload to the serverClusterLayer
     reload(visible) {
-      super.reload(visible);
-
       if (this.serverClusterLayer)
         this.serverClusterLayer.reload(visible);
+      return super.reload(visible);
     }
   }
 
@@ -98576,7 +98586,7 @@ body>*:not(#' + mapEl.id + '),\
 
     // Define reload action
     reload() {
-      super.reload(this.selector.getSelection().length);
+      return super.reload(this.selector.getSelection().length);
     }
   }
 
@@ -98610,7 +98620,7 @@ body>*:not(#' + mapEl.id + '),\
       super({
         serverClusterMinResolution: 100, // (meters per pixel) resolution above which we ask clusters to the server
         distance: 50, // (pixels) distance above which the browser clusters
-        browserClusterFeaturelMaxPerimeter: 300,
+        browserClusterFeaturelMaxPerimeter: 300, // (pixels) perimeter of a line or poly above which we do not cluster
         browserGigue: 10, // (meters) Randomly shift a point around his position
 
         // Any myol.layer.MyVectorLayer, ol.source.Vector options, ol.source.layer.Vector
@@ -98646,7 +98656,7 @@ body>*:not(#' + mapEl.id + '),\
         host: 'https://alpages.info/',
         attribution: '&copy;alpages.info',
         distance: 50, // (pixels) distance above which the browser clusters
-        browserClusterFeaturelMaxPerimeter: 300,
+        browserClusterFeaturelMaxPerimeter: 300, // (pixels) perimeter of a line or poly above which we do not cluster
         // Any myol.layer.MyVectorLayer, ol.source.Vector options, ol.source.layer.Vector
         ...options,
       });

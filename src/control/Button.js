@@ -60,8 +60,6 @@ export class Button extends ol.control.Control {
   }
 
   setMap(map) {
-    super.setMap(map);
-
     // Register action listeners when html is fully loaded
     this.buttonEl.addEventListener('click', evt => this.buttonListener(evt));
     this.element.addEventListener('mouseover', evt => this.buttonListener(evt));
@@ -80,6 +78,8 @@ export class Button extends ol.control.Control {
         el.addEventListener(tag, evt =>
           this.subMenuAction(evt)
         )));
+
+    return super.setMap(map);
   }
 
   buttonListener(evt) {

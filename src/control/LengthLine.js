@@ -15,8 +15,6 @@ export class LengthLine extends ol.control.Control {
   }
 
   setMap(map) {
-    super.setMap(map);
-
     map.on('pointermove', evt => {
       this.element.innerHTML = ''; // Clear the measure if hover no feature
 
@@ -27,6 +25,8 @@ export class LengthLine extends ol.control.Control {
           hitTolerance: 6, // Default is 0
         });
     });
+
+    return super.setMap(map);
   }
 
   //BEST calculate distance to the ends

@@ -9,10 +9,10 @@ export class Marker extends ol.layer.Vector {
   constructor(options) {
     options = {
       // src: 'imageUrl', // url of marker image
-      // position: [0, 0], // Initial position of the marker (default : center of the map)
+      // position: [<lon>, <lat>], // Initial position of the marker
       // dragable: false, // Can draw the marker to edit position
       // focus: number // Center & value of zoom on the marker
-      zIndex: 400, // Above points
+      zIndex: 600, // Above points & hover
 
       prefix: 'marker', // Will take the values on
       // marker-json, // <input> json form
@@ -23,21 +23,27 @@ export class Marker extends ol.layer.Vector {
       ...options,
     };
 
+    const point = new ol.geom.Point(options.position || [0, 0]);
+
     super({
-      source: new ol.source.Vector(options),
+      source: new ol.source.Vector({
+        features: [new ol.Feature({
+          geometry: point,
+        })],
+        wrapX: false,
+        ...options,
+      }),
       style: new ol.style.Style({
-        image: new ol.style.Icon({
-          src: options.src,
-        }),
+        image: new ol.style.Icon(options),
       }),
       properties: {
-        marker: true,
+        marker: true, // To recognise that this is a marker
       },
-
       ...options
     });
 
     this.options = options;
+    this.point = point;
 
     // Initialise specific projection
     if (typeof proj4Lib == 'function') {
@@ -64,60 +70,52 @@ export class Marker extends ol.layer.Vector {
   }
 
   setMapInternal(map) {
-    super.setMapInternal(map);
-
-    map.once('loadstart', () => { // Hack to be noticed at map init
+    map.once('postrender', () => { //HACK the only event to trigger if the map is not centered
       this.view = map.getView();
 
-      // Create the point at option position or map center
-      this.point = new ol.geom.Point(this.options.position || this.view.getCenter());
-      this.getSource().addFeature(new ol.Feature({
-        geometry: this.point,
-      }));
-
-      this.action(this.els.lon);
-      this.action(this.els.json);
-      this.changeLL(); // Display anyway (if no lon | json)
-
+      this.action(this.els.lon); // Il value is provided in lon / lat inputs fields
+      this.action(this.els.json); // Il value is provided in json inputs fields
       if (this.options.focus)
         this.view.setZoom(this.options.focus);
+    });
 
-      // Change the cursor over a dragable feature
-      map.on('pointermove', evt => {
-        const hoverDragable = map.getFeaturesAtPixel(evt.pixel, {
-          layerFilter: l => {
-            if (this.options.dragable)
-              return l.ol_uid == this.ol_uid;
-          }
-        });
-
-        map.getTargetElement().style.cursor = hoverDragable.length ? 'move' : 'auto';
-        //BEST change cursor to grab / grabbing
+    // Change the cursor over a dragable feature
+    map.on('pointermove', evt => {
+      const hoverDragable = map.getFeaturesAtPixel(evt.pixel, {
+        layerFilter: l => {
+          if (this.options.dragable)
+            return l.ol_uid == this.ol_uid;
+        }
       });
 
-      // Edit the marker position
-      if (this.options.dragable) {
-        map.addInteraction(new ol.interaction.Pointer({
-          handleDownEvent: evt => {
-            return map.getFeaturesAtPixel(evt.pixel, {
-              layerFilter: l => {
-                return l.ol_uid == this.ol_uid;
-              }
-            }).length;
-          },
-          handleDragEvent: evt => {
-            this.changeLL(evt.coordinate, 'EPSG:3857');
-          },
-        }));
-
-        // Get the marker at the dblclick position
-        map.on('dblclick', evt => {
-          this.changeLL(evt.coordinate, 'EPSG:3857');
-          return false;
-        });
-      }
+      map.getTargetElement().style.cursor = hoverDragable.length ? 'move' : 'auto';
+      //BEST change cursor to grab / grabbing
     });
-  }
+
+    // Drag the marker
+    if (this.options.dragable) {
+      map.addInteraction(new ol.interaction.Pointer({
+        handleDownEvent: evt => {
+          return map.getFeaturesAtPixel(evt.pixel, {
+            layerFilter: l => {
+              return l.ol_uid == this.ol_uid;
+            }
+          }).length;
+        },
+        handleDragEvent: evt => {
+          this.changeLL(evt.coordinate, 'EPSG:3857');
+        },
+      }));
+
+      // Get the marker at the dblclick position
+      map.on('dblclick', evt => {
+        this.changeLL(evt.coordinate, 'EPSG:3857');
+        return false;
+      });
+    }
+
+    return super.setMapInternal(map);
+  } // End setMapInternal
 
   // Read new values
   action(el) {

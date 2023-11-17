@@ -39,8 +39,6 @@ export class LayerSwitcher extends Button {
   }
 
   setMap(map) {
-    super.setMap(map);
-
     map.addLayer(new BackgroundLayer());
 
     for (let name in this.layers) {
@@ -79,6 +77,8 @@ export class LayerSwitcher extends Button {
       if (evt.pixel[0] < max_x || evt.pixel[1] > max_y)
         this.element.classList.remove('myol-button-switcher-open');
     });
+
+    return super.setMap(map);
   }
 
   action(evt) {

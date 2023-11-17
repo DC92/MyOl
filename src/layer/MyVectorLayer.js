@@ -17,6 +17,7 @@ class MyVectorSource extends ol.source.Vector {
     // selectName: '', // Name of checkbox inputs to tune the url parameters
     // browserGigue: 0, // (meters) Randomly shift a point around his position
     // addProperties: properties => {}, // Add properties to each received feature
+    //TODO voir si cluster appliqué out of map size extent / strategie bboxDom
 
     super(options);
 
@@ -69,6 +70,7 @@ class MyClusterSource extends ol.source.Cluster {
     options = {
       // browserClusterFeaturelMaxPerimeter: 300, // (pixels) perimeter of a line or poly above which we do not cluster
       // distance: 50, // (pixels) distance above which the browser clusters
+      //TODO distance function of map size
       // minDistance: 16, // (pixels) minimum distance in pixels between clusters
 
       // Any MyVectorSource options
@@ -186,10 +188,10 @@ class MyBrowserClusterVectorLayer extends ol.layer.Vector {
   }
 
   setMapInternal(map) {
-    super.setMapInternal(map);
-
     if (this.lowResolutionLayer)
       map.addLayer(this.lowResolutionLayer);
+
+    return super.setMapInternal(map);
   }
 
   // Propagate reload
@@ -227,18 +229,17 @@ class MyServerClusterVectorLayer extends MyBrowserClusterVectorLayer {
   }
 
   setMapInternal(map) {
-    super.setMapInternal(map);
-
     if (this.serverClusterLayer)
       map.addLayer(this.serverClusterLayer);
+
+    return super.setMapInternal(map);
   }
 
   // Propagate the reload to the serverClusterLayer
   reload(visible) {
-    super.reload(visible);
-
     if (this.serverClusterLayer)
       this.serverClusterLayer.reload(visible);
+    return super.reload(visible);
   }
 }
 
@@ -346,7 +347,7 @@ export class MyVectorLayer extends MyServerClusterVectorLayer {
 
   // Define reload action
   reload() {
-    super.reload(this.selector.getSelection().length);
+    return super.reload(this.selector.getSelection().length);
   }
 }
 

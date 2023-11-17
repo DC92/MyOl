@@ -1,7 +1,6 @@
-var centre = [5.5067, 44.9844],
+var host = 'https://www.refuges.info/',
   mapKeys = {},
   layerOptions = false,
-  host = 'https://www.refuges.info/',
   viseur = '../images/viseur.svg';
 
 
@@ -12,11 +11,16 @@ var centre = [5.5067, 44.9844],
 
 // PARTIE A REPRENDRE
 // Gestion des cartes
+var curseur = new myol.layer.Marker({
+  src: viseur,
+  prefix: 'marker', // S'interface avec les <TAG id="marker-xxx"...>
+  dragable: true,
+  focus: 17,
+});
+
 new ol.Map({
   target: 'carte-modif',
   view: new ol.View({
-    center: ol.proj.transform(centre, 'EPSG:4326', 'EPSG:3857'),
-    zoom: 13,
     enableRotation: false,
     constrainResolution: true, // Force le zoom sur la définition des dalles disponibles
   }),
@@ -35,6 +39,10 @@ new ol.Map({
     new ol.control.Attribution({ // Attribution doit être défini avant LayerSwitcher
       collapsed: false,
     }),
+    new myol.control.Permalink({ // Permet de garder le même réglage de carte en création de point
+      init: !curseur.els.json.value, // On cadre le point si on est en modification
+      //TODO à challenger
+    }),
 
     // Haut droit
     new myol.control.LayerSwitcher({
@@ -42,17 +50,10 @@ new ol.Map({
     }),
   ],
   layers: [
-    // Les autres points refuges.info
     couchePointsWRI({
       host: host, // Appeler la couche de CE serveur
-    }),
-    // Le viseur jaune pour modifier la position du point
-    new myol.layer.Marker({
-      src: viseur,
-      prefix: 'marker', // S'interface avec les <TAG id="marker-xxx"...>
-      dragable: true,
-      focus: 15,
-    }),
+    }), // Les autres points refuges.info
+    curseur, // Le viseur jaune pour modifier la position du point
     new myol.layer.Hover(), // Gère le survol du curseur
   ],
 });

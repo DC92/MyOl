@@ -1,5 +1,5 @@
 var host = 'https://www.refuges.info/',
-  initPermalink = true,
+  initPermalink = false,
   layerOptions = false,
   mapKeys = {
     ign: 'iejxbx4obzhco6c8klxrfbto',
@@ -8,6 +8,17 @@ var host = 'https://www.refuges.info/',
     bing: 'AldBMbaKNyat-j6CBRKxxH05uaxP7dvQu1RnMWCQEGGC3z0gjBu-bLniE_8WZvcC',
     kompass: '2ba8c124-38b6-11e7-ade1-e0cb4e28e847',
   };
+
+
+
+
+
+
+
+
+
+
+
 
 // PARTIE A REPRENDRE
 var contourMassif = coucheContourMassif({
@@ -69,9 +80,11 @@ var contourMassif = coucheContourMassif({
       new myol.layer.vector.Overpass({
         selectName: 'select-osm',
       }),
+
       contourMassif,
+
       couchePointsWRI({
-        host: host,
+        host: host, // Appeler la couche de CE serveur
         selectName: 'select-wri',
         selectMassif: contourMassif.options.selector,
       }),
@@ -82,4 +95,5 @@ var contourMassif = coucheContourMassif({
 myol.trace(map);
 // FIN PARTIE A REPRENDRE
 
-map.getView().fit(ol.proj.transformExtent([5, 44.68, 5.72, 45.33], 'EPSG:4326', 'EPSG:3857'));
+if (!initPermalink)
+  map.getView().fit(ol.proj.transformExtent([5, 44.68, 5.72, 45.33], 'EPSG:4326', 'EPSG:3857'));

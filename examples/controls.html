@@ -32,11 +32,6 @@ Based on https://openlayers.org
   <script type="module">
     new ol.Map({
       target: 'map',
-      view: new ol.View({
-        enableRotation: false,
-        center: [600000, 5800000],
-        zoom: 6,
-      }),
       controls: [
         ...myol.control.collection(),
         new myol.control.Button({ // Help
@@ -45,6 +40,7 @@ Based on https://openlayers.org
         }),
         new myol.control.Permalink({
           display: true,
+          init: true,
         }),
       ],
       layers: [

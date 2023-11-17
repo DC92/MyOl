@@ -15,6 +15,8 @@ export class Editor extends ol.layer.Vector {
       format: new ol.format.GeoJSON(),
       dataProjection: 'EPSG:4326',
       featureProjection: 'EPSG:3857',
+      // defaultExtent: [-534114, 5211062, 916444, 6637050], // France
+      //TODO to be challenged
 
       // styleOptions: {}, // Style options to apply to the edited features
       withHoles: true, // Authorize holes in polygons
@@ -38,28 +40,27 @@ export class Editor extends ol.layer.Vector {
         features: options.format.readFeatures(geoJson, options),
         wrapX: false,
         ...options,
-      });
-
-    const style = new ol.style.Style({
-      // Marker
-      image: new ol.style.Circle({
-        radius: 4,
+      }),
+      style = new ol.style.Style({
+        // Marker
+        image: new ol.style.Circle({
+          radius: 4,
+          stroke: new ol.style.Stroke({
+            color: 'red',
+            width: 2,
+          }),
+        }),
+        // Lines or polygons border
         stroke: new ol.style.Stroke({
           color: 'red',
           width: 2,
         }),
-      }),
-      // Lines or polygons border
-      stroke: new ol.style.Stroke({
-        color: 'red',
-        width: 2,
-      }),
-      // Polygons
-      fill: new ol.style.Fill({
-        color: 'rgba(0,0,255,0.2)',
-      }),
-      ...options.styleOptions,
-    });
+        // Polygons
+        fill: new ol.style.Fill({
+          color: 'rgba(0,0,255,0.2)',
+        }),
+        ...options.styleOptions,
+      });
 
     super({
       source: source,
@@ -78,8 +79,21 @@ export class Editor extends ol.layer.Vector {
   } // End constructor
 
   setMapInternal(map) {
-    super.setMapInternal(map);
     this.map = map;
+
+    // Fit to the source at the init
+    map.once('postrender', () => { //HACK the only event to trigger if the map is not centered
+      const extent = this.source.getExtent();
+
+      if (!ol.extent.isEmpty(extent))
+        map.getView().fit(
+          extent, {
+            minResolution: 10,
+            padding: [5, 5, 5, 5],
+          });
+    });
+
+    this.optimiseEdited(); // Optimise at init
 
     this.interactions = [
       new ol.interaction.Modify({ // 0 Modify
@@ -104,15 +118,6 @@ export class Editor extends ol.layer.Vector {
         pixelTolerance: 7.5, // 6 + line width / 2 : default is 10
       }),
     ];
-
-    // Add features loaded from GPX file
-    map.on('myol:onfeatureload', evt => {
-      this.getSource().addFeatures(evt.features);
-      this.optimiseEdited();
-      return false; // Warn control.load that the editor got the included feature
-    });
-
-    this.optimiseEdited(); // Optimise at init
 
     // End of modify
     this.interactions[0].on('modifyend', evt => {
@@ -202,6 +207,8 @@ export class Editor extends ol.layer.Vector {
       }));
 
     this.changeInteraction(0); // Init to modify
+
+    return super.setMapInternal(map);
   } // End setMapInternal
 
   changeInteraction(interaction, type = 'click') {

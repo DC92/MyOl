@@ -25,16 +25,6 @@ Based on https://openlayers.org
 
     var map = new ol.Map({
       target: 'map',
-      view: new ol.View({
-        enableRotation: false,
-        center: [600000, 5800000],
-        zoom: 6,
-      }),
-      layers: [
-        new myol.layer.vector.Chemineur({
-          selectName: 'select-chem',
-        }),
-      ],
       controls: [
         ...myol.control.collection(),
         new myol.control.LayerSwitcher({
@@ -42,6 +32,12 @@ Based on https://openlayers.org
         }),
         new myol.control.Permalink({
           display: true,
+          init: true,
+        }),
+      ],
+      layers: [
+        new myol.layer.vector.Chemineur({
+          selectName: 'select-chem',
         }),
       ],
     });
@@ -68,7 +64,7 @@ Based on https://openlayers.org
 </head>
 
 <body>
-  <a style="float:right" href="layerSwitcher.html">Next &#9654;</a>
+  <a style="float:right" href="index.html">Next &#9654;</a>
   <h1 style="margin:0">myol</h1>
   <a href="index.html" title="Layer switcher">I</a>
   <a href="layerSwitcher.html" title="Layer switcher">S</a>
@@ -81,7 +77,9 @@ Based on https://openlayers.org
   <a href="wri/index.html" title="Refuges.info">I</a>
   <a href="wri/nav.html" title="Nav">N</a>
   <a href="wri/edit.html" title="Edit massif">E</a>
+  <a href="wri/creemassif.html" title="Crée massif">Cm</a>
   <a href="wri/point.html" title="Point WRI">P</a>
+  <a href="wri/creepoint.html" title="Create point WRI">Cp</a>
   <a href="wri/modif.html" title="Modif point WRI">M</a>
   <a style="float:right" href="https://github.com/Dominique92/myol/">Github &#9654;</a>
   <br><br>
