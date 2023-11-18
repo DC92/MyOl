@@ -60,9 +60,8 @@ export class Hover extends ol.layer.Vector {
       hoveredSubFeature = hoveredFeature;
 
     if (hoveredFeature) {
-      const hoveredProperties = hoveredFeature.getProperties();
-
-      const hoveredSubProperties = hoveredSubFeature.getProperties();
+      const hoveredProperties = hoveredFeature.getProperties(),
+        hoveredSubProperties = hoveredSubFeature.getProperties();
 
       // Click
       if (evt.type == 'click' &&

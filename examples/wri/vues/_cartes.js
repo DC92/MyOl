@@ -8,7 +8,6 @@ function couchePointsWRI(options) {
     serverClusterMinResolution: 100, // (mètres par pixel) résolution au dessus de laquelle on demande des clusters au serveur
     distance: 30, // (pixels) distance au-dessus de laquelle le navigateur clusterise
     browserClusterMinResolution: 10, // (mètres par pixel) résolution en-dessous de laquelle le navigateur ne clusterise plus
-    browserGigue: 5, // (mètres) décale aléatoirement un point autour de sa position
 
     ...layerOptions, // Config_privee
     ...options,

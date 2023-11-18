@@ -9,13 +9,18 @@
 import ol from '../ol';
 
 // Basic style to display a geo vector layer based on standard properties
-export function basic(feature) {
+export function basic(feature, resolution, layer) {
   const properties = feature.getProperties();
 
   return [{
     // Point
     image: properties.icon ? new ol.style.Icon({
+      anchor: resolution < layer.options.minResolution ? [
+        feature.getId() / 5 % 2 - 0.5,
+        feature.getId() / 7 % 2 - 0.5,
+      ] : [0.5, 0.5],
       src: properties.icon,
+      //BEST ??? crossOrigin: 'anonymous',
     }) : null,
 
     // Lines

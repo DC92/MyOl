@@ -15,7 +15,6 @@ import * as stylesOptions from './stylesOptions';
 class MyVectorSource extends ol.source.Vector {
   constructor(options) {
     // selectName: '', // Name of checkbox inputs to tune the url parameters
-    // browserGigue: 0, // (meters) Randomly shift a point around his position
     // addProperties: properties => {}, // Add properties to each received feature
     //TODO voir si cluster appliqué out of map size extent / strategie bboxDom
 
@@ -30,16 +29,6 @@ class MyVectorSource extends ol.source.Vector {
         evt.type == 'featuresloadstart' ? '&#8987;' :
         evt.type == 'featuresloadend' ? '' :
         '&#9888;'; // Error symbol
-
-      // Randomly shift a point around his position
-      if (evt.type == 'featuresloadend' &&
-        options.browserGigue)
-        evt.features.forEach(f => {
-          f.getGeometry().translate(
-            (f.getId() / 5 % 2 - 1) * options.browserGigue,
-            (f.getId() / 7 % 2 - 1) * options.browserGigue,
-          );
-        });
     });
 
     // Compute properties when the layer is loaded & before the cluster layer is computed
@@ -157,33 +146,34 @@ class MyBrowserClusterVectorLayer extends ol.layer.Vector {
     // Any ol.source.layer.Vector
 
     // High resolutions layer, can call for server clustering
-    super({
+    const hiResOptions = {
       source: options.distance ?
         new MyClusterSource(options) : // Use a cluster source and a vector source to manages clusters
         new MyVectorSource(options), // or a vector source to get the data
 
       ...options,
+
       minResolution: Math.max(
         options.minResolution || 0,
         options.browserClusterMinResolution || 0,
       ),
-    });
+    };
 
-    this.options = options; // Mem for further use
+    super(hiResOptions);
+    this.options = hiResOptions; // Mem for further use
 
     // Low resolutions layer without clustering
-    if (options.browserClusterMinResolution) {
-      this.lowResolutionLayer = new ol.layer.Vector({
+    if (options.browserClusterMinResolution &&
+      options.browserClusterMinResolution < options.maxResolution) {
+      const lowResOptions = {
         source: new MyVectorSource(options),
-
         ...options,
-        maxResolution: Math.min(
-          options.maxResolution || Infinity,
-          options.browserClusterMinResolution || Infinity,
-        ),
-      });
+        maxResolution: options.browserClusterMinResolution,
+        type: 'lowResolution',
+      };
 
-      this.lowResolutionLayer.options = options;
+      this.lowResolutionLayer = new ol.layer.Vector(lowResOptions);
+      this.lowResolutionLayer.options = lowResOptions;
     }
   }
 
@@ -218,6 +208,7 @@ class MyServerClusterVectorLayer extends MyBrowserClusterVectorLayer {
     super({
       ...options,
       maxResolution: options.serverClusterMinResolution,
+      type: 'browserCluster',
     });
 
     // High resolutions layer to get and display the clusters delivered by the server at hight resolutions
@@ -225,6 +216,7 @@ class MyServerClusterVectorLayer extends MyBrowserClusterVectorLayer {
       this.serverClusterLayer = new MyBrowserClusterVectorLayer({
         ...options,
         minResolution: options.serverClusterMinResolution,
+        type: 'serverCluster',
       });
   }
 
@@ -256,16 +248,15 @@ export class MyVectorLayer extends MyServerClusterVectorLayer {
       dataProjection: 'EPSG:4326',
 
       // Clusters:
-      // serverClusterMinResolution: 100, // (meters per pixel) resolution above which we ask clusters to the server
-      // distance: 50, // (pixels) distance above which the browser clusters
+      // distance: 50, // (pixels) distance above which we cluster
       // minDistance: 16, // (pixels) minimum distance in pixels between clusters
+      // serverClusterMinResolution: 100, // (meters per pixel) resolution above which we ask clusters to the server
       // browserClusterMinResolution: 10, // (meters per pixel) resolution below which the browser no longer clusters
       // browserClusterFeaturelMaxPerimeter: 300, // (pixels) perimeter of a line or poly above which we do not cluster
-      // browserGigue: 0, // (meters) Randomly shift a point around his position
 
       // addProperties: properties => {}, // Add properties to each received feature
-      basicStylesOptions: stylesOptions.basic, // (feature, layer)
-      hoverStylesOptions: stylesOptions.hover, // (feature, layer)
+      basicStylesOptions: stylesOptions.basic, // (feature, resolution, layer)
+      hoverStylesOptions: stylesOptions.hover, // (feature, resolution, layer)
       // selectName: '', // Name of checkbox inputs to tune the url parameters
       selector: new Selector(options.selectName), // Tune the url parameters
       zIndex: 100, // Above tiles layers
@@ -286,7 +277,7 @@ export class MyVectorLayer extends MyServerClusterVectorLayer {
     super({
       url: (e, r, p) => this.url(e, r, p),
       addProperties: p => this.addProperties(p),
-      style: (f, r) => this.style(f, r, this),
+      style: (f, r) => this.style(f, r, this), //TODO BUG should apply on each ol.vector.layer
       ...options,
     });
 
@@ -338,8 +329,7 @@ export class MyVectorLayer extends MyServerClusterVectorLayer {
 
   // Function returning an array of styles options
   style(feature) {
-    const sof = !feature.getProperties().cluster ? this.options.basicStylesOptions :
-      stylesOptions.cluster;
+    const sof = feature.getProperties().cluster ? stylesOptions.cluster : this.options.basicStylesOptions;
 
     return sof(...arguments) // Call the styleOptions function
       .map(so => new ol.style.Style(so)); // Transform into an array of Style objects
@@ -347,7 +337,7 @@ export class MyVectorLayer extends MyServerClusterVectorLayer {
 
   // Define reload action
   reload() {
-    return super.reload(this.selector.getSelection().length);
+    return super.reload(this.selector.getSelection().length > 0);
   }
 }
 

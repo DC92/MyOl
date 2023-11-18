@@ -6,6 +6,7 @@
  */
 
 // Geocoder
+//TODO     "ol-geocoder": "4.3.1"
 import Geocoder from '@myol/geocoder/src/base';
 import '@myol/geocoder/dist/ol-geocoder.css';
 import './myGeocoder.css'; // After ol-geocoder.css

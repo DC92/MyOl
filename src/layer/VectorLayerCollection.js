@@ -25,7 +25,6 @@ export class GeoBB extends MyVectorLayer {
       serverClusterMinResolution: 100, // (meters per pixel) resolution above which we ask clusters to the server
       distance: 50, // (pixels) distance above which the browser clusters
       browserClusterFeaturelMaxPerimeter: 300, // (pixels) perimeter of a line or poly above which we do not cluster
-      browserGigue: 10, // (meters) Randomly shift a point around his position
 
       // Any myol.layer.MyVectorLayer, ol.source.Vector options, ol.source.layer.Vector
       ...options,
@@ -91,7 +90,6 @@ export class WRI extends MyVectorLayer {
       serverClusterMinResolution: 100, // (meters per pixel) resolution above which we ask clusters to the server
       distance: 30, // (pixels) distance above which the browser clusters
       // browserClusterMinResolution: 10, // (meters per pixel) resolution below which the browser no longer clusters
-      browserGigue: 10, // (meters) Randomly shift a point around his position
       // Any myol.layer.MyVectorLayer, ol.source.Vector options, ol.source.layer.Vector
 
       ...options,

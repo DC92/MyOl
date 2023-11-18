@@ -4,7 +4,7 @@
  * This package adds many features to Openlayer https://openlayers.org/
  * https://github.com/Dominique92/myol#readme
  * Based on https://openlayers.org
- * Built 17/11/2023 17:45:17 using npm run build from the src/... sources
+ * Built 18/11/2023 16:08:40 using npm run build from the src/... sources
  * Please don't modify it : modify src/... & npm run build !
  */
 
@@ -90417,9 +90417,8 @@ body>*:not(#' + mapEl.id + '),\
         hoveredSubFeature = hoveredFeature;
 
       if (hoveredFeature) {
-        const hoveredProperties = hoveredFeature.getProperties();
-
-        const hoveredSubProperties = hoveredSubFeature.getProperties();
+        const hoveredProperties = hoveredFeature.getProperties(),
+          hoveredSubProperties = hoveredSubFeature.getProperties();
 
         // Click
         if (evt.type == 'click' &&
@@ -98114,13 +98113,18 @@ body>*:not(#' + mapEl.id + '),\
 
 
   // Basic style to display a geo vector layer based on standard properties
-  function basic(feature) {
+  function basic(feature, resolution, layer) {
     const properties = feature.getProperties();
 
     return [{
       // Point
       image: properties.icon ? new ol.style.Icon({
+        anchor: resolution < layer.options.minResolution ? [
+          feature.getId() / 5 % 2 - 0.5,
+          feature.getId() / 7 % 2 - 0.5,
+        ] : [0.5, 0.5],
         src: properties.icon,
+        //BEST ??? crossOrigin: 'anonymous',
       }) : null,
 
       // Lines
@@ -98254,7 +98258,6 @@ body>*:not(#' + mapEl.id + '),\
   class MyVectorSource extends ol.source.Vector {
     constructor(options) {
       // selectName: '', // Name of checkbox inputs to tune the url parameters
-      // browserGigue: 0, // (meters) Randomly shift a point around his position
       // addProperties: properties => {}, // Add properties to each received feature
       //TODO voir si cluster appliqué out of map size extent / strategie bboxDom
 
@@ -98269,16 +98272,6 @@ body>*:not(#' + mapEl.id + '),\
           evt.type == 'featuresloadstart' ? '&#8987;' :
           evt.type == 'featuresloadend' ? '' :
           '&#9888;'; // Error symbol
-
-        // Randomly shift a point around his position
-        if (evt.type == 'featuresloadend' &&
-          options.browserGigue)
-          evt.features.forEach(f => {
-            f.getGeometry().translate(
-              (f.getId() / 5 % 2 - 1) * options.browserGigue,
-              (f.getId() / 7 % 2 - 1) * options.browserGigue,
-            );
-          });
       });
 
       // Compute properties when the layer is loaded & before the cluster layer is computed
@@ -98396,33 +98389,34 @@ body>*:not(#' + mapEl.id + '),\
       // Any ol.source.layer.Vector
 
       // High resolutions layer, can call for server clustering
-      super({
+      const hiResOptions = {
         source: options.distance ?
           new MyClusterSource(options) : // Use a cluster source and a vector source to manages clusters
           new MyVectorSource(options), // or a vector source to get the data
 
         ...options,
+
         minResolution: Math.max(
           options.minResolution || 0,
           options.browserClusterMinResolution || 0,
         ),
-      });
+      };
 
-      this.options = options; // Mem for further use
+      super(hiResOptions);
+      this.options = hiResOptions; // Mem for further use
 
       // Low resolutions layer without clustering
-      if (options.browserClusterMinResolution) {
-        this.lowResolutionLayer = new ol.layer.Vector({
+      if (options.browserClusterMinResolution &&
+        options.browserClusterMinResolution < options.maxResolution) {
+        const lowResOptions = {
           source: new MyVectorSource(options),
-
           ...options,
-          maxResolution: Math.min(
-            options.maxResolution || Infinity,
-            options.browserClusterMinResolution || Infinity,
-          ),
-        });
+          maxResolution: options.browserClusterMinResolution,
+          type: 'lowResolution',
+        };
 
-        this.lowResolutionLayer.options = options;
+        this.lowResolutionLayer = new ol.layer.Vector(lowResOptions);
+        this.lowResolutionLayer.options = lowResOptions;
       }
     }
 
@@ -98457,6 +98451,7 @@ body>*:not(#' + mapEl.id + '),\
       super({
         ...options,
         maxResolution: options.serverClusterMinResolution,
+        type: 'browserCluster',
       });
 
       // High resolutions layer to get and display the clusters delivered by the server at hight resolutions
@@ -98464,6 +98459,7 @@ body>*:not(#' + mapEl.id + '),\
         this.serverClusterLayer = new MyBrowserClusterVectorLayer({
           ...options,
           minResolution: options.serverClusterMinResolution,
+          type: 'serverCluster',
         });
     }
 
@@ -98495,16 +98491,15 @@ body>*:not(#' + mapEl.id + '),\
         dataProjection: 'EPSG:4326',
 
         // Clusters:
-        // serverClusterMinResolution: 100, // (meters per pixel) resolution above which we ask clusters to the server
-        // distance: 50, // (pixels) distance above which the browser clusters
+        // distance: 50, // (pixels) distance above which we cluster
         // minDistance: 16, // (pixels) minimum distance in pixels between clusters
+        // serverClusterMinResolution: 100, // (meters per pixel) resolution above which we ask clusters to the server
         // browserClusterMinResolution: 10, // (meters per pixel) resolution below which the browser no longer clusters
         // browserClusterFeaturelMaxPerimeter: 300, // (pixels) perimeter of a line or poly above which we do not cluster
-        // browserGigue: 0, // (meters) Randomly shift a point around his position
 
         // addProperties: properties => {}, // Add properties to each received feature
-        basicStylesOptions: basic, // (feature, layer)
-        hoverStylesOptions: hover, // (feature, layer)
+        basicStylesOptions: basic, // (feature, resolution, layer)
+        hoverStylesOptions: hover, // (feature, resolution, layer)
         // selectName: '', // Name of checkbox inputs to tune the url parameters
         selector: new Selector(options.selectName), // Tune the url parameters
         zIndex: 100, // Above tiles layers
@@ -98525,7 +98520,7 @@ body>*:not(#' + mapEl.id + '),\
       super({
         url: (e, r, p) => this.url(e, r, p),
         addProperties: p => this.addProperties(p),
-        style: (f, r) => this.style(f, r, this),
+        style: (f, r) => this.style(f, r, this), //TODO BUG should apply on each ol.vector.layer
         ...options,
       });
 
@@ -98577,8 +98572,7 @@ body>*:not(#' + mapEl.id + '),\
 
     // Function returning an array of styles options
     style(feature) {
-      const sof = !feature.getProperties().cluster ? this.options.basicStylesOptions :
-        cluster;
+      const sof = feature.getProperties().cluster ? cluster : this.options.basicStylesOptions;
 
       return sof(...arguments) // Call the styleOptions function
         .map(so => new ol.style.Style(so)); // Transform into an array of Style objects
@@ -98586,7 +98580,7 @@ body>*:not(#' + mapEl.id + '),\
 
     // Define reload action
     reload() {
-      return super.reload(this.selector.getSelection().length);
+      return super.reload(this.selector.getSelection().length > 0);
     }
   }
 
@@ -98621,7 +98615,6 @@ body>*:not(#' + mapEl.id + '),\
         serverClusterMinResolution: 100, // (meters per pixel) resolution above which we ask clusters to the server
         distance: 50, // (pixels) distance above which the browser clusters
         browserClusterFeaturelMaxPerimeter: 300, // (pixels) perimeter of a line or poly above which we do not cluster
-        browserGigue: 10, // (meters) Randomly shift a point around his position
 
         // Any myol.layer.MyVectorLayer, ol.source.Vector options, ol.source.layer.Vector
         ...options,
@@ -98687,7 +98680,6 @@ body>*:not(#' + mapEl.id + '),\
         serverClusterMinResolution: 100, // (meters per pixel) resolution above which we ask clusters to the server
         distance: 30, // (pixels) distance above which the browser clusters
         // browserClusterMinResolution: 10, // (meters per pixel) resolution below which the browser no longer clusters
-        browserGigue: 10, // (meters) Randomly shift a point around his position
         // Any myol.layer.MyVectorLayer, ol.source.Vector options, ol.source.layer.Vector
 
         ...options,
