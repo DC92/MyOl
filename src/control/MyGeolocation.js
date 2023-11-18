@@ -78,6 +78,7 @@ export class MyGeolocation extends Button {
     this.geolocation = new ol.Geolocation({
       projection: map.getView().getProjection(),
       trackingOptions: this.options,
+
       ...this.options,
     });
     this.geolocation.on('change', evt => this.subMenuAction(evt));

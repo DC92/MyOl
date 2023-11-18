@@ -29,7 +29,7 @@
   "dependencies": {
     "ol": "8.1.0",
     "proj4": "2.9.0",
-    "@myol/geocoder": "1.0.2"
+    "@myol/geocoder": "4.2.16"
   },
   "devDependencies": {
     "@rollup/plugin-commonjs": "25.0.4",

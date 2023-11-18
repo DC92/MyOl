@@ -12,6 +12,7 @@ export class Hover extends ol.layer.Vector {
       source: new ol.source.Vector(),
       zIndex: 500, // Above all layers
       wrapX: false,
+
       ...options,
     });
   }

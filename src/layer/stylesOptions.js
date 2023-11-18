@@ -16,8 +16,8 @@ export function basic(feature, resolution, layer) {
     // Point
     image: properties.icon ? new ol.style.Icon({
       anchor: resolution < layer.options.minResolution ? [
-        feature.getId() / 5 % 2 - 0.5,
-        feature.getId() / 7 % 2 - 0.5,
+        feature.getId() / 5 % 1,
+        feature.getId() / 7 % 1,
       ] : [0.5, 0.5],
       src: properties.icon,
       //BEST ??? crossOrigin: 'anonymous',

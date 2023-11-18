@@ -23,7 +23,7 @@ export class GeoBB extends MyVectorLayer {
   constructor(options) {
     super({
       serverClusterMinResolution: 100, // (meters per pixel) resolution above which we ask clusters to the server
-      distance: 50, // (pixels) distance above which the browser clusters
+      nbMaxClusters: 80, // Number of clusters on the map display. Replace distance
       browserClusterFeaturelMaxPerimeter: 300, // (pixels) perimeter of a line or poly above which we do not cluster
 
       // Any myol.layer.MyVectorLayer, ol.source.Vector options, ol.source.layer.Vector
@@ -46,6 +46,7 @@ export class Chemineur extends GeoBB {
     super({
       host: 'https://chemineur.fr/',
       attribution: '&copy;chemineur.fr',
+
       // Any myol.layer.MyVectorLayer, ol.source.Vector options, ol.source.layer.Vector
       ...options,
     });
@@ -58,8 +59,9 @@ export class Alpages extends MyVectorLayer {
     super({
       host: 'https://alpages.info/',
       attribution: '&copy;alpages.info',
-      distance: 50, // (pixels) distance above which the browser clusters
+      nbMaxClusters: 80, // Number of clusters on the map display. Replace distance
       browserClusterFeaturelMaxPerimeter: 300, // (pixels) perimeter of a line or poly above which we do not cluster
+
       // Any myol.layer.MyVectorLayer, ol.source.Vector options, ol.source.layer.Vector
       ...options,
     });
@@ -88,7 +90,7 @@ export class WRI extends MyVectorLayer {
       attribution: '&copy;refuges.info',
 
       serverClusterMinResolution: 100, // (meters per pixel) resolution above which we ask clusters to the server
-      distance: 30, // (pixels) distance above which the browser clusters
+      nbMaxClusters: 80, // Number of clusters on the map display. Replace distance
       // browserClusterMinResolution: 10, // (meters per pixel) resolution below which the browser no longer clusters
       // Any myol.layer.MyVectorLayer, ol.source.Vector options, ol.source.layer.Vector
 
@@ -125,7 +127,8 @@ export class PRC extends MyVectorLayer {
       url: 'https://www.pyrenees-refuges.com/api.php?type_fichier=GEOJSON',
       strategy: ol.loadingstrategy.all,
       attribution: '&copy;Pyrenees-Refuges',
-      distance: 50, // (pixels) distance above which the browser clusters
+      nbMaxClusters: 80, // Number of clusters on the map display. Replace distance
+
       // Any myol.layer.MyVectorLayer, ol.source.Vector options, ol.source.layer.Vector
       ...options,
     });
@@ -149,7 +152,8 @@ export class C2C extends MyVectorLayer {
       host: 'https://api.camptocamp.org/',
       dataProjection: 'EPSG:3857',
       attribution: '&copy;Camp2camp',
-      distance: 50, // (pixels) distance above which the browser clusters
+      nbMaxClusters: 80, // Number of clusters on the map display. Replace distance
+
       // Any myol.layer.MyVectorLayer options
       ...options,
     });
@@ -209,7 +213,8 @@ export class Overpass extends MyVectorLayer {
       attribution: '&copy;OpenStreetMap',
 
       maxResolution: 50,
-      distance: 50, // (pixels) distance above which the browser clusters
+      nbMaxClusters: 80, // Number of clusters on the map display. Replace distance
+
       // Any myol.layer.MyVectorLayer, ol.source.Vector options, ol.source.layer.Vector
       ...options,
     });

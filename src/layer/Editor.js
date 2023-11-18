@@ -39,6 +39,7 @@ export class Editor extends ol.layer.Vector {
       source = new ol.source.Vector({
         features: options.format.readFeatures(geoJson, options),
         wrapX: false,
+
         ...options,
       }),
       style = new ol.style.Style({
@@ -59,6 +60,7 @@ export class Editor extends ol.layer.Vector {
         fill: new ol.style.Fill({
           color: 'rgba(0,0,255,0.2)',
         }),
+
         ...options.styleOptions,
       });
 
@@ -66,6 +68,7 @@ export class Editor extends ol.layer.Vector {
       source: source,
       style: style,
       zIndex: 400, // Editor & cursor : above the features
+
       ...options,
     });
 

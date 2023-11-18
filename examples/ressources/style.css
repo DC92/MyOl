@@ -17,10 +17,8 @@
 
 .map {
   clear: both;
-  width: 100%;
-  max-width: 600px;
-  height: 80vw;
-  max-height: 400px;
+  width: 90vw;
+  height: 60vw;
   background: #444;
 }
 

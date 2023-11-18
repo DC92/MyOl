@@ -579,10 +579,10 @@
   background: #fcffd1 !important;
 }
 /*!
- * @myol/geocoder - v4.2.17-dev
+ * @myol/geocoder - v4.2.16
  * DEVELOPMENT : DON'T USE
  * https://github.com/Dominique92/ol-geocoder
- * Built: 16/09/2023 13:29:28
+ * Built: 14/09/2023 15:59:54
  */
  
  .ol-touch .ol-control.gcd-gl-control button {
@@ -654,8 +654,7 @@
   width: 1.5625em;
   height: 1.5625em;
   top: 0.125em;
-  left: 0.125em;
-  cursor: pointer; }
+  left: 0.125em; }
 
 .ol-geocoder .gcd-gl-btn:after {
   content: "\1F50D"; }
@@ -841,7 +840,6 @@
   font-size: 0.75em;
   font-weight: lighter;
   color: #333; }
-
 
 /* Geocodeur */
 .ol-geocoder.gcd-gl-container {

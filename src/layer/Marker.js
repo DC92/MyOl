@@ -31,6 +31,7 @@ export class Marker extends ol.layer.Vector {
           geometry: point,
         })],
         wrapX: false,
+
         ...options,
       }),
       style: new ol.style.Style({
@@ -39,6 +40,7 @@ export class Marker extends ol.layer.Vector {
       properties: {
         marker: true, // To recognise that this is a marker
       },
+
       ...options
     });
 

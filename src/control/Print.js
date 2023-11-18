@@ -13,6 +13,7 @@ export class Print extends Button {
       subMenuId: 'myol-button-print',
       subMenuHTML: subMenuHTML,
       subMenuHTML_fr: subMenuHTML_fr,
+
       ...options,
     });
 

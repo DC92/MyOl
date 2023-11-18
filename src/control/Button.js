@@ -31,6 +31,7 @@ export class Button extends ol.control.Control {
 
     super({
       element: document.createElement('div'),
+
       ...options,
     });
 
