@@ -4,7 +4,7 @@
  * This package adds many features to Openlayer https://openlayers.org/
  * https://github.com/Dominique92/myol#readme
  * Based on https://openlayers.org
- * Built 19/11/2023 08:26:45 using npm run build from the src/... sources
+ * Built 19/11/2023 18:29:38 using npm run build from the src/... sources
  * Please don't modify it : modify src/... & npm run build !
  */
 
@@ -63086,8 +63086,6 @@ body>*:not(#' + mapEl.id + '),\
         format: new ol.format.GeoJSON(),
         dataProjection: 'EPSG:4326',
         featureProjection: 'EPSG:3857',
-        // defaultExtent: [-534114, 5211062, 916444, 6637050], // France
-        //TODO to be challenged
 
         // styleOptions: {}, // Style options to apply to the edited features
         withHoles: true, // Authorize holes in polygons
@@ -63157,10 +63155,17 @@ body>*:not(#' + mapEl.id + '),\
 
       // Fit to the source at the init
       map.once('postrender', () => { //HACK the only event to trigger if the map is not centered
-        const extent = this.source.getExtent();
+        const extent = this.source.getExtent(),
+          defaultPosition = [localStorage.myol_lon || 2, localStorage.myol_lat || 47], // Initial position of the marker
+          view = map.getView();
 
-        if (!ol.extent.isEmpty(extent))
-          map.getView().fit(
+        if (ol.extent.isEmpty(extent)) {
+          view.setCenter(
+            ol.proj.transform(defaultPosition, 'EPSG:4326', 'EPSG:3857') // If no json value
+          );
+          view.setZoom(localStorage.myol_zoom || 6);
+        } else
+          view.fit(
             extent, {
               minResolution: 10,
               padding: [5, 5, 5, 5],
@@ -71003,8 +71008,7 @@ body>*:not(#' + mapEl.id + '),\
     constructor(options) {
       options = {
         // src: 'imageUrl', // url of marker image
-        // position: [<lon>, <lat>], // Initial position of the marker
-        //TODO to be challenged
+        defaultPosition: [localStorage.myol_lon || 2, localStorage.myol_lat || 47], // Initial position of the marker
         // dragable: false, // Can draw the marker to edit position
         // focus: number // Center & value of zoom on the marker
         zIndex: 600, // Above points & hover
@@ -71018,7 +71022,9 @@ body>*:not(#' + mapEl.id + '),\
         ...options,
       };
 
-      const point = new ol.geom.Point(options.position || [0, 0]);
+      const point = new ol.geom.Point(
+        ol.proj.transform(options.defaultPosition, 'EPSG:4326', 'EPSG:3857') // If no json value
+      );
 
       super({
         source: new ol.source.Vector({
@@ -71565,13 +71571,13 @@ body>*:not(#' + mapEl.id + '),\
    */
   class MyBrowserClusterVectorLayer extends ol.layer.Vector {
     constructor(options) {
-      // browserClusterMinResolution: 10, // (meters per pixel) resolution below which the browser no longer clusters
+      // browserClusterMinResolution: 10, // (meters per pixel) resolution below which the browser no longer clusters but add a jitter
 
       // Any ol.source.layer.Vector options
 
       // High resolutions layer, can call for server clustering
       const hiResOptions = {
-        source: options.distance || options.nbMaxClusters ?
+        source: options.nbMaxClusters ?
           new MyClusterSource(options) : // Use a cluster source and a vector source to manages clusters
           new MyVectorSource(options), // or a vector source to get the data
 
@@ -71685,12 +71691,13 @@ body>*:not(#' + mapEl.id + '),\
 
         // Clusters:
         // serverClusterMinResolution: 100, // (meters per pixel) resolution above which we ask clusters to the server
-        // browserClusterMinResolution: 10, // (meters per pixel) resolution below which the browser no longer clusters
-        // nbMaxClusters: 80, // Number of clusters on the map display. Replace distance
+        // browserClusterMinResolution: 10, // (meters per pixel) resolution below which the browser no longer clusters but add a jitter
+        // nbMaxClusters: 90, // Number of clusters on the map display. Replace distance
         // distance: 50, // (pixels) distance above which we cluster
-        // minDistance: 16, // (pixels) minimum distance in pixels between clusters (can slide cluster icons
+        minDistance: 24, // (pixels) minimum distance in pixels between clusters (can slide cluster icons
         // browserClusterFeaturelMaxPerimeter: 300, // (pixels) perimeter of a line or poly above which we do not cluster
 
+        // Features
         // addProperties: properties => {}, // Add properties to each received feature
         basicStylesOptions: basic, // (feature, resolution, layer)
         hoverStylesOptions: hover, // (feature, resolution, layer)
@@ -71714,7 +71721,7 @@ body>*:not(#' + mapEl.id + '),\
       super({
         url: (e, r, p) => this.url(e, r, p),
         addProperties: p => this.addProperties(p),
-        style: (f, r) => this.style(f, r, this), //BEST BUG should apply on each ol.vector.layer
+        style: (f, r) => this.style(f, r, this), //BEST BUG should apply on each ol.vector.layer (now only the basic layer of 3)
 
         ...options,
       });
@@ -71808,7 +71815,8 @@ body>*:not(#' + mapEl.id + '),\
     constructor(options) {
       super({
         serverClusterMinResolution: 100, // (meters per pixel) resolution above which we ask clusters to the server
-        nbMaxClusters: 80, // Number of clusters on the map display. Replace distance
+        browserClusterMinResolution: 10, // (meters per pixel) resolution below which the browser no longer clusters but add a jitter
+        nbMaxClusters: 90, // Number of clusters on the map display. Replace distance
         browserClusterFeaturelMaxPerimeter: 300, // (pixels) perimeter of a line or poly above which we do not cluster
 
         // Any myol.layer.MyVectorLayer, ol.source.Vector options, ol.source.layer.Vector
@@ -71833,6 +71841,7 @@ body>*:not(#' + mapEl.id + '),\
         attribution: '&copy;chemineur.fr',
 
         // Any myol.layer.MyVectorLayer, ol.source.Vector options, ol.source.layer.Vector
+
         ...options,
       });
     }
@@ -71844,10 +71853,10 @@ body>*:not(#' + mapEl.id + '),\
       super({
         host: 'https://alpages.info/',
         attribution: '&copy;alpages.info',
-        nbMaxClusters: 80, // Number of clusters on the map display. Replace distance
         browserClusterFeaturelMaxPerimeter: 300, // (pixels) perimeter of a line or poly above which we do not cluster
 
         // Any myol.layer.MyVectorLayer, ol.source.Vector options, ol.source.layer.Vector
+
         ...options,
       });
     }
@@ -71875,8 +71884,9 @@ body>*:not(#' + mapEl.id + '),\
         attribution: '&copy;refuges.info',
 
         serverClusterMinResolution: 100, // (meters per pixel) resolution above which we ask clusters to the server
-        nbMaxClusters: 80, // Number of clusters on the map display. Replace distance
-        // browserClusterMinResolution: 10, // (meters per pixel) resolution below which the browser no longer clusters
+        nbMaxClusters: 90, // Number of clusters on the map display. Replace distance
+        browserClusterMinResolution: 10, // (meters per pixel) resolution below which the browser no longer clusters
+
         // Any myol.layer.MyVectorLayer, ol.source.Vector options, ol.source.layer.Vector
 
         ...options,
@@ -71912,9 +71922,10 @@ body>*:not(#' + mapEl.id + '),\
         url: 'https://www.pyrenees-refuges.com/api.php?type_fichier=GEOJSON',
         strategy: ol.loadingstrategy.all,
         attribution: '&copy;Pyrenees-Refuges',
-        nbMaxClusters: 80, // Number of clusters on the map display. Replace distance
+        nbMaxClusters: 90, // Number of clusters on the map display. Replace distance
 
         // Any myol.layer.MyVectorLayer, ol.source.Vector options, ol.source.layer.Vector
+
         ...options,
       });
     }
@@ -71937,9 +71948,9 @@ body>*:not(#' + mapEl.id + '),\
         host: 'https://api.camptocamp.org/',
         dataProjection: 'EPSG:3857',
         attribution: '&copy;Camp2camp',
-        nbMaxClusters: 80, // Number of clusters on the map display. Replace distance
 
         // Any myol.layer.MyVectorLayer options
+
         ...options,
       });
 
@@ -71998,7 +72009,7 @@ body>*:not(#' + mapEl.id + '),\
         attribution: '&copy;OpenStreetMap',
 
         maxResolution: 50,
-        nbMaxClusters: 80, // Number of clusters on the map display. Replace distance
+        nbMaxClusters: 90, // Number of clusters on the map display. Replace distance
 
         // Any myol.layer.MyVectorLayer, ol.source.Vector options, ol.source.layer.Vector
         ...options,
@@ -72190,8 +72201,8 @@ body>*:not(#' + mapEl.id + '),\
     // Zoom & resolution
     if (map)
       map.getView().on('change:resolution', () =>
-        console.log('zoom ' + map.getView().getZoom().toFixed(1) +
-          ', res ' + map.getView().getResolution().toFixed(0) + ' m/pix'
+        console.log('zoom ' + map.getView().getZoom().toFixed(2) +
+          ', res ' + map.getView().getResolution().toPrecision(4) + ' m/pix'
         )
       );
   }

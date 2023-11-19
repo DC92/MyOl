@@ -84,10 +84,17 @@ export class Editor extends ol.layer.Vector {
 
     // Fit to the source at the init
     map.once('postrender', () => { //HACK the only event to trigger if the map is not centered
-      const extent = this.source.getExtent();
+      const extent = this.source.getExtent(),
+        defaultPosition = [localStorage.myol_lon || 2, localStorage.myol_lat || 47], // Initial position of the marker
+        view = map.getView();
 
-      if (!ol.extent.isEmpty(extent))
-        map.getView().fit(
+      if (ol.extent.isEmpty(extent)) {
+        view.setCenter(
+          ol.proj.transform(defaultPosition, 'EPSG:4326', 'EPSG:3857') // If no json value
+        );
+        view.setZoom(localStorage.myol_zoom || 6);
+      } else
+        view.fit(
           extent, {
             minResolution: 10,
             padding: [5, 5, 5, 5],

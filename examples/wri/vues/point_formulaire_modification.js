@@ -9,6 +9,7 @@ var host = 'https://www.refuges.info/',
 
 
 
+
 // PARTIE A REPRENDRE
 // Gestion des cartes
 var curseur = new myol.layer.Marker({

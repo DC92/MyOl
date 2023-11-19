@@ -2,6 +2,7 @@ var host = 'https://www.refuges.info/',
   mapKeys = {},
   layerOptions = false,
   cadre = '../images/cadre.svg';
+
 // PARTIE A REPRENDRE
 var map = new ol.Map({
   target: 'carte-point',
