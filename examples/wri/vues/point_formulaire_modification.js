@@ -14,8 +14,9 @@ var host = 'https://www.refuges.info/',
 var curseur = new myol.layer.Marker({
   src: viseur,
   prefix: 'marker', // S'interface avec les <TAG id="marker-xxx"...>
+  // Prend la position qui est dans <input id="cadre-json">
   dragable: true,
-  focus: 15,
+  focus: 15, // Centre la carte sur le curseur
 });
 
 new ol.Map({
@@ -38,10 +39,6 @@ new ol.Map({
     // Bas droit
     new ol.control.Attribution({ // Attribution doit être défini avant LayerSwitcher
       collapsed: false,
-    }),
-    new myol.control.Permalink({ // Permet de garder le même réglage de carte en création de point
-      init: !curseur.els.json.value, // On cadre le point si on est en modification
-      //TODO à challenger
     }),
 
     // Haut droit

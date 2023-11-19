@@ -35,8 +35,8 @@ Based on https://openlayers.org
       target: 'map',
       view: new ol.View({
         center: ol.proj.transform([2, 47], 'EPSG:4326', 'EPSG:3857'), // France
-        zoom: 5,
         constrainResolution: true, // Force le zoom sur la définition des dalles disponibles
+        zoom: 5,
       }),
       controls: [
         new ol.control.Zoom(),

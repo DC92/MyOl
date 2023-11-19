@@ -37,6 +37,7 @@ Based on https://openlayers.org
       view: new ol.View({
         center: ol.proj.transform([5.885, 44.791], 'EPSG:4326', 'EPSG:3857'), // Cabane double
         // Autre cabane double 6.51, 45.13
+        constrainResolution: true, // Force le zoom sur la définition des dalles disponibles
         zoom: 14,
       }),
       controls: [

@@ -9,7 +9,7 @@ export class Marker extends ol.layer.Vector {
   constructor(options) {
     options = {
       // src: 'imageUrl', // url of marker image
-      // position: [<lon>, <lat>], // Initial position of the marker
+      defaultPosition: [localStorage.myol_lon || 2, localStorage.myol_lat || 47], // Initial position of the marker
       // dragable: false, // Can draw the marker to edit position
       // focus: number // Center & value of zoom on the marker
       zIndex: 600, // Above points & hover
@@ -23,7 +23,9 @@ export class Marker extends ol.layer.Vector {
       ...options,
     };
 
-    const point = new ol.geom.Point(options.position || [0, 0]);
+    const point = new ol.geom.Point(
+      ol.proj.transform(options.defaultPosition, 'EPSG:4326', 'EPSG:3857') // If no json value
+    );
 
     super({
       source: new ol.source.Vector({

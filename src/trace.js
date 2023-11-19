@@ -48,8 +48,8 @@ export async function trace(map) {
   // Zoom & resolution
   if (map)
     map.getView().on('change:resolution', () =>
-      console.log('zoom ' + map.getView().getZoom().toFixed(1) +
-        ', res ' + map.getView().getResolution().toPrecision(3) + ' m/pix'
+      console.log('zoom ' + map.getView().getZoom().toFixed(2) +
+        ', res ' + map.getView().getResolution().toPrecision(4) + ' m/pix'
       )
     );
 }

@@ -27,7 +27,7 @@ function couchePointsWRI(options, page) {
 
     // Traduction des propriétés reçues de WRI pour interprétation par MyVectorLayer
     addProperties: properties => ({
-      label: page == 'nav' ? properties.nom : null, // Permanence de l'étiquette dès l'affichage de la carte
+      label: 'nav,point'.includes(page) ? properties.nom : null, // Permanence de l'étiquette dès l'affichage de la carte
       name: properties.nom, // Nom utilisé dans les listes affichées au survol des ronds des clusters
       icon: options.host + 'images/icones/' + properties.type.icone + '.svg',
       type: properties.type.valeur, // Pour export
