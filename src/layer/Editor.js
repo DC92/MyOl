@@ -15,8 +15,6 @@ export class Editor extends ol.layer.Vector {
       format: new ol.format.GeoJSON(),
       dataProjection: 'EPSG:4326',
       featureProjection: 'EPSG:3857',
-      // defaultExtent: [-534114, 5211062, 916444, 6637050], // France
-      //TODO to be challenged
 
       // styleOptions: {}, // Style options to apply to the edited features
       withHoles: true, // Authorize holes in polygons

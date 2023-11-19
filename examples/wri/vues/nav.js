@@ -87,7 +87,7 @@ var contourMassif = coucheContourMassif({
         host: host, // Appeler la couche de CE serveur
         selectName: 'select-wri',
         selectMassif: contourMassif.options.selector,
-      }),
+      }, 'nav'),
       new myol.layer.Hover(), // Gère le survol du curseur
     ],
   });

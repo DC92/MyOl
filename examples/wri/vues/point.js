@@ -40,13 +40,16 @@ var map = new ol.Map({
     // Les autres points refuges.info
     couchePointsWRI({
       host: host, // Appeler la couche de CE serveur
-    }),
+      browserClusterMinResolution: 4, // (mètres par pixel) pour ne pas générer de gigue à l'affichage du point
+    }, 'point'),
 
     // Le cadre rouge autour du point de la fiche
     new myol.layer.Marker({
-      src: cadre,
       prefix: 'cadre', // S'interface avec les <TAG id="cadre-xxx"...>
-      focus: 17, // Centrer
+      // Prend la position qui est dans <input id="cadre-json">
+      src: cadre,
+      focus: 15, // Centrer
+      zIndex: 300, // Above the features, under the hover label
     }),
 
     // Gère le survol du curseur

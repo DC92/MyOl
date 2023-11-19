@@ -15,7 +15,7 @@ var curseur = new myol.layer.Marker({
   src: viseur,
   prefix: 'marker', // S'interface avec les <TAG id="marker-xxx"...>
   dragable: true,
-  focus: 17,
+  focus: 15,
 });
 
 new ol.Map({
@@ -50,10 +50,16 @@ new ol.Map({
     }),
   ],
   layers: [
+    // Les autres points refuges.info
     couchePointsWRI({
       host: host, // Appeler la couche de CE serveur
-    }), // Les autres points refuges.info
-    curseur, // Le viseur jaune pour modifier la position du point
-    new myol.layer.Hover(), // Gère le survol du curseur
+      browserClusterMinResolution: null, // Pour ne pas générer de gigue
+    }, 'modif'),
+
+    // Le viseur jaune pour modifier la position du point
+    curseur,
+
+    // Gère le survol du curseur
+    new myol.layer.Hover(),
   ],
 });

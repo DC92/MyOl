@@ -26,8 +26,15 @@ $config_wri['mapKeys'] = [
   // SwissTopo : You need to register your domain in https://shop.swisstopo.admin.ch/fr/products/geoservice/swisstopo_geoservices/WMTS_info
 ];
 
+$config_wri['layerOptions'] = [
+  // 'serverClusterMinResolution' => 100, // (mètres par pixel) résolution au dessus de laquelle on demande des clusters au serveur
+  // 'nbMaxClusters' => 42, // Nombre de clusters sur la carte (6 rangées de 7)
+  // 'browserClusterMinResolution' => 10, // (mètres par pixel) résolution en-dessous de laquelle le navigateur ne clusterise plus et ajoute une gigue
+];
+
 // Pour affichage d'un peu plus de debug sur certaines fonctions utilisant la fonction erreur();
 //$config_wri['debug']=true;
+//$config_wri['nom_ol']='myol-debug'; // Décommenter pour utiliser myol-debug.js
 
 // Ici choisissez les options pour afficher les erreurs php
 //ini_set('error_reporting', E_ALL); // toutes les erreurs

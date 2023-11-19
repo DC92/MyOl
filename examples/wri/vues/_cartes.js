@@ -1,13 +1,13 @@
 // Contient les fonctions communes à plusieurs cartes
 
-function couchePointsWRI(options) {
+function couchePointsWRI(options, page) {
   const layer = new myol.layer.MyVectorLayer({
     selectMassif: new myol.Selector('no-selector'), // Defaut = pas de sélecteur de massif
 
     // Clusters:
     serverClusterMinResolution: 100, // (mètres par pixel) résolution au dessus de laquelle on demande des clusters au serveur
-    nbMaxClusters: 80, // Nombre de clusters sur la carte. Remplace la distance
-    browserClusterMinResolution: 10, // (mètres par pixel) résolution en-dessous de laquelle le navigateur ne clusterise plus
+    nbMaxClusters: 42, // Nombre de clusters sur la carte. Remplace la distance
+    browserClusterMinResolution: 10, // (mètres par pixel) résolution en-dessous de laquelle le navigateur ne clusterise plus et ajoute une gigue
 
     ...layerOptions, // Config_privee
     ...options,
@@ -27,7 +27,7 @@ function couchePointsWRI(options) {
 
     // Traduction des propriétés reçues de WRI pour interprétation par MyVectorLayer
     addProperties: properties => ({
-      label: properties.nom, // Permanence de l'étiquette dès l'affichage de la carte
+      label: page == 'nav' ? properties.nom : null, // Permanence de l'étiquette dès l'affichage de la carte
       name: properties.nom, // Nom utilisé dans les listes affichées au survol des ronds des clusters
       icon: options.host + 'images/icones/' + properties.type.icone + '.svg',
       type: properties.type.valeur, // Pour export

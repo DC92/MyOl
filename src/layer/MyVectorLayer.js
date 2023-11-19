@@ -146,7 +146,7 @@ class MyClusterSource extends ol.source.Cluster {
  */
 class MyBrowserClusterVectorLayer extends ol.layer.Vector {
   constructor(options) {
-    // browserClusterMinResolution: 10, // (meters per pixel) resolution below which the browser no longer clusters
+    // browserClusterMinResolution: 10, // (meters per pixel) resolution below which the browser no longer clusters but add a jitter
 
     // Any ol.source.layer.Vector options
 
@@ -266,10 +266,13 @@ export class MyVectorLayer extends MyServerClusterVectorLayer {
 
       // Clusters:
       // serverClusterMinResolution: 100, // (meters per pixel) resolution above which we ask clusters to the server
-      // browserClusterMinResolution: 10, // (meters per pixel) resolution below which the browser no longer clusters
-      // nbMaxClusters: 80, // Number of clusters on the map display. Replace distance
+      // browserClusterMinResolution: 10, // (meters per pixel) resolution below which the browser no longer clusters but add a jitter
+      // nbMaxClusters: 42, // Number of clusters on the map display. Replace distance
+      // distance: 50, // (pixels) distance above which we cluster
+      minDistance: 24, // (pixels) minimum distance in pixels between clusters (can slide cluster icons
       // browserClusterFeaturelMaxPerimeter: 300, // (pixels) perimeter of a line or poly above which we do not cluster
 
+      // Features
       // addProperties: properties => {}, // Add properties to each received feature
       basicStylesOptions: stylesOptions.basic, // (feature, resolution, layer)
       hoverStylesOptions: stylesOptions.hover, // (feature, resolution, layer)
@@ -293,7 +296,7 @@ export class MyVectorLayer extends MyServerClusterVectorLayer {
     super({
       url: (e, r, p) => this.url(e, r, p),
       addProperties: p => this.addProperties(p),
-      style: (f, r) => this.style(f, r, this), //BEST BUG should apply on each ol.vector.layer
+      style: (f, r) => this.style(f, r, this), //BEST BUG should apply on each ol.vector.layer (now only the basic layer of 3)
 
       ...options,
     });

@@ -49,7 +49,7 @@ export async function trace(map) {
   if (map)
     map.getView().on('change:resolution', () =>
       console.log('zoom ' + map.getView().getZoom().toFixed(1) +
-        ', res ' + map.getView().getResolution().toFixed(0) + ' m/pix'
+        ', res ' + map.getView().getResolution().toPrecision(3) + ' m/pix'
       )
     );
 }

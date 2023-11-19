@@ -4,7 +4,7 @@
  * This package adds many features to Openlayer https://openlayers.org/
  * https://github.com/Dominique92/myol#readme
  * Based on https://openlayers.org
- * Built 18/11/2023 22:17:26 using npm run build from the src/... sources
+ * Built 19/11/2023 08:26:45 using npm run build from the src/... sources
  * Please don't modify it : modify src/... & npm run build !
  */
 
@@ -61049,7 +61049,7 @@ var myol = (function () {
 
   //BEST how do we do on touch terminal ? alt key to switch layers / transparency
   //BEST slider transparency doesn't work out of range (no BackgroundLayer)
-  //BEST BUG Attribution doit être défini avant LayerSwitcher
+  //BEST BUG Attribution must be set before LayerSwitcher
   class LayerSwitcher extends Button {
     constructor(options) {
       super({
@@ -71004,6 +71004,7 @@ body>*:not(#' + mapEl.id + '),\
       options = {
         // src: 'imageUrl', // url of marker image
         // position: [<lon>, <lat>], // Initial position of the marker
+        //TODO to be challenged
         // dragable: false, // Can draw the marker to edit position
         // focus: number // Center & value of zoom on the marker
         zIndex: 600, // Above points & hover
@@ -71570,7 +71571,7 @@ body>*:not(#' + mapEl.id + '),\
 
       // High resolutions layer, can call for server clustering
       const hiResOptions = {
-        source: options.nbMaxClusters ?
+        source: options.distance || options.nbMaxClusters ?
           new MyClusterSource(options) : // Use a cluster source and a vector source to manages clusters
           new MyVectorSource(options), // or a vector source to get the data
 
@@ -71686,6 +71687,8 @@ body>*:not(#' + mapEl.id + '),\
         // serverClusterMinResolution: 100, // (meters per pixel) resolution above which we ask clusters to the server
         // browserClusterMinResolution: 10, // (meters per pixel) resolution below which the browser no longer clusters
         // nbMaxClusters: 80, // Number of clusters on the map display. Replace distance
+        // distance: 50, // (pixels) distance above which we cluster
+        // minDistance: 16, // (pixels) minimum distance in pixels between clusters (can slide cluster icons
         // browserClusterFeaturelMaxPerimeter: 300, // (pixels) perimeter of a line or poly above which we do not cluster
 
         // addProperties: properties => {}, // Add properties to each received feature
