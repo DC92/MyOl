@@ -19,7 +19,7 @@ self.addEventListener('install', evt => {
           'ressources/favicon.png',
           'ressources/gps.css',
           'ressources/gps.js',
-          'ressources/icon-512.png',
+          'ressources/icon-512.png', //TODO remove when favicon.svg
           'index.php',
           'manifest.json',
           'service-worker.php',
@@ -27,7 +27,7 @@ self.addEventListener('install', evt => {
           ...jsVars.gpxFiles,
         ])
         .then(console.log('PWA files added to cache'))
-        .catch(err => console.error(err)); //BEST error when initialising cache
+        .catch(err => console.error(err));
     })
     .catch(err => console.error(err))
   );

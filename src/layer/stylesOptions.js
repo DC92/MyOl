@@ -16,6 +16,7 @@ export function basic(feature, resolution, layer) {
     // Point
     image: properties.icon ? new ol.style.Icon({
       anchor: resolution < layer.options.minResolution ? [
+        //TODO facteur de gigue (pixel)
         feature.getId() / 5 % 1,
         feature.getId() / 7 % 1,
       ] : [0.5, 0.5],
@@ -83,6 +84,7 @@ export function cluster(feature) {
         color: 'white',
       }),
     }),
+    //TODO laisser le texte sur les clusters < 3 icônes
     text: new ol.style.Text({
       text: feature.getProperties().cluster.toString(),
       font: '12px Verdana',

@@ -4,7 +4,7 @@
  * This package adds many features to Openlayer https://openlayers.org/
  * https://github.com/Dominique92/myol#readme
  * Based on https://openlayers.org
- * Built 19/11/2023 18:29:38 using npm run build from the src/... sources
+ * Built 20/11/2023 15:26:39 using npm run build from the src/... sources
  * Please don't modify it : modify src/... & npm run build !
  */
 
@@ -71302,6 +71302,7 @@ body>*:not(#' + mapEl.id + '),\
       // Point
       image: properties.icon ? new ol.style.Icon({
         anchor: resolution < layer.options.minResolution ? [
+          //TODO facteur de gigue (pixel)
           feature.getId() / 5 % 1,
           feature.getId() / 7 % 1,
         ] : [0.5, 0.5],
@@ -71369,6 +71370,7 @@ body>*:not(#' + mapEl.id + '),\
           color: 'white',
         }),
       }),
+      //TODO laisser le texte sur les clusters < 3 icônes
       text: new ol.style.Text({
         text: feature.getProperties().cluster.toString(),
         font: '12px Verdana',
@@ -71558,6 +71560,7 @@ body>*:not(#' + mapEl.id + '),\
 
       if (n)
         this.setDistance(Math.sqrt(s[0] * s[1] / n / 2));
+      //TODO il faut plus de pictos pour les grandes cartes
     }
 
     reload() {

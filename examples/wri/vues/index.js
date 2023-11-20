@@ -1,4 +1,8 @@
+var host = 'https://www.refuges.info/',
+  extent = [4, 43.5, 8.5, 47];
+
 // PARTIE A REPRENDRE
+//TODO BUG 8.2.0 WRI index
 var map = new ol.Map({
   target: 'carte-accueil',
   view: new ol.View({
@@ -13,7 +17,7 @@ var map = new ol.Map({
   layers: [
     new myol.layer.tile.MRI(), // Fond de carte
     coucheMassifsColores({ // Les massifs
-      host: 'https://www.refuges.info/',
+      host: host,
     }),
     new myol.layer.Hover(), // Gère le survol du curseur
   ],

@@ -133,6 +133,7 @@ class MyClusterSource extends ol.source.Cluster {
 
     if (n)
       this.setDistance(Math.sqrt(s[0] * s[1] / n / 2));
+    //TODO il faut plus de pictos pour les grandes cartes
   }
 
   reload() {
