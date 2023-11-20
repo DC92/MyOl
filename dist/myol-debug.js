@@ -4,7 +4,7 @@
  * This package adds many features to Openlayer https://openlayers.org/
  * https://github.com/Dominique92/myol#readme
  * Based on https://openlayers.org
- * Built 20/11/2023 15:26:39 using npm run build from the src/... sources
+ * Built 20/11/2023 18:32:33 using npm run build from the src/... sources
  * Please don't modify it : modify src/... & npm run build !
  */
 
@@ -71301,10 +71301,11 @@ body>*:not(#' + mapEl.id + '),\
     return [{
       // Point
       image: properties.icon ? new ol.style.Icon({
+        anchorXUnits: 'pixels',
+        anchorYUnits: 'pixels',
         anchor: resolution < layer.options.minResolution ? [
-          //TODO facteur de gigue (pixel)
-          feature.getId() / 5 % 1,
-          feature.getId() / 7 % 1,
+          feature.getId() / 5 % 1 * layer.options.jitter + 12, // 24 * 24 icons
+          feature.getId() / 9 % 1 * layer.options.jitter + 12,
         ] : [0.5, 0.5],
         src: properties.icon,
         //BEST ??? crossOrigin: 'anonymous',
@@ -71321,6 +71322,7 @@ body>*:not(#' + mapEl.id + '),\
         color: 'rgba(0,0,256,0.3)',
       }),
       // properties.label if any
+      //BEST appliquer gigue anchor au label
       ...label(...arguments),
     }];
   }
@@ -71464,7 +71466,7 @@ body>*:not(#' + mapEl.id + '),\
             f._yetAdded = true;
             f.setProperties(
               options.addProperties(f.getProperties()),
-              true // Silent : add the feature without refresh the layer
+              true, // Silent : add the feature without refresh the layer
             );
           }
         })
@@ -71556,11 +71558,11 @@ body>*:not(#' + mapEl.id + '),\
 
     tuneDistance(map) {
       const s = map.getSize(),
-        n = this.options.nbMaxClusters;
+        n = this.options.nbMaxClusters,
+        f = (s[0] + s[1] + 5000) / 5000; // More clusters on big maps
 
       if (n)
-        this.setDistance(Math.sqrt(s[0] * s[1] / n / 2));
-      //TODO il faut plus de pictos pour les grandes cartes
+        this.setDistance(Math.sqrt(s[0] * s[1] / n / f));
     }
 
     reload() {
@@ -71695,9 +71697,10 @@ body>*:not(#' + mapEl.id + '),\
         // Clusters:
         // serverClusterMinResolution: 100, // (meters per pixel) resolution above which we ask clusters to the server
         // browserClusterMinResolution: 10, // (meters per pixel) resolution below which the browser no longer clusters but add a jitter
-        // nbMaxClusters: 90, // Number of clusters on the map display. Replace distance
+        jitter: 36, // (pixels)
+        // nbMaxClusters: 108, // Number of clusters on the map display. Replace distance
         // distance: 50, // (pixels) distance above which we cluster
-        minDistance: 24, // (pixels) minimum distance in pixels between clusters (can slide cluster icons
+        minDistance: 24, // (pixels) minimum distance in pixels between clusters (can slide cluster icons)
         // browserClusterFeaturelMaxPerimeter: 300, // (pixels) perimeter of a line or poly above which we do not cluster
 
         // Features
@@ -71819,7 +71822,7 @@ body>*:not(#' + mapEl.id + '),\
       super({
         serverClusterMinResolution: 100, // (meters per pixel) resolution above which we ask clusters to the server
         browserClusterMinResolution: 10, // (meters per pixel) resolution below which the browser no longer clusters but add a jitter
-        nbMaxClusters: 90, // Number of clusters on the map display. Replace distance
+        nbMaxClusters: 108, // Number of clusters on the map display. Replace distance
         browserClusterFeaturelMaxPerimeter: 300, // (pixels) perimeter of a line or poly above which we do not cluster
 
         // Any myol.layer.MyVectorLayer, ol.source.Vector options, ol.source.layer.Vector
@@ -71887,7 +71890,7 @@ body>*:not(#' + mapEl.id + '),\
         attribution: '&copy;refuges.info',
 
         serverClusterMinResolution: 100, // (meters per pixel) resolution above which we ask clusters to the server
-        nbMaxClusters: 90, // Number of clusters on the map display. Replace distance
+        nbMaxClusters: 108, // Number of clusters on the map display. Replace distance
         browserClusterMinResolution: 10, // (meters per pixel) resolution below which the browser no longer clusters
 
         // Any myol.layer.MyVectorLayer, ol.source.Vector options, ol.source.layer.Vector
@@ -71925,7 +71928,7 @@ body>*:not(#' + mapEl.id + '),\
         url: 'https://www.pyrenees-refuges.com/api.php?type_fichier=GEOJSON',
         strategy: ol.loadingstrategy.all,
         attribution: '&copy;Pyrenees-Refuges',
-        nbMaxClusters: 90, // Number of clusters on the map display. Replace distance
+        nbMaxClusters: 108, // Number of clusters on the map display. Replace distance
 
         // Any myol.layer.MyVectorLayer, ol.source.Vector options, ol.source.layer.Vector
 
@@ -72012,7 +72015,7 @@ body>*:not(#' + mapEl.id + '),\
         attribution: '&copy;OpenStreetMap',
 
         maxResolution: 50,
-        nbMaxClusters: 90, // Number of clusters on the map display. Replace distance
+        nbMaxClusters: 108, // Number of clusters on the map display. Replace distance
 
         // Any myol.layer.MyVectorLayer, ol.source.Vector options, ol.source.layer.Vector
         ...options,

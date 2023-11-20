@@ -15,10 +15,11 @@ export function basic(feature, resolution, layer) {
   return [{
     // Point
     image: properties.icon ? new ol.style.Icon({
+      anchorXUnits: 'pixels',
+      anchorYUnits: 'pixels',
       anchor: resolution < layer.options.minResolution ? [
-        //TODO facteur de gigue (pixel)
-        feature.getId() / 5 % 1,
-        feature.getId() / 7 % 1,
+        feature.getId() / 5 % 1 * layer.options.jitter + 12, // 24 * 24 icons
+        feature.getId() / 9 % 1 * layer.options.jitter + 12,
       ] : [0.5, 0.5],
       src: properties.icon,
       //BEST ??? crossOrigin: 'anonymous',
@@ -35,6 +36,7 @@ export function basic(feature, resolution, layer) {
       color: 'rgba(0,0,256,0.3)',
     }),
     // properties.label if any
+    //BEST appliquer gigue anchor au label
     ...label(...arguments),
   }];
 }
