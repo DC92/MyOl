@@ -8,7 +8,7 @@ var host = 'https://www.refuges.info/',
 
 
 
-
+//TODO couche points non clicable
 
 // PARTIE A REPRENDRE
 // Gestion des cartes

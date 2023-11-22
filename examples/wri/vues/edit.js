@@ -1,6 +1,6 @@
 var host = 'https://www.refuges.info/',
   mapKeys = {};
-//TODO BUG 8.2.0 on WRI editmassif & creemassif
+
 // PARTIE A REPRENDRE
 var editorlayer = new myol.layer.Editor({
     geoJsonId: 'edit-json',

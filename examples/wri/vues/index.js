@@ -1,7 +1,7 @@
 var host = 'https://www.refuges.info/',
   extent = [4, 43.5, 8.5, 47];
 
-//TODO BUG 8.2.0 WRI index
+
 // PARTIE A REPRENDRE
 var map = new ol.Map({
   target: 'carte-accueil',
