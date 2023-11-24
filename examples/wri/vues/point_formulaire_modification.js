@@ -8,7 +8,7 @@ var host = 'https://www.refuges.info/',
 
 
 
-//TODO couche points non clicable
+
 
 // PARTIE A REPRENDRE
 // Gestion des cartes
@@ -52,6 +52,7 @@ new ol.Map({
     couchePointsWRI({
       host: host, // Appeler la couche de CE serveur
       browserClusterMinResolution: null, // Pour ne pas générer de gigue
+      noClick: true,
     }, 'modif'),
 
     // Le viseur jaune pour modifier la position du point
