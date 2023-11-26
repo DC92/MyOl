@@ -2,7 +2,7 @@ var host = 'https://www.refuges.info/',
   mapKeys = {};
 
 // PARTIE A REPRENDRE
-var editorlayer = new myol.layer.Editor({
+var editorLayer = new myol.layer.Editor({
     geoJsonId: 'edit-json',
     editOnly: 'poly',
 
@@ -29,7 +29,7 @@ var editorlayer = new myol.layer.Editor({
       new myol.control.MyGeolocation,
       new myol.control.Load(),
       new myol.control.Download({
-        savedLayer: editorlayer,
+        savedLayer: editorLayer,
       }),
 
       // Bas gauche
@@ -50,6 +50,6 @@ var editorlayer = new myol.layer.Editor({
       coucheContourMassif({
         host: host,
       }),
-      editorlayer,
+      editorLayer,
     ],
   });

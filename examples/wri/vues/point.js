@@ -47,6 +47,7 @@ var map = new ol.Map({
     // Le cadre rouge autour du point de la fiche
     new myol.layer.Marker({
       prefix: 'cadre', // S'interface avec les <TAG id="cadre-xxx"...>
+      //TODO BUG ne cadre pas autour de l'icône
       // Prend la position qui est dans <input id="cadre-json">
       src: cadre,
       focus: 15, // Centrer

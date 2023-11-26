@@ -46,7 +46,7 @@ Based on https://openlayers.org
           stroke: new ol.style.Stroke(),
         }),
       }),
-      editorlayer = new myol.layer.Editor({
+      editorLayer = new myol.layer.Editor({
         geoJsonId: 'geojson',
       });
 
@@ -57,10 +57,10 @@ Based on https://openlayers.org
         new myol.control.MyGeocoder(),
         new myol.control.MyGeolocation(),
         new myol.control.Load({
-          receivingLayer: editorlayer,
+          receivingLayer: editorLayer,
         }),
         new myol.control.Download({
-          savedLayer: editorlayer,
+          savedLayer: editorLayer,
         }),
         new myol.control.Print(),
       ],
@@ -69,7 +69,7 @@ Based on https://openlayers.org
           source: new ol.source.OSM(),
         }),
         snaplayer,
-        editorlayer,
+        editorLayer,
       ],
     });
   </script>

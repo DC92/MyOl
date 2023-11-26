@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<!--
+© Dominique Cavailhez 2019
+https://github.com/Dominique92/myol
+Based on https://openlayers.org
+-->
+<html lang="fr">
+
+<head>
+  <title>My Openlayers WRI</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="../images/logo-dark.svg" rel="icon" type="image/svg">
+
+  <link href="../ressources/style.css" rel="stylesheet">
+  <style>
+    #carte-edit {
+      float: right;
+      width: 75vw;
+      height: 75vw;
+    }
+
+    #edit-json {
+      width: 100%;
+    }
+  </style>
+
+  <!-- Simulation of importing myol -->
+  <script>
+    // apache (production)
+    if (window.origin.split(':').length == 2) {
+      document.write('<link href="../../dist/myol.css" type="text/css" rel="stylesheet">');
+      document.write('<script src="../../dist/myol-debug.js"><&#47;script>');
+    }
+  </script>
+  <script type="module">
+    // vite nmp (test)
+    import myol from '../../build/index'; // At this place, mysteriously do not import out of npm vite context
+    window.myol = myol; // Declare a myol global variable
+  </script>
+
+  <!-- WRI -->
+  <script src="vues/edit.js" defer></script>
+  <script src="vues/_cartes.js"></script>
+</head>
+
+<body>
+  <a style="float:right" href="creemassif.html">Next &#9654;</a>
+  <a style="float:right;margin-right:15px" href="../">Home</a>
+  <h1 style="margin:0">Edit massif refuges.info</h1>
+  <a style="float:right" href="https://github.com/Dominique92/myol/">Github &#9654;</a>
+
+  <h4>/vues/editmassif.html</h4>
+  <div id="carte-edit"></div>
+
+  <div id="myol-edit-help-modify">
+    <p><u>Déplacer un sommet:</u> cliquer sur le sommet et le déplacer</p>
+    <p><u>Ajouter un sommet au milieu d'un côté:</u> cliquer le long du côté puis déplacer</p>
+    <p><u>Supprimer un sommet:</u> Alt+cliquer sur le sommet</p>
+    <p><u>Scinder un polygone:</u> joindre 2 sommets du polygone puis Alt+cliquer sur le sommet commun</p>
+    'de chaque polygone puis Alt+cliquer dessus</p>
+    <p><u>Supprimer un polygone:</u> Ctrl+Alt+cliquer sur un côté du polygone</p>
+  </div>
+  <hr>
+  <div id="myol-edit-help-poly">
+    <p><u>Pour créer un polygone:</u></p>
+    <p><a>Cliquer sur le bouton &#x23E2;</a> et choisissez "Création polygone"</p>
+    <p>Cliquer sur l'emplacement du premier sommet</p>
+    <p>Puis sur chaque sommet</p>
+    <p>Double cliquer sur le dernier sommet pour terminer</p>
+    <hr>
+    <p>Un polygone entièrement compris dans un autre crée un "trou"</p>
+  </div>
+
+  <input id="edit-json" type="text" value='
+    {
+      "type": "MultiPolygon",
+      "coordinates": [
+        [
+          [
+            [5.72, 45.18],
+            [5.6, 45.32],
+            [5.2, 45.08],
+            [5.11632, 44.91339],
+            [5.03, 44.73],
+            [5.19035, 44.7282],
+            [5.25558, 44.7755],
+            [5.29266, 44.78525],
+            [5.38193, 44.78866],
+            [5.44, 44.74],
+            [5.48, 44.69],
+            [5.54398, 44.69648],
+            [5.61, 44.76],
+            [5.62438, 44.7841],
+            [5.59, 44.87],
+            [5.63, 44.91],
+            [5.64, 45.02],
+            [5.72, 45.09],
+            [5.72, 45.18]
+          ]
+        ]
+      ]
+    }
+  '>
+</body>
+
+</html>
