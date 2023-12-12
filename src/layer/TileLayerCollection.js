@@ -55,7 +55,7 @@ export class Kompass extends OpenStreetMap { // Austria
         'https://map{1-5}.tourinfra.com/tiles/kompass_' + options.subLayer + '/{z}/{x}/{y}.png', // No key
       maxZoom: 17,
       hidden: !options.key && options.subLayer != 'osm', // For LayerSwitcher
-      attributions: '<a href="http://www.kompass.de/livemap/">KOMPASS</a>',
+      attributions: '<a href="http://www.kompass.de/livemap/">Kompass</a>',
       ...options,
     });
   }
@@ -361,6 +361,7 @@ export class MapboxElevation extends Maxbox {
  * elevation = -10000 + ((R * 256 * 256 + G * 256 + B) * 0.1
  * Get your own (free) key at https://cloud.maptiler.com/account/keys/
  */
+/*//BEST Maxbox elevation backup
 export class MapTilerElevation extends XYZ {
   constructor(options = {}) {
     super({
@@ -371,7 +372,7 @@ export class MapTilerElevation extends XYZ {
       ...options,
     });
   }
-}
+}*/
 
 export class NoTile extends XYZ {
   constructor(options) {
@@ -547,7 +548,6 @@ export function demo(options = {}) {
     }),
 
     'MapBox elevation': new MapboxElevation(options.mapbox), // options include key
-    'MapTiler elevation': new MapTilerElevation(options.maptiler), // options include key
 
     'No tile': new NoTile(),
     'Blank': new ol.layer.Tile(),

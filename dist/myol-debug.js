@@ -4,7 +4,7 @@
  * This package adds many features to Openlayer https://openlayers.org/
  * https://github.com/Dominique92/myol#readme
  * Based on https://openlayers.org
- * Built 12/12/2023 13:05:54 using npm run build from the src/... sources
+ * Built 12/12/2023 20:40:18 using npm run build from the src/... sources
  * Please don't modify it : modify src/... & npm run build !
  */
 
@@ -62812,7 +62812,7 @@ var myol = (function () {
           'https://map{1-5}.tourinfra.com/tiles/kompass_' + options.subLayer + '/{z}/{x}/{y}.png', // No key
         maxZoom: 17,
         hidden: !options.key && options.subLayer != 'osm', // For LayerSwitcher
-        attributions: '<a href="http://www.kompass.de/livemap/">KOMPASS</a>',
+        attributions: '<a href="http://www.kompass.de/livemap/">Kompass</a>',
         ...options,
       });
     }
@@ -63118,7 +63118,8 @@ var myol = (function () {
    * elevation = -10000 + ((R * 256 * 256 + G * 256 + B) * 0.1
    * Get your own (free) key at https://cloud.maptiler.com/account/keys/
    */
-  class MapTilerElevation extends XYZ {
+  /*//BEST Maxbox elevation backup
+  export class MapTilerElevation extends XYZ {
     constructor(options = {}) {
       super({
         url: 'https://api.maptiler.com/tiles/terrain-rgb/{z}/{x}/{y}.png?key=' + options.key,
@@ -63128,7 +63129,7 @@ var myol = (function () {
         ...options,
       });
     }
-  }
+  }*/
 
   class NoTile extends XYZ {
     constructor(options) {
@@ -63304,7 +63305,6 @@ var myol = (function () {
       }),
 
       'MapBox elevation': new MapboxElevation(options.mapbox), // options include key
-      'MapTiler elevation': new MapTilerElevation(options.maptiler), // options include key
 
       'No tile': new NoTile(),
       'Blank': new ol.layer.Tile(),
@@ -63321,7 +63321,6 @@ var myol = (function () {
     IgnES: IgnES,
     Kompass: Kompass,
     MRI: MRI,
-    MapTilerElevation: MapTilerElevation,
     MapboxElevation: MapboxElevation,
     Maxbox: Maxbox,
     NoTile: NoTile,
