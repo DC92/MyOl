@@ -20,7 +20,6 @@ export function basic(feature, resolution, layer) {
         feature.getId() / 9 % 1, // 44 px hight frame
       ] : [0.5, 0.5],
       src: properties.icon, // 24 * 24 icons
-      //BEST ??? crossOrigin: 'anonymous',
     }) : null,
 
     // Lines

@@ -4,7 +4,7 @@
  * This package adds many features to Openlayer https://openlayers.org/
  * https://github.com/Dominique92/myol#readme
  * Based on https://openlayers.org
- * Built 26/11/2023 16:37:53 using npm run build from the src/... sources
+ * Built 12/12/2023 13:05:54 using npm run build from the src/... sources
  * Please don't modify it : modify src/... & npm run build !
  */
 
@@ -62761,6 +62761,7 @@ var myol = (function () {
    * Acces to various tiles layers services
    */
 
+  //BEST ?? You need to add crossOrigin: 'anonymous' to the source options.
 
   // Virtual class to factorise XYZ layers code
   class XYZ extends ol.layer.Tile {
@@ -63036,7 +63037,7 @@ var myol = (function () {
 
   /**
    * Maxbox (Maxar)
-   * Get your own key at https://www.mapbox.com/
+   * Get your own (free) key at https://www.mapbox.com/
    */
   class Maxbox extends XYZ {
     constructor(options = {}) {
@@ -63094,6 +63095,40 @@ var myol = (function () {
       });
     }
   };
+
+  /**
+   * RGB elevation (Mapbox)
+   * Doc: https://docs.mapbox.com/data/tilesets/guides/access-elevation-data/
+   * elevation = -10000 + (({R} * 256 * 256 + {G} * 256 + {B}) * 0.1)
+   * Get your own (free) key at https://www.mapbox.com/
+   */
+  class MapboxElevation extends Maxbox {
+    constructor(options) {
+      super({
+        ...options,
+        tileset: 'mapbox.terrain-rgb',
+      });
+    }
+  }
+
+  /**
+   * RGB elevation (MapTiler)
+   * Doc: https://cloud.maptiler.com/tiles/terrain-rgb-v2/
+   * Doc: https://documentation.maptiler.com/hc/en-us/articles/4405444055313-RGB-Terrain-by-MapTiler
+   * elevation = -10000 + ((R * 256 * 256 + G * 256 + B) * 0.1
+   * Get your own (free) key at https://cloud.maptiler.com/account/keys/
+   */
+  class MapTilerElevation extends XYZ {
+    constructor(options = {}) {
+      super({
+        url: 'https://api.maptiler.com/tiles/terrain-rgb/{z}/{x}/{y}.png?key=' + options.key,
+        hidden: !options.key, // For LayerSwitcher
+        maxZoom: 12,
+        attributions: '<a href="https://www.maptiler.com/copyright/"">&copy; MapTiler</a> ' + '<a href="https://www.openstreetmap.org/copyright"">&copy; OpenStreetMap contributors</a>',
+        ...options,
+      });
+    }
+  }
 
   class NoTile extends XYZ {
     constructor(options) {
@@ -63267,6 +63302,10 @@ var myol = (function () {
       'Google hybrid': new Google({
         subLayers: 's,h',
       }),
+
+      'MapBox elevation': new MapboxElevation(options.mapbox), // options include key
+      'MapTiler elevation': new MapTilerElevation(options.maptiler), // options include key
+
       'No tile': new NoTile(),
       'Blank': new ol.layer.Tile(),
     };
@@ -63282,6 +63321,8 @@ var myol = (function () {
     IgnES: IgnES,
     Kompass: Kompass,
     MRI: MRI,
+    MapTilerElevation: MapTilerElevation,
+    MapboxElevation: MapboxElevation,
     Maxbox: Maxbox,
     NoTile: NoTile,
     OS: OS,
@@ -63305,7 +63346,7 @@ var myol = (function () {
     constructor(options) {
       // High resolution background layer
       super({
-        minResolution: 10,
+        minResolution: 20,
         visible: false,
 
         ...options,
@@ -73606,7 +73647,6 @@ body>*:not(#' + mapEl.id + '),\
           feature.getId() / 9 % 1, // 44 px hight frame
         ] : [0.5, 0.5],
         src: properties.icon, // 24 * 24 icons
-        //BEST ??? crossOrigin: 'anonymous',
       }) : null,
 
       // Lines
