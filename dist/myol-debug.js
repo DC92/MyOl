@@ -4,7 +4,7 @@
  * This package adds many features to Openlayer https://openlayers.org/
  * https://github.com/Dominique92/myol#readme
  * Based on https://openlayers.org
- * Built 12/12/2023 20:40:18 using npm run build from the src/... sources
+ * Built 17/12/2023 14:48:26 using npm run build from the src/... sources
  * Please don't modify it : modify src/... & npm run build !
  */
 
@@ -62747,9 +62747,9 @@ var myol = (function () {
   }
 
   var subMenuHTML$3 = '\
-  <label><a mime="application/gpx+xml">GPX</a></label>\
-  <label><a mime="vnd.google-earth.kml+xml">KML</a></label>\
-  <label><a mime="application/json">GeoJSON</a></label>';
+  <p><a mime="application/gpx+xml">GPX</a></p>\
+  <p><a mime="vnd.google-earth.kml+xml">KML</a></p>\
+  <p><a mime="application/json">GeoJSON</a></p>';
 
   var subMenuHTML_fr$3 = '\
   <p>Cliquer sur un format ci-dessous pour obtenir\
@@ -62761,7 +62761,6 @@ var myol = (function () {
    * Acces to various tiles layers services
    */
 
-  //BEST ?? You need to add crossOrigin: 'anonymous' to the source options.
 
   // Virtual class to factorise XYZ layers code
   class XYZ extends ol.layer.Tile {
@@ -62918,7 +62917,6 @@ var myol = (function () {
             matrixIds: matrixIds,
           }),
           requestEncoding: 'REST',
-          crossOrigin: 'anonymous',
         })),
 
         ...options, // For layer limits
@@ -65354,10 +65352,10 @@ body>*:not(#' + mapEl.id + '),\
   }
 
   var subMenuHTML = '\
-  <label><input type="radio" value="0">Portrait</label>\
-  <label><input type="radio" value="1">Landscape</label>\
-  <label><a id="print">Print</a></label>\
-  <label><a onclick="location.reload()">Cancel</a></label>';
+  <p><input type="radio" name="myol-portrait" value="0">Portrait</p>\
+  <p><input type="radio" name="myol-landscape" value="1">Landscape</p>\
+  <p><a id="print">Print</a></p>\
+  <p><a onclick="location.reload()">Cancel</a></p>';
 
   var subMenuHTML_fr = '\
   <p>Pour imprimer la carte:</p>\
@@ -73709,7 +73707,7 @@ body>*:not(#' + mapEl.id + '),\
           color: 'white',
         }),
       }),
-      //TODO laisser le texte sur les clusters < 3 icônes
+      //BEST laisser le texte sur les clusters < 3 icônes
       text: new ol.style.Text({
         text: feature.getProperties().cluster.toString(),
         font: '12px Verdana',
@@ -74284,7 +74282,7 @@ body>*:not(#' + mapEl.id + '),\
   }
 
   // CampToCamp.org
-  /*//TODO Don't work / to be redesigned
+  /*//BEST Don't work / to be redesigned
   export class C2C extends MyVectorLayer {
     constructor(options) {
       super({

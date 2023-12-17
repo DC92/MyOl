@@ -83,7 +83,7 @@ export function cluster(feature) {
         color: 'white',
       }),
     }),
-    //TODO laisser le texte sur les clusters < 3 icônes
+    //BEST laisser le texte sur les clusters < 3 icônes
     text: new ol.style.Text({
       text: feature.getProperties().cluster.toString(),
       font: '12px Verdana',

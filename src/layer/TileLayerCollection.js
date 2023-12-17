@@ -4,7 +4,6 @@
  */
 
 import ol from '../ol';
-//BEST ?? You need to add crossOrigin: 'anonymous' to the source options.
 
 // Virtual class to factorise XYZ layers code
 class XYZ extends ol.layer.Tile {
@@ -161,7 +160,6 @@ export class SwissTopo extends ol.layer.Tile {
           matrixIds: matrixIds,
         }),
         requestEncoding: 'REST',
-        crossOrigin: 'anonymous',
       })),
 
       ...options, // For layer limits

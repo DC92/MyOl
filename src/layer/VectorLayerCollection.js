@@ -150,7 +150,7 @@ export class PRC extends MyVectorLayer {
 }
 
 // CampToCamp.org
-/*//TODO Don't work / to be redesigned
+/*//BEST Don't work / to be redesigned
 export class C2C extends MyVectorLayer {
   constructor(options) {
     super({
