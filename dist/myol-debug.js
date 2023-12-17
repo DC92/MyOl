@@ -4,7 +4,7 @@
  * This package adds many features to Openlayer https://openlayers.org/
  * https://github.com/Dominique92/myol#readme
  * Based on https://openlayers.org
- * Built 17/12/2023 14:48:26 using npm run build from the src/... sources
+ * Built 17/12/2023 17:02:24 using npm run build from the src/... sources
  * Please don't modify it : modify src/... & npm run build !
  */
 
@@ -63116,7 +63116,7 @@ var myol = (function () {
    * elevation = -10000 + ((R * 256 * 256 + G * 256 + B) * 0.1
    * Get your own (free) key at https://cloud.maptiler.com/account/keys/
    */
-  /*//BEST Maxbox elevation backup
+  /*// Opportunity : backup of Maxbox elevation 
   export class MapTilerElevation extends XYZ {
     constructor(options = {}) {
       super({
@@ -73605,6 +73605,7 @@ body>*:not(#' + mapEl.id + '),\
       // Save the current status
       if (this.safeName && this.getSelection().length)
         localStorage[this.safeName] = this.getSelection().join(',');
+      //BEST BUG : don't recover values including a ,
       else
         delete localStorage[this.safeName];
 
@@ -74282,8 +74283,7 @@ body>*:not(#' + mapEl.id + '),\
   }
 
   // CampToCamp.org
-  /*//BEST Don't work / to be redesigned
-  export class C2C extends MyVectorLayer {
+  class C2C extends MyVectorLayer {
     constructor(options) {
       super({
         host: 'https://api.camptocamp.org/',
@@ -74296,11 +74296,10 @@ body>*:not(#' + mapEl.id + '),\
       });
 
       this.format.readFeatures = json => {
-        const features = [],
-          objects = JSON.parse(json);
+        const features = [];
 
-        for (let o in objects.documents) {
-          const properties = objects.documents[o];
+        for (let p in json.documents) {
+          const properties = json.documents[p];
 
           features.push({
             id: properties.document_id,
@@ -74329,7 +74328,7 @@ body>*:not(#' + mapEl.id + '),\
         wtyp: this.selector.getSelection(),
       };
     }
-  }*/
+  }
 
   /**
    * OSM XML overpass POI layer
@@ -74458,7 +74457,7 @@ body>*:not(#' + mapEl.id + '),\
     return [
       new WRI(options.wri),
       new PRC(options.prc),
-      //new C2C(options.c2c),
+      new C2C(options.c2c),
       new Overpass(options.osm),
       new Chemineur(options.chemineur),
       new Alpages(options.alpages),
@@ -74468,6 +74467,7 @@ body>*:not(#' + mapEl.id + '),\
   var vectorLayerCollection = /*#__PURE__*/Object.freeze({
     __proto__: null,
     Alpages: Alpages,
+    C2C: C2C,
     Chemineur: Chemineur,
     GeoBB: GeoBB,
     Overpass: Overpass,
