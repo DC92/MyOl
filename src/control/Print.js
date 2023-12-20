@@ -78,8 +78,8 @@ body>*:not(#' + mapEl.id + '),\
 }
 
 var subMenuHTML = '\
-  <p><input type="radio" name="myol-portrait" value="0">Portrait</p>\
-  <p><input type="radio" name="myol-landscape" value="1">Landscape</p>\
+  <label><input type="radio" name="myol-portrait" value="0">Portrait</label>\
+  <label><input type="radio" name="myol-landscape" value="1">Landscape</label>\
   <p><a id="print">Print</a></p>\
   <p><a onclick="location.reload()">Cancel</a></p>';
 
