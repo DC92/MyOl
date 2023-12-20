@@ -4,7 +4,7 @@
  * This package adds many features to Openlayer https://openlayers.org/
  * https://github.com/Dominique92/myol#readme
  * Based on https://openlayers.org
- * Built 19/12/2023 20:19:02 using npm run build from the src/... sources
+ * Built 20/12/2023 16:31:22 using npm run build from the src/... sources
  * Please don't modify it : modify src/... & npm run build !
  */
 
@@ -63185,10 +63185,7 @@ var myol = (function () {
    */
   function collection$2(options = {}) {
     return {
-      'OSM fr': new OpenStreetMap({
-        url: 'https://{a-c}.tile.openstreetmap.fr/osmfr/{z}/{x}/{y}.png',
-        //BEST BUG Ensure CORS response header values are valid
-      }),
+      'OSM': new OpenStreetMap(),
       'OpenTopo': new OpenTopo(),
       'OSM outdoors': new Thunderforest({
         ...options.thunderforest, // Include key
@@ -63280,7 +63277,10 @@ var myol = (function () {
     return {
       ...collection$2(options),
 
-      'OSM': new OpenStreetMap(),
+      'OSM fr': new OpenStreetMap({
+        url: 'https://{a-c}.tile.openstreetmap.fr/osmfr/{z}/{x}/{y}.png',
+        //BEST BUG Ensure CORS response header values are valid
+      }),
       'OSM orthos FR': new OpenStreetMap({
         url: 'https://wms.openstreetmap.fr/tms/1.0.0/tous_fr/{z}/{x}/{y}',
       }),
