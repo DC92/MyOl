@@ -4,7 +4,7 @@
  * This package adds many features to Openlayer https://openlayers.org/
  * https://github.com/Dominique92/myol#readme
  * Based on https://openlayers.org
- * Built 20/12/2023 16:31:22 using npm run build from the src/... sources
+ * Built 28/12/2023 21:26:42 using npm run build from the src/... sources
  * Please don't modify it : modify src/... & npm run build !
  */
 
@@ -62618,7 +62618,8 @@ var myol = (function () {
       });
 
       this.subMenuEl.querySelectorAll('a, input')
-        .forEach(el => ['click', 'change'].forEach(tag =>
+        //TODO .forEach(el => ['click', 'change'].forEach(tag =>
+        .forEach(el => ['click'].forEach(tag =>
           el.addEventListener(tag, evt =>
             this.subMenuAction(evt)
           )));
@@ -63185,7 +63186,11 @@ var myol = (function () {
    */
   function collection$2(options = {}) {
     return {
-      'OSM': new OpenStreetMap(),
+      'OSM fr': new OpenStreetMap({
+        url: 'https://{a-c}.tile.openstreetmap.fr/osmfr/{z}/{x}/{y}.png',
+        //TODO BUG ? Error CORS
+        //BEST BUG Ensure CORS response header values are valid
+      }),
       'OpenTopo': new OpenTopo(),
       'OSM outdoors': new Thunderforest({
         ...options.thunderforest, // Include key
@@ -63277,10 +63282,7 @@ var myol = (function () {
     return {
       ...collection$2(options),
 
-      'OSM fr': new OpenStreetMap({
-        url: 'https://{a-c}.tile.openstreetmap.fr/osmfr/{z}/{x}/{y}.png',
-        //BEST BUG Ensure CORS response header values are valid
-      }),
+      'OSM': new OpenStreetMap(),
       'OSM orthos FR': new OpenStreetMap({
         url: 'https://wms.openstreetmap.fr/tms/1.0.0/tous_fr/{z}/{x}/{y}',
       }),
@@ -63347,7 +63349,7 @@ var myol = (function () {
       'IGN Cassini': new IGN({
         ...options.ign,
         layer: 'GEOGRAPHICALGRIDSYSTEMS.CASSINI',
-        key: 'an7nvfzojv5wa96dsga5nk8w', //TODO use owner key
+        key: 'an7nvfzojv5wa96dsga5nk8w', //BEST use owner key
       }),
 
       'MapBox elevation': new MapboxElevation(options.mapbox), // options include key
@@ -65327,6 +65329,8 @@ var myol = (function () {
    * Print control
    */
 
+  //TODO voir layerswitcher button en mode format
+  //TODO bug filtres print dans chem
 
   class Print extends Button {
     constructor(options) {
@@ -65352,69 +65356,49 @@ var myol = (function () {
     subMenuAction(evt) {
       const map = this.getMap(),
         mapEl = map.getTargetElement(),
-        poElcs = this.element.querySelectorAll('input:checked'), // Selected orientation inputs
-        orientation = poElcs.length ? parseInt(poElcs[0].value) : 0; // Selected orientation or portrait
-
-      // Change map size & style
-      mapEl.style.maxHeight = mapEl.style.maxWidth = mapEl.style.float = 'none';
-      mapEl.style.width = orientation == 0 ? '208mm' : '295mm';
-      mapEl.style.height = orientation == 0 ? '295mm' : '208mm';
-      map.setSize([mapEl.clientWidth, mapEl.clientHeight]);
+        poEl = this.element.querySelector('input:checked'), // Selected orientation inputs
+        orientation = poEl ? parseInt(poEl.value) : 0; // Selected orientation or portrait
 
       // Parent the map to the top of the page
       document.body.appendChild(mapEl);
 
-      // Set style
-      const styleSheet = document.createElement('style');
-      styleSheet.type = 'text/css';
-      styleSheet.innerText = '\
-@page {\
-  size: ' + (orientation == 0 ? 'portrait' : 'landscape') + ';\
-}\
-body>*:not(#' + mapEl.id + '),\
-.ol-control:not(.ol-zoom):not(.ol-attribution):not(.myol-button-print) {\
-  display: none;\
-}\
-.myol-button-switcher {\
-  display: block !important;\
-  float: left !important;\
-}\
-.myol-button-switcher>div {\
-  left: 65px;\
-  right: initial;\
-}';
-      document.head.appendChild(styleSheet);
+      // Fix resolution to available tiles resolution
+      map.getView().setConstrainResolution(true);
 
-      // Finer zoom not dependent on the baselayer's levels
-      map.getView().setConstrainResolution(false);
-      map.addInteraction(new ol.interaction.MouseWheelZoom({
-        maxDelta: 0.1,
-      }));
+      // Set the page style
+      document.head.insertAdjacentHTML('beforeend',
+        '<style>@page{size:' + (orientation ? 'landscape' : 'portrait') + '}</style>');
+
+      // Change map size & style
+      mapEl.classList.add('myol-print-format');
+      mapEl.style.width = orientation ? '297mm' : '210mm'; // 11.7 x 8.3 inches
+      mapEl.style.height = orientation ? '210mm' : '297mm';
 
       // Finally print if required
-      if (evt.target.id == 'print')
-        map.once('rendercomplete', () => {
+      if (evt.target.id == 'myol-print') {
+        if (poEl) { // If a format is set, the full page is already loaded
           window.print();
           location.reload();
-        });
+        } else // Direct print : wait for full format rendering
+          map.once('rendercomplete', () => {
+            window.print();
+            location.reload();
+          });
+      }
     }
   }
 
   var subMenuHTML = '\
-  <p><input type="radio" name="myol-portrait" value="0">Portrait</p>\
-  <p><input type="radio" name="myol-landscape" value="1">Landscape</p>\
-  <p><a id="print">Print</a></p>\
-  <p><a onclick="location.reload()">Cancel</a></p>';
+  <label><input type="radio" name="myol-print-orientation" value="0">Portrait</label>\
+  <label><input type="radio" name="myol-print-orientation" value="1">Landscape</label>\
+  <p><a id="print">Print</a></p>',
 
-  var subMenuHTML_fr = '\
-  <p>Pour imprimer la carte:</p>\
-  <p>-Choisir portrait ou paysage,</p>\
-  <p>-zoomer et déplacer la carte dans le format,</p>\
-  <p>-imprimer.</p>' +
+    subMenuHTML_fr = '\
+  <p style="float:right" title="Cancel"><a onclick="location.reload()">&#10006;</a></p>\
+  <p style="width:175px">Choisir le format et recadrer</p>' +
     subMenuHTML
     .replace('Landscape', 'Paysage')
-    .replace('Print', 'Imprimer')
-    .replace('Cancel', 'Annuler');
+    .replace('Print', 'Imprimer');
 
   /**
    * This file defines the myol.control exports

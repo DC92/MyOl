@@ -1,0 +1,17 @@
+/*
+ * print.css
+ */
+/* Only display the map when the format is chosen */
+body:has(.myol-print-format)>*:not(.myol-print-format),
+/* Hide useless controls */
+.myol-print-format .ol-control:not(.ol-zoom):not(.ol-attribution):not(.myol-button-print) {
+  display: none;
+}
+
+.myol-print-format {
+  position: absolute;
+  top: 0;
+  left: 0;
+  max-height: none !important;
+  max-width: none !important;
+}

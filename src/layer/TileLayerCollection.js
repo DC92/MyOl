@@ -428,7 +428,11 @@ export class MapTilerElevation extends XYZ {
  */
 export function collection(options = {}) {
   return {
-    'OSM': new OpenStreetMap(),
+    'OSM fr': new OpenStreetMap({
+      url: 'https://{a-c}.tile.openstreetmap.fr/osmfr/{z}/{x}/{y}.png',
+      //TODO BUG ? Error CORS
+      //BEST BUG Ensure CORS response header values are valid
+    }),
     'OpenTopo': new OpenTopo(),
     'OSM outdoors': new Thunderforest({
       ...options.thunderforest, // Include key
@@ -520,10 +524,7 @@ export function demo(options = {}) {
   return {
     ...collection(options),
 
-    'OSM fr': new OpenStreetMap({
-      url: 'https://{a-c}.tile.openstreetmap.fr/osmfr/{z}/{x}/{y}.png',
-      //BEST BUG Ensure CORS response header values are valid
-    }),
+    'OSM': new OpenStreetMap(),
     'OSM orthos FR': new OpenStreetMap({
       url: 'https://wms.openstreetmap.fr/tms/1.0.0/tous_fr/{z}/{x}/{y}',
     }),
@@ -590,7 +591,7 @@ export function demo(options = {}) {
     'IGN Cassini': new IGN({
       ...options.ign,
       layer: 'GEOGRAPHICALGRIDSYSTEMS.CASSINI',
-      key: 'an7nvfzojv5wa96dsga5nk8w', //TODO use owner key
+      key: 'an7nvfzojv5wa96dsga5nk8w', //BEST use owner key
     }),
 
     'MapBox elevation': new MapboxElevation(options.mapbox), // options include key

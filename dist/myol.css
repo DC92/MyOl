@@ -358,8 +358,9 @@
   cursor: move;
 }
 
-/* Control */
-
+/*
+ * control.css
+ */
 /* PhpBB compatibility */
 .ol-overlaycontainer-stopevent>div:not(.ol-control) {
   margin: 0;
@@ -439,8 +440,9 @@
     display: none;
   }
 }
-/* layerSwitcher */
-
+/*
+ * button.css
+ */
 /* Top aligned buttons */
 /* Container */
 .ol-zoom,
@@ -557,8 +559,9 @@
 .myol-button hr {
   margin: 1px;
 }
-/* LayerSwitcher */
-
+/*
+ * layerSwitcher.css
+ */
 .myol-button-switcher {
   float: right !important;
 }
@@ -841,7 +844,9 @@
   font-weight: lighter;
   color: #333; }
 
-/* Geocodeur */
+/*
+ * myGeocodeur.css
+ */
 .ol-geocoder.gcd-gl-container {
   /* Takes place in the myol button flow */
   position: initial;
@@ -890,8 +895,26 @@
   top: 61px !important;
   left: 66px !important;
 }
-/* Editor */
+/*
+ * print.css
+ */
+/* Only display the map when the format is chosen */
+body:has(.myol-print-format)>*:not(.myol-print-format),
+/* Hide useless controls */
+.myol-print-format .ol-control:not(.ol-zoom):not(.ol-attribution):not(.myol-button-print) {
+  display: none;
+}
 
+.myol-print-format {
+  position: absolute;
+  top: 0;
+  left: 0;
+  max-height: none !important;
+  max-width: none !important;
+}
+/*
+ * editor.css
+ */
 .myol-button-edit-modify button::after {
   content: "\2725";
 }
