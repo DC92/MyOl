@@ -4,7 +4,7 @@
  * This package adds many features to Openlayer https://openlayers.org/
  * https://github.com/Dominique92/myol#readme
  * Based on https://openlayers.org
- * Built 31/12/2023 14:39:42 using npm run build from the src/... sources
+ * Built 31/12/2023 18:11:19 using npm run build from the src/... sources
  * Please don't modify it : modify src/... & npm run build !
  */
 
@@ -65360,7 +65360,7 @@ var myol = (function () {
       map.getView().setConstrainResolution(true);
 
       // Set or replace the page style
-      if (document.head.lastChild.innerHTML[0] == '@')
+      if (document.head.lastChild.textContent.match(/^@page{size:/))
         document.head.lastChild.remove();
       document.head.insertAdjacentHTML('beforeend', '<style>@page{size: A4 ' + orientation + '}</style>');
 
