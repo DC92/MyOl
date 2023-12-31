@@ -428,16 +428,12 @@ export class MapTilerElevation extends XYZ {
  */
 export function collection(options = {}) {
   return {
-    'OSM fr': new OpenStreetMap({
-      url: 'https://{a-c}.tile.openstreetmap.fr/osmfr/{z}/{x}/{y}.png',
-      //TODO BUG ? Error CORS
-      //BEST BUG Ensure CORS response header values are valid
-    }),
-    'OpenTopo': new OpenTopo(),
+    'OSM': new OpenStreetMap(),
     'OSM outdoors': new Thunderforest({
       ...options.thunderforest, // Include key
       subLayer: 'outdoors',
     }),
+    'OpenTopo': new OpenTopo(),
     'OSM transports': new Thunderforest({
       ...options.thunderforest, // Include key
       subLayer: 'transport',
@@ -524,7 +520,10 @@ export function demo(options = {}) {
   return {
     ...collection(options),
 
-    'OSM': new OpenStreetMap(),
+    'OSM fr': new OpenStreetMap({
+      url: 'https://{a-c}.tile.openstreetmap.fr/osmfr/{z}/{x}/{y}.png',
+      //BEST BUG Ensure CORS response header values are valid
+    }),
     'OSM orthos FR': new OpenStreetMap({
       url: 'https://wms.openstreetmap.fr/tms/1.0.0/tous_fr/{z}/{x}/{y}',
     }),
