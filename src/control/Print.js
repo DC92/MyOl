@@ -32,22 +32,19 @@ export class Print extends Button {
     const map = this.getMap(),
       mapEl = map.getTargetElement(),
       poEl = this.element.querySelector('input:checked'), // Selected orientation inputs
-      orientation = poEl ? parseInt(poEl.value) : 0; // Selected orientation or portrait
+      orientation = poEl && poEl.value == '1' ? 'landscape' : 'portrait';
+
+    // Fix resolution to an available tiles resolution
+    map.getView().setConstrainResolution(true);
+
+    // Set or replace the page style
+    if (document.head.lastChild.innerHTML[0] == '@')
+      document.head.lastChild.remove();
+    document.head.insertAdjacentHTML('beforeend', '<style>@page{size: A4 ' + orientation + '}</style>');
 
     // Parent the map to the top of the page
     document.body.appendChild(mapEl);
-
-    // Fix resolution to available tiles resolution
-    map.getView().setConstrainResolution(true);
-
-    // Set the page style
-    document.head.insertAdjacentHTML('beforeend',
-      '<style>@page{size:' + (orientation ? 'landscape' : 'portrait') + '}</style>');
-
-    // Change map size & style
-    mapEl.classList.add('myol-print-format');
-    mapEl.style.width = orientation ? '297mm' : '210mm'; // 11.7 x 8.3 inches
-    mapEl.style.height = orientation ? '210mm' : '297mm';
+    mapEl.className = 'myol-print-' + orientation;
 
     // Finally print if required
     if (evt.target.id == 'myol-print') {
@@ -66,7 +63,7 @@ export class Print extends Button {
 var subMenuHTML = '\
   <label><input type="radio" name="myol-print-orientation" value="0">Portrait</label>\
   <label><input type="radio" name="myol-print-orientation" value="1">Landscape</label>\
-  <p><a id="print">Print</a></p>',
+  <p><a id="myol-print">Print</a></p>',
 
   subMenuHTML_fr = '\
   <p style="float:right" title="Cancel"><a onclick="location.reload()">&#10006;</a></p>\

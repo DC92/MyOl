@@ -75,11 +75,9 @@ export class Button extends ol.control.Control {
     });
 
     this.subMenuEl.querySelectorAll('a, input')
-      //TODO .forEach(el => ['click', 'change'].forEach(tag =>
-      .forEach(el => ['click'].forEach(tag =>
-        el.addEventListener(tag, evt =>
-          this.subMenuAction(evt)
-        )));
+      .forEach(el => el.addEventListener('click', evt =>
+        this.subMenuAction(evt)
+      ));
 
     return super.setMap(map);
   }

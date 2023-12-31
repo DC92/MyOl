@@ -4,7 +4,7 @@
  * This package adds many features to Openlayer https://openlayers.org/
  * https://github.com/Dominique92/myol#readme
  * Based on https://openlayers.org
- * Built 28/12/2023 21:26:42 using npm run build from the src/... sources
+ * Built 31/12/2023 14:39:42 using npm run build from the src/... sources
  * Please don't modify it : modify src/... & npm run build !
  */
 
@@ -62618,11 +62618,9 @@ var myol = (function () {
       });
 
       this.subMenuEl.querySelectorAll('a, input')
-        //TODO .forEach(el => ['click', 'change'].forEach(tag =>
-        .forEach(el => ['click'].forEach(tag =>
-          el.addEventListener(tag, evt =>
-            this.subMenuAction(evt)
-          )));
+        .forEach(el => el.addEventListener('click', evt =>
+          this.subMenuAction(evt)
+        ));
 
       return super.setMap(map);
     }
@@ -63186,16 +63184,12 @@ var myol = (function () {
    */
   function collection$2(options = {}) {
     return {
-      'OSM fr': new OpenStreetMap({
-        url: 'https://{a-c}.tile.openstreetmap.fr/osmfr/{z}/{x}/{y}.png',
-        //TODO BUG ? Error CORS
-        //BEST BUG Ensure CORS response header values are valid
-      }),
-      'OpenTopo': new OpenTopo(),
+      'OSM': new OpenStreetMap(),
       'OSM outdoors': new Thunderforest({
         ...options.thunderforest, // Include key
         subLayer: 'outdoors',
       }),
+      'OpenTopo': new OpenTopo(),
       'OSM transports': new Thunderforest({
         ...options.thunderforest, // Include key
         subLayer: 'transport',
@@ -63282,7 +63276,10 @@ var myol = (function () {
     return {
       ...collection$2(options),
 
-      'OSM': new OpenStreetMap(),
+      'OSM fr': new OpenStreetMap({
+        url: 'https://{a-c}.tile.openstreetmap.fr/osmfr/{z}/{x}/{y}.png',
+        //BEST BUG Ensure CORS response header values are valid
+      }),
       'OSM orthos FR': new OpenStreetMap({
         url: 'https://wms.openstreetmap.fr/tms/1.0.0/tous_fr/{z}/{x}/{y}',
       }),
@@ -65357,22 +65354,19 @@ var myol = (function () {
       const map = this.getMap(),
         mapEl = map.getTargetElement(),
         poEl = this.element.querySelector('input:checked'), // Selected orientation inputs
-        orientation = poEl ? parseInt(poEl.value) : 0; // Selected orientation or portrait
+        orientation = poEl && poEl.value == '1' ? 'landscape' : 'portrait';
+
+      // Fix resolution to an available tiles resolution
+      map.getView().setConstrainResolution(true);
+
+      // Set or replace the page style
+      if (document.head.lastChild.innerHTML[0] == '@')
+        document.head.lastChild.remove();
+      document.head.insertAdjacentHTML('beforeend', '<style>@page{size: A4 ' + orientation + '}</style>');
 
       // Parent the map to the top of the page
       document.body.appendChild(mapEl);
-
-      // Fix resolution to available tiles resolution
-      map.getView().setConstrainResolution(true);
-
-      // Set the page style
-      document.head.insertAdjacentHTML('beforeend',
-        '<style>@page{size:' + (orientation ? 'landscape' : 'portrait') + '}</style>');
-
-      // Change map size & style
-      mapEl.classList.add('myol-print-format');
-      mapEl.style.width = orientation ? '297mm' : '210mm'; // 11.7 x 8.3 inches
-      mapEl.style.height = orientation ? '210mm' : '297mm';
+      mapEl.className = 'myol-print-' + orientation;
 
       // Finally print if required
       if (evt.target.id == 'myol-print') {
@@ -65391,7 +65385,7 @@ var myol = (function () {
   var subMenuHTML = '\
   <label><input type="radio" name="myol-print-orientation" value="0">Portrait</label>\
   <label><input type="radio" name="myol-print-orientation" value="1">Landscape</label>\
-  <p><a id="print">Print</a></p>',
+  <p><a id="myol-print">Print</a></p>',
 
     subMenuHTML_fr = '\
   <p style="float:right" title="Cancel"><a onclick="location.reload()">&#10006;</a></p>\
