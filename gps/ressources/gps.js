@@ -1,5 +1,6 @@
 console.log('MyGPS version ' + jsVars.lastChangeDate);
-//BEST GPS WRI avec couche WRI
+//BEST GPS WRI avec balayers WRI
+//BEST GPS WRI avec pictos WRI
 
 // Force https & script name to be compliant with PWA
 if (!location.href.match(/(https|localhost).*\/index.php/)) {

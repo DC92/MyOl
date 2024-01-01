@@ -22,7 +22,7 @@ self.addEventListener('install', evt => {
           'index.php',
           'manifest.json',
           'service-worker.php',
-          ...jsVars.distFiles,
+          ...jsVars.myolFiles,
           ...jsVars.gpxFiles,
         ])
         .then(console.log('PWA files added to cache'))

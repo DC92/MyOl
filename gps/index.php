@@ -28,12 +28,12 @@ Based on https://openlayers.org
   <meta name="msapplication-TileColor" content="#ffffff">
   <!-- PWA -->
   <link href="manifest.json" rel="manifest">
-  <link href="<?=$dist_rep?>myol.css" rel="stylesheet">
-  <script src="<?=$dist_rep?>myol.js"></script>
+  <link href="<?=$myol_rep?>myol.css" rel="stylesheet">
+  <script src="<?=$myol_rep?>myol.js"></script>
   </script>
   <link href="ressources/gps.css" rel="stylesheet">
   <script>
-    var jsVars = <?=$js_vars?>
+    var jsVars = <?=$js_vars?>;
   </script>
   <script src="ressources/gps.js" defer></script>
 </head>

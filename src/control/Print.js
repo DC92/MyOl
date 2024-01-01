@@ -4,8 +4,6 @@
 
 import Button from './Button.js';
 import './print.css';
-//TODO voir layerswitcher button en mode format
-//TODO bug filtres print dans chem
 
 export class Print extends Button {
   constructor(options) {
