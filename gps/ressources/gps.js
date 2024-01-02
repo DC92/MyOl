@@ -1,6 +1,4 @@
 console.log('MyGPS version ' + jsVars.lastChangeDate);
-//BEST GPS WRI avec balayers WRI
-//BEST GPS WRI avec pictos WRI
 
 // Force https & script name to be compliant with PWA
 if (!location.href.match(/(https|localhost).*\/index.php/)) {
@@ -13,10 +11,9 @@ if (!location.href.match(/(https|localhost).*\/index.php/)) {
     location.hash);
 }
 
-if ("serviceWorker" in navigator) {
+if ("serviceWorker" in navigator)
   navigator.serviceWorker.register("service-worker.php")
-    .catch(err => console.log(err));
-}
+  .catch(error => console.log(error));
 
 // Display the map
 var loadControl = new myol.control.Load(),
@@ -40,6 +37,7 @@ var loadControl = new myol.control.Load(),
       // Top right
       new myol.control.LayerSwitcher({
         layers: myol.layer.tile.collection(jsVars.mapKeys),
+        ...jsVars.layerSwitcherOptions,
       }),
 
       // Bottom left
@@ -53,10 +51,11 @@ var loadControl = new myol.control.Load(),
       }),
       new ol.control.Attribution(),
     ],
+    layers: jsVars.vectorLayers,
   });
 
 // Preload 2 more layers zoom
-map.on('precompose', () => {
+map.once('precompose', () => {
   map.getLayers().forEach(layer => {
     if (typeof layer.setPreload == 'function')
       layer.setPreload(2);
