@@ -91,6 +91,12 @@ navigator.serviceWorker.addEventListener('controllerchange', () => {
     new myol.control.Button({
       className: 'myol-button-upgrade',
       subMenuId: 'myol-button-upgrade',
+
+      // Reload when click on the "New" button
+      buttonAction: evt => {
+        if (evt.type == 'click')
+          location.reload();
+      },
     })
   );
 }, {
